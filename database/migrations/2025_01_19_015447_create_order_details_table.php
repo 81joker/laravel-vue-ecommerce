@@ -19,8 +19,11 @@ return new class extends Migration
             $table->string('address1' , 255);
             $table->string('address2' ,255);
             $table->string('city' ,45);
+            $table->string('state' ,45)->nullable();
             $table->string('zipcode' ,45);
             $table->string('country_code' ,3);
+            
+            $table->foreignId('order_id')->references('id')->on('orders');
             $table->timestamps();
         });
     }
