@@ -2,26 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Container\Attributes\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
     public function login(Request $request) {
 
-        $creadentails = $request->validate([
+        $credentials = $request->validate([
             'email' => ['required' , 'email'], 
             'password' => ['required', 'min:8'],  // minimum 8 characters long
             'remember' => ['boolean']
         ]);
-        $remmber = $creadentails['remmber'] ?? false;
-        unset($creadentails['remmber']);
+        $remmber = $credentials['remmber'] ?? false;
+        unset($credentials['remmber']);
 
-        if(!auth()->attempt($creadentails, $remmber)){
+        if(!Auth::attempt($credentials, $remmber)){
            return response([
              'message' => 'Email or password is incorrect'
            ], 422);
         }
+        /*
+         * @var \App\Models\User $user
+         */
         $user = Auth::user();   
         if(!$user->is_admin) {
             Auth::logout();
@@ -42,6 +45,9 @@ class AuthController extends Controller
 
     public function logout() {
         // auth()->logout();
+          /*
+         * @var \App\Models\User $user
+         */
         $user = Auth::user();
         $user->currentAccessToken()->delete();
         return response()->noContent(204);
