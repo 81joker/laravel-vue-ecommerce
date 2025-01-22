@@ -1,8 +1,12 @@
 <template>
-  <guest-layout title="Sign in to your accountXXX" @submit.prevent="login">
+  <guest-layout title="Sign in to your account">
+    <form action=""  @submit.prevent="login">
+    <div v-if="errorMsg" class="bg-red-400">
+        {{errorMsg}}
+    </div>
     <div>
       <label for="email" class="block text-sm/6 font-medium text-gray-900"
-        >Email addressXX</label
+        >Email address</label
       >
       <div class="mt-2">
         <input
@@ -68,6 +72,10 @@
     </div>
     <!--/ Remmber me -->
     <div>
+        <!-- <p class="mt-10 text-center text-sm/6 text-gray-500">
+          Not a member?
+          <a href="#" class="font-semibold text-indigo-600 hover:text-indigo-500">Start a 14 day free trial</a>
+        </p> -->
       <button
         type="submit"
         class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
@@ -75,12 +83,17 @@
         Sign in
       </button>
     </div>
+</form>
   </guest-layout>
 </template>
   <script setup>
 import { ref } from "vue";
 import GuestLayout from "../components/GuestLayout.vue";
+// import { useRoute } from "vue-router";
+import store from '@/store'
+import router from "../router";
 
+// const router = useRoute()
 const loading = ref(false);
 const errorMsg = ref("");
 const user = {
@@ -90,6 +103,7 @@ const user = {
 };
 
 function login() {
+    // debugger;
     loading.value = true;
     store.dispatch("login", user)
         .then(() => {
