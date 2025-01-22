@@ -1,17 +1,15 @@
 import axiosClient from "@/axios";
 
 export function login({ commit},data) {
-    console.log(data);
-
- return axiosClient.post("/login", {data})
+ return axiosClient.post("/login", data)
     .then(({data}) => {
         commit("setUser", data.user);
         commit("setToken", data.token);
         return data;
     })
-    .catch(({response}) => {
-        throw new Error(response.data.message);
-    });
+    // .catch(({response}) => {
+    //     throw new Error(response.data.message);
+    // });
 }
 
 export async function logout({ commit }) {
