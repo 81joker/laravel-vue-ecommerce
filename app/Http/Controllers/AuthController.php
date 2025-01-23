@@ -12,7 +12,7 @@ class AuthController extends Controller
         $credentials = $request->validate([
             'email' => ['required' , 'email'], 
             'password' => ['required', 'min:8'],  // minimum 8 characters long
-            'remember' => ['boolean']
+            // 'remember' => ['boolean']
         ]);
         $remmber = $credentials['remmber'] ?? false;
         unset($credentials['remmber']);
@@ -34,7 +34,7 @@ class AuthController extends Controller
             
         }
 
-        $token = $user->createToken('main')->lainTextToken;
+        $token = $user->createToken('main')->plainTextToken;
         // $token = $user->createToken('authToken')->plainTextToken;
 
         return response([
@@ -45,11 +45,9 @@ class AuthController extends Controller
 
     public function logout() {
         // auth()->logout();
-          /*
-         * @var \App\Models\User $user
-         */
+        /** @var \App\Models\User $user */
         $user = Auth::user();
         $user->currentAccessToken()->delete();
-        return response()->noContent(204);
+        return response('', 204);
     }
 }

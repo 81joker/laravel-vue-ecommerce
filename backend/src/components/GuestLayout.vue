@@ -8,16 +8,7 @@
       </div>
 
       <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-
-        <!-- <form class="space-y-6" action="#" method="POST"  @submit.prevent="emit('submit')"> -->
         <slot></slot>
-        <!-- </form> -->
-
-        <p class="mt-10 text-center text-sm/6 text-gray-500">
-          Not a member?
-          {{ ' ' }}
-          <a href="#" class="font-semibold text-indigo-600 hover:text-indigo-500">Start a 14 day free trial</a>
-        </p>
       </div>
     </div>
   </template>
@@ -26,6 +17,5 @@ const {title} = defineProps({
     title: String
 });
 
-// const emit = defineEmits(['submit'])
-
-  </script>
+</script>
+<!-- const emit = defineEmits(['submit']) -->
