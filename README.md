@@ -14,3 +14,11 @@
 ##[heroicons](https://heroicons.com/)
 
 npm install -D  @headlessui/vue@latest @heroicons/vue @tailwindcss/forms
+
+
+
+sail artisan cache:clear
+sail artisan view:clear
+sail artisan route:clear
+sail artisan clear-compiled
+sail artisan config:cache

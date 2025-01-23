@@ -1,8 +1,27 @@
 <template>
   <guest-layout title="Sign in to your account">
     <form   @submit.prevent="login">
-    <div v-if="errorMsg" class="bg-red-400">
+    <div v-if="errorMsg" class="flex items-center justify-between px-5 py-3 text-sm rounded text-white bg-red-400">
         {{errorMsg}}
+        <span
+          @click="errorMsg = ''"
+          class="w-8 h-8 flex items-center justify-center rounded-full transition-colors cursor-pointer hover:bg-[rgba(0,0,0,0.2)]"
+        >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </span>
     </div>
     <div>
       <label for="email" class="block text-sm/6 font-medium text-gray-900"
@@ -96,11 +115,9 @@
   <script setup>
 import { ref } from "vue";
 import GuestLayout from "../components/GuestLayout.vue";
-import { useRoute } from "vue-router";
 import store from '@/store'
-// import router from "../router";
+import router from "../router";
 
-const router = useRoute()
 const loading = ref(false);
 const errorMsg = ref("");
 const user = {
