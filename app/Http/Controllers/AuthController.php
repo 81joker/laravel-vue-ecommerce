@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\UserResource;
 
 class AuthController extends Controller
 {
@@ -12,16 +13,18 @@ class AuthController extends Controller
         $credentials = $request->validate([
             'email' => ['required' , 'email'], 
             'password' => ['required', 'min:8'],  // minimum 8 characters long
-            // 'remember' => ['boolean']
+            'remember' => ['boolean']
         ]);
-        $remmber = $credentials['remmber'] ?? false;
-        unset($credentials['remmber']);
 
-        if(!Auth::attempt($credentials, $remmber)){
+        $remember = $credentials['remember'] ?? false;
+        unset($credentials['remember']);
+
+        if(!Auth::attempt($credentials, $remember)){
            return response([
              'message' => 'Email or password is incorrect'
            ], 422);
         }
+
         /*
          * @var \App\Models\User $user
          */
@@ -34,8 +37,9 @@ class AuthController extends Controller
             
         }
 
-        $token = $user->createToken('main')->plainTextToken;
+        // $token = $user->createToken('main')->plainTextToken;
         // $token = $user->createToken('authToken')->plainTextToken;
+        $token = $user->createToken('main', ['*'], now()->addDays(7))->plainTextToken;
 
         return response([
             'token' => $token,
@@ -49,5 +53,11 @@ class AuthController extends Controller
         $user = Auth::user();
         $user->currentAccessToken()->delete();
         return response('', 204);
+    }
+
+    public function getUser(Request $request)
+    {
+        dd($request->all());
+        return new UserResource($request->user());
     }
 }

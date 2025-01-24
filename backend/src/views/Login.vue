@@ -23,6 +23,8 @@
         </svg>
       </span>
     </div>
+    <input type="hidden" name="remember" value="true"/>
+
     <div>
       <label for="email" class="block text-sm/6 font-medium text-gray-900"
         >Email address</label
@@ -116,7 +118,10 @@
 import { ref } from "vue";
 import GuestLayout from "../components/GuestLayout.vue";
 import store from '@/store'
-import router from "../router";
+// import router from "../router";
+import {useRouter} from 'vue-router'
+
+const router = useRouter()
 
 const loading = ref(false);
 const errorMsg = ref("");
@@ -134,9 +139,10 @@ function login() {
             loading.value = false;
             router.push({ name: "app.dashboard" });
         })
-        .catch(({ response }) => {
-            loading.value = false;
-            errorMsg.value = response.data.message;
-        });
+        .catch(({response}) => {
+      loading.value = false;
+      errorMsg.value = response.data.message;
+      console.log(errorMsg.value);
+    })
 }
 </script>

@@ -75,6 +75,7 @@
   const router = useRouter()
   const emit = defineEmits(['toggle-sidebar'])
 function logout(){
+  // debugger;
     store.dispatch('logout')
     .then(() => {
         router.push({name: 'login'})
