@@ -4,7 +4,7 @@ import * as mutations from "./mutations"
 const store = createStore({
 state: {
      user: {
-          token: sessionStorage.getItem('Token'),
+          token: sessionStorage.getItem('TOKEN'),
           data: {}
      }
 },

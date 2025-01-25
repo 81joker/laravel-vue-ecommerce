@@ -1,7 +1,7 @@
 <template>
   <guest-layout title="Sign in to your account">
-    <form   @submit.prevent="login">
-    <div v-if="errorMsg" class="flex items-center justify-between px-5 py-3 text-sm rounded text-white bg-red-400">
+    <form class="mt-8 space-y-6" method="POST" @submit.prevent="login">
+      <div v-if="errorMsg" class="flex items-center justify-between px-5 py-3 text-sm rounded text-white bg-red-400">
         {{errorMsg}}
         <span
           @click="errorMsg = ''"
@@ -23,6 +23,8 @@
         </svg>
       </span>
     </div>
+    <input type="hidden" name="remember" value="true"/>
+
     <div>
       <label for="email" class="block text-sm/6 font-medium text-gray-900"
         >Email address</label
@@ -118,6 +120,7 @@ import GuestLayout from "../components/GuestLayout.vue";
 import store from '@/store'
 import router from "../router";
 
+
 const loading = ref(false);
 const errorMsg = ref("");
 const user = {
@@ -127,16 +130,15 @@ const user = {
 };
 
 function login() {
-    // debugger;
-    loading.value = true;
-    store.dispatch("login", user)
-        .then(() => {
-            loading.value = false;
-            router.push({ name: "app.dashboard" });
-        })
-        .catch(({ response }) => {
-            loading.value = false;
-            errorMsg.value = response.data.message;
-        });
+  loading.value = true;
+  store.dispatch('login', user)
+    .then(() => {
+      loading.value = false;
+      router.push({name: 'app.dashboard'})
+    })
+    .catch(({response}) => {
+      loading.value = false;
+      errorMsg.value = response.data.message;
+    })
 }
 </script>
