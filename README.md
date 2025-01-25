@@ -14,7 +14,7 @@
 ## [Headless UI](https://headlessui.com/)<br />
 ## [Heroicons](https://heroicons.com/)<br />
 
-6- Install Package https://github.com/spatie/laravel-sluggable
+6- Install Package [Laravel Sluggable](https://github.com/spatie/laravel-sluggable/) Generate slugs when saving Eloquent models
 
 
 
