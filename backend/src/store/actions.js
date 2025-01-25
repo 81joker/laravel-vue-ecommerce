@@ -1,4 +1,3 @@
-// import axiosClient from "@/axios";
 import axiosClient from "../axios";
 
 // export function getUser({commit}) {
@@ -19,22 +18,6 @@ export function login({commit}, data) {
     })
 }
 
-
-// export function logout({ commit }) {
-//   return axiosClient.post('/logout', {}, {
-//     headers: {
-//       'Authorization': `Bearer ${store.state.token}`, // Assuming token is stored in Vuex
-//     }
-//   })
-//   .then((response) => {
-//     commit('setToken', null); // Clear token in Vuex
-//     return response;
-//   })
-//   .catch((error) => {
-//     console.error('Logout failed:', error);
-//   });
-// }
-
 export function logout({commit}) {
   return axiosClient.post('/logout')
     .then((response) => {
@@ -44,15 +27,3 @@ export function logout({commit}) {
     })
 }
 
-// export async function logout({ commit }) {
-//     try {
-//         const response = await axiosClient.post("/logout");
-//          commit('setToken', null);
-//          commit("setUser", {});
-//          // OR
-//         // commit("setToken", null);
-//         return response;
-//     } catch ({ error }) {
-//         throw new Error(error);
-//     }
-// }

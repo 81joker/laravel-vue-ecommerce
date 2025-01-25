@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted} from 'vue'
+import { ref, onMounted , onUnmounted} from 'vue'
 import Sidebar from "./Sidebar.vue";
 import Navbar from "./Navbar.vue";
 import store from '../store'
@@ -33,14 +33,18 @@ function toggleSidebar() {
   sidebarOpened.value = !sidebarOpened.value
 }
 
-onMounted(() => {
-  // store.dispatch('getUser')
-  window.addEventListener('resize', handleSidebarOpen)
-})
-function handleSidebarOpen(){
 
+function updateSidebarState() {
   sidebarOpened.value = window.outerWidth > 768;
 }
+onMounted(() => {
+  // store.dispatch('getUser')
+  updateSidebarState();
+  window.addEventListener('resize', updateSidebarState)
+})
+onUnmounted(() => {
+  window.removeEventListener('resize', updateSidebarState)
+})
 
 
 </script>

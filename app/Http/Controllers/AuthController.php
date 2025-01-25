@@ -25,9 +25,8 @@ class AuthController extends Controller
            ], 422);
         }
 
-        /*
-         * @var \App\Models\User $user
-         */
+        /** @var \App\Models\User $user */
+         
         $user = Auth::user();   
         if(!$user->is_admin) {
             Auth::logout();
@@ -37,9 +36,10 @@ class AuthController extends Controller
             
         }
 
+        $token = $user->createToken('main')->plainTextToken;
         // $token = $user->createToken('main')->plainTextToken;
         // $token = $user->createToken('authToken')->plainTextToken;
-        $token = $user->createToken('main', ['*'], now()->addDays(7))->plainTextToken;
+        // $token = $user->createToken('main', ['*'], now()->addDays(7))->plainTextToken;
 
         return response([
             'token' => $token,
@@ -48,10 +48,11 @@ class AuthController extends Controller
     }
 
     public function logout() {
-        // auth()->logout();
+         dd('test');
         /** @var \App\Models\User $user */
         $user = Auth::user();
-        $user->currentAccessToken()->delete();
+        $user->currentAccessToken->delete();
+        // $user->tokens()->delete(); 
         return response('', 204);
     }
 

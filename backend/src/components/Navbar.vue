@@ -68,14 +68,11 @@
   import {MenuIcon, LogoutIcon, UserIcon} from '@heroicons/vue/outline'
   import {Menu, MenuButton, MenuItems, MenuItem} from '@headlessui/vue'
   import {ChevronDownIcon} from '@heroicons/vue/solid'
-  import {useRouter} from 'vue-router'
   import store from '@/store'
-  // import router from "../router";
+  import router from "../router";
 
-  const router = useRouter()
   const emit = defineEmits(['toggle-sidebar'])
 function logout(){
-  // debugger;
     store.dispatch('logout')
     .then(() => {
         router.push({name: 'login'})

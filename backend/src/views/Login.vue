@@ -1,7 +1,7 @@
 <template>
   <guest-layout title="Sign in to your account">
-    <form   @submit.prevent="login">
-    <div v-if="errorMsg" class="flex items-center justify-between px-5 py-3 text-sm rounded text-white bg-red-400">
+    <form class="mt-8 space-y-6" method="POST" @submit.prevent="login">
+      <div v-if="errorMsg" class="flex items-center justify-between px-5 py-3 text-sm rounded text-white bg-red-400">
         {{errorMsg}}
         <span
           @click="errorMsg = ''"
@@ -118,10 +118,8 @@
 import { ref } from "vue";
 import GuestLayout from "../components/GuestLayout.vue";
 import store from '@/store'
-// import router from "../router";
-import {useRouter} from 'vue-router'
+import router from "../router";
 
-const router = useRouter()
 
 const loading = ref(false);
 const errorMsg = ref("");
@@ -132,17 +130,15 @@ const user = {
 };
 
 function login() {
-    // debugger;
-    loading.value = true;
-    store.dispatch("login", user)
-        .then(() => {
-            loading.value = false;
-            router.push({ name: "app.dashboard" });
-        })
-        .catch(({response}) => {
+  loading.value = true;
+  store.dispatch('login', user)
+    .then(() => {
+      loading.value = false;
+      router.push({name: 'app.dashboard'})
+    })
+    .catch(({response}) => {
       loading.value = false;
       errorMsg.value = response.data.message;
-      console.log(errorMsg.value);
     })
 }
 </script>

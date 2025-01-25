@@ -14,14 +14,21 @@ class Admin
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next ,String $admin): Response
     {
-        if (Auth::user() && Auth::user()->is_admin == 1) {
+        dd($admin);
+        $user = Auth::user();
+        // if ($user && $user->is_admin == 1) {
+        //     return $next($request);
+        // }
+
+        if (Auth::user()->is_admin == 1){
+            // abort (403);
             return $next($request);
         }
         return response([
-            'message' => 'You don\'t have permission to perform this action'
+            'message' => 'You don\'t have permission to perform this action Middleware'
         ], 403);
-      return response()->json(['message' => 'Unauthorized'], 403);
+    //   return response()->json(['message' => 'Unauthorized'], 403);
     }
 }
