@@ -23,3 +23,5 @@ sail artisan view:clear
 sail artisan route:clear
 sail artisan clear-compiled
 sail artisan config:cache
+sail aritisan make:controller ProductController --api --model=Product
+

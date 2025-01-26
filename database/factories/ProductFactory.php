@@ -23,7 +23,7 @@ class ProductFactory extends Factory
             // 'image_mime' => $this->faker->mimeType(),
             // 'image_size' => $this->faker->randomNumber(8),
             'description' => $this->faker->realText(2000),
-            'price' => $this->faker->randomFloat(2, 2,5),
+            'price' => $this->faker->randomFloat(2, 20,5000),
             // 'created_by' => now(),
             // 'updated_by' => now(),
             'created_at' => now(),
