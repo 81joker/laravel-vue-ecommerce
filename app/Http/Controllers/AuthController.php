@@ -43,7 +43,7 @@ class AuthController extends Controller
 
         return response([
             'token' => $token,
-            'user' => $user
+            'user' => new UserResource($user)
         ]);
     }
 
@@ -73,7 +73,6 @@ class AuthController extends Controller
 
     public function getUser(Request $request)
     {
-        dd($request->all());
         return new UserResource($request->user());
     }
 }

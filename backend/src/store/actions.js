@@ -2,9 +2,9 @@ import axiosClient from "../axios";
 
 export function getUser({commit}) {
   return axiosClient.get('/user')
-    .then(({response}) => {
-      commit('setUser', response.data.user);
-      return response;
+    .then(({data}) => {
+      commit('setUser', data.user);
+      return data;
     })
 }
 
@@ -29,14 +29,4 @@ export async function logout({ commit }) {
       throw error; // Re-throw the error for further handling
     }
   }
-// export async function logout({commit}) {
-//   try {
-//     const response = await axiosClient.post('/logout');
-//     commit('setToken', null);
-//     return response;
-//   } catch (error) {
-//     console.error('Logout failed:', error);
-//     throw error;
-//   }
-// }
 
