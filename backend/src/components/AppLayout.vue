@@ -38,7 +38,7 @@ function updateSidebarState() {
   sidebarOpened.value = window.outerWidth > 768;
 }
 onMounted(() => {
-  // store.dispatch('getUser')
+  store.dispatch('getUser')
   updateSidebarState();
   window.addEventListener('resize', updateSidebarState)
 })

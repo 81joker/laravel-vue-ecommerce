@@ -11,7 +11,7 @@ class AuthController extends Controller
     public function login(Request $request) {
 
         $credentials = $request->validate([
-            'email' => ['required' , 'email'], 
+            'email' => ['required' , 'email'],
             'password' => ['required', 'min:8'],  // minimum 8 characters long
             'remember' => ['boolean']
         ]);
@@ -26,14 +26,14 @@ class AuthController extends Controller
         }
 
         /** @var \App\Models\User $user */
-         
-        $user = Auth::user();   
+
+        $user = Auth::user();
         if(!$user->is_admin) {
             Auth::logout();
             return response([
                 'message' => 'You don\'t have permission to access this page'
               ], 403);
-            
+
         }
 
         $token = $user->createToken('main')->plainTextToken;
@@ -47,14 +47,29 @@ class AuthController extends Controller
         ]);
     }
 
-    public function logout() {
-         dd('test');
-        /** @var \App\Models\User $user */
-        $user = Auth::user();
-        $user->currentAccessToken->delete();
-        // $user->tokens()->delete(); 
-        return response('', 204);
+    // public function logout() {
+    //     /** @var \App\Models\User $user */
+    //     $user = Auth::user();
+    //     $user->currentAccessToken->delete();
+    //     // $user->tokens()->delete();
+    //     return response('', 204);
+    // }
+    public function logout(Request $request)
+{
+    // Log::info('Logout request', [
+    //     'user' => Auth::user(),
+    //     'token' => $request->bearerToken()
+    // ]);
+
+    $user = $request->user();
+    if ($user && $user->currentAccessToken()) {
+        $user->currentAccessToken()->delete();
+        return response()->json(['message' => 'Logged out successfully'], 204);
     }
+
+    return response()->json(['message' => 'Token not found or invalid'], 400);
+}
+
 
     public function getUser(Request $request)
     {

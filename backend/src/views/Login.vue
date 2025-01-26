@@ -1,6 +1,6 @@
 <template>
   <guest-layout title="Sign in to your account">
-    <form class="mt-8 space-y-6" method="POST" @submit.prevent="login">
+    <form class="mt-8 space-y-6"  method="POST" @submit.prevent="login">
       <div v-if="errorMsg" class="flex items-center justify-between px-5 py-3 text-sm rounded text-white bg-red-400">
         {{errorMsg}}
         <span
@@ -138,6 +138,8 @@ function login() {
     })
     .catch(({response}) => {
       loading.value = false;
+      console.log("response.data.message" ,response.data.message);
+
       errorMsg.value = response.data.message;
     })
 }

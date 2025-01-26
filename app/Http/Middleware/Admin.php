@@ -14,16 +14,10 @@ class Admin
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next ,String $admin): Response
+    public function handle(Request $request, Closure $next): Response
     {
-        dd($admin);
         $user = Auth::user();
-        // if ($user && $user->is_admin == 1) {
-        //     return $next($request);
-        // }
-
-        if (Auth::user()->is_admin == 1){
-            // abort (403);
+        if ($user && $user->is_admin == 1) {
             return $next($request);
         }
         return response([
