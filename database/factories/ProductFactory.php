@@ -30,7 +30,8 @@ class ProductFactory extends Factory
             'updated_at' => now(),
             'created_by' => 1,
             'updated_by' => 1,
-            // 'deleted_at' => null,
+            'deleted_at' => null,
+            'deleted_by' => 1,
         ];
     }
 }
