@@ -29,13 +29,21 @@ export async function logout({ commit }) {
     }
 }
 
-export function setProducts({ commit }) {
-commit('setProducts', true)
+export function getProducts({ commit }) {
+commit('setProducts', [true])
 return axiosClient.get('/products')
-  .then(({data}) => {
-    commit('setProducts', [false, data]);
-    return data;
+.then(res => {
+    //   debugger;
+    commit('setProducts', [false, res.data]);
 })
+.catch(() => {
+    commit('setProducts', [false]);
+})
+// .then(({data}) => {
+//       debugger;
+//     commit('setProducts', [false, data]);
+//     return data;
+// })
 }
 
 
