@@ -18,7 +18,6 @@ export function login({commit}, data) {
     })
 }
 
-
 export async function logout({ commit }) {
     try {
       const response = await axiosClient.post('/logout');
@@ -28,5 +27,16 @@ export async function logout({ commit }) {
       console.error('Logout failed:', error); // Log the error for debugging
       throw error; // Re-throw the error for further handling
     }
-  }
+}
+
+export function setProducts({ commit }) {
+commit('setProducts', true)
+return axiosClient.get('/products')
+  .then(({data}) => {
+    commit('setProducts', [false, data]);
+    return data;
+})
+}
+
+
 
