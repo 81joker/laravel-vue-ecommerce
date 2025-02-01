@@ -9,14 +9,15 @@
       >
         Add new Product
       </button>
-    </div> 
+    </div>
 
     <div class="bg-white p-4 rounded-lg shadow animate-fade-in-down">
       <div class="flex justify-between border-b-2 pb-3">
         <div class="flex items-center">
           <span class="whitespace-nowrap mr-3">Per Page</span>
           <select
-          @change="getProducts(null)" v-model="perPage"
+            @change="getProducts(null)"
+            v-model="perPage"
             class="appearance-none relative block w-24 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
           >
             <option value="5">5</option>
@@ -29,90 +30,144 @@
         </div>
         <div>
           <input
-           @change="getProducts(null)" v-model="search"
+            @change="getProducts(null)"
+            v-model="search"
             class="appearance-none relative block w-48 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
             placeholder="Type to Search products"
           />
         </div>
-      </div>            page:response.page,
+      </div>
+      page:response.page,
 
       <Spinner v-if="products.loading" />
-        <template v-else>
-            <table class="table-auto w-full">
-                <thead>
-                    <tr>
-                        <th class="border-b-2 p-2 text-left">ID</th>
+      <template v-else>
+        <table class="table-auto w-full">
+          <thead>
+            <tr>
+              <!-- <th class="border-b-2 p-2 text-left">ID</th>
                         <th class="border-b-2 p-2 text-left">Image</th>
                         <th class="border-b-2 p-2 text-left">Title</th>
                         <th class="border-b-2 p-2 text-left">Price</th>
-                        <th class="border-b-2 p-2 text-left">Last Updated At</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="product in products.data" :key="product.id">
-                        <td class="border-b p-2">{{ product.id }}</td>
-                        <td class="border-b p-2">
-                            <img :src="product.image" :alt="product.title" class="w-14 h-10 object-cover rounded-full" />
-                        </td>
-                        <td class="border-b p-2 max-w-[200px] whitespace-nowrap overflow-hidden text-ellipsis">{{ product.title }}</td>
-                        <td class="border-b p-2">{{ product.price }}</td>
-                        <td class="border-b p-2">{{ product.updated_at }}</td>
-                    </tr>
-                </tbody>
-
-            </table>
-            <div class="flex items-center justify-between mt-5 bg-red">
-                <span>
-                    Showing  from {{ products.from }} to {{ products.to }}  products
-                </span>
-                <nav v-if="products.total > products.limit"
-                    class="relative z-0 inline-flex rounded-md justify-center shadow-sm -space-x-px"
-                    aria-label="Pagination">
-                  <a
-                  v-for="(link, i) of products.links"
-          :key="i"
-          :disabled="!link.url"
-          href="#"
-          @click="getForPage($event, link)"
-          aria-current="page"
-          class="relative inline-flex items-center px-4 py-2 border text-sm font-medium whitespace-nowrap"
-          :class="[
-              link.active
-                ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600'
-                : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50',
-              i === 0 ? 'rounded-l-md' : '',
-              i === products.links.length - 1 ? 'rounded-r-md' : '',
-              !link.url ? ' bg-gray-100 text-gray-700': ''
-            ]"
-          v-html="link.label"
-                  >
-
-                  </a>
-
-                </nav>
-            </div>
-        </template>
-
+                        <th class="border-b-2 p-2 text-left">Last Updated At</th> -->
+              <TableHeaderCell
+                field="id"
+                :sort-field="sortField"
+                :sort-direction="sortDirection"
+                @click="sortProducts('id')"
+              >
+                ID
+              </TableHeaderCell>
+              <TableHeaderCell
+                field="image"
+                :sort-field="sortField"
+                :sort-direction="sortDirection"
+              >
+                Image
+              </TableHeaderCell>
+              <TableHeaderCell
+                field="title"
+                :sort-field="sortField"
+                :sort-direction="sortDirection"
+                @click="sortProducts('title')"
+              >
+                Title
+              </TableHeaderCell>
+              <TableHeaderCell
+                field="price"
+                :sort-field="sortField"
+                :sort-direction="sortDirection"
+                @click="sortProducts('price')"
+              >
+                Price
+              </TableHeaderCell>
+              <TableHeaderCell
+                field="updated_at"
+                :sort-field="sortField"
+                :sort-direction="sortDirection"
+                @click="sortProducts('updated_at')"
+              >
+                Last Updated At
+              </TableHeaderCell>
+              <TableHeaderCell field="actions"> Actions </TableHeaderCell>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="product in products.data" :key="product.id">
+              <td class="border-b p-2">{{ product.id }}</td>
+              <td class="border-b p-2">
+                <img
+                  :src="product.image"
+                  :alt="product.title"
+                  class="w-14 h-10 object-cover rounded-full"
+                />
+              </td>
+              <td
+                class="border-b p-2 max-w-[200px] whitespace-nowrap overflow-hidden text-ellipsis"
+              >
+                {{ product.title }}
+              </td>
+              <td class="border-b p-2">{{ product.price }}</td>
+              <td class="border-b p-2">{{ product.updated_at }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="flex items-center justify-between mt-5 bg-red">
+          <span>
+            Showing from {{ products.from }} to {{ products.to }} products
+          </span>
+          <nav
+            v-if="products.total > products.limit"
+            class="relative z-0 inline-flex rounded-md justify-center shadow-sm -space-x-px"
+            aria-label="Pagination"
+          >
+            <a
+              v-for="(link, i) of products.links"
+              :key="i"
+              :disabled="!link.url"
+              href="#"
+              @click="getForPage($event, link)"
+              aria-current="page"
+              class="relative inline-flex items-center px-4 py-2 border text-sm font-medium whitespace-nowrap"
+              :class="[
+                link.active
+                  ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600'
+                  : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50',
+                i === 0 ? 'rounded-l-md' : '',
+                i === products.links.length - 1 ? 'rounded-r-md' : '',
+                !link.url ? ' bg-gray-100 text-gray-700' : '',
+              ]"
+              v-html="link.label"
+            >
+            </a>
+          </nav>
+        </div>
+      </template>
     </div>
   </div>
 </template>
 <script setup>
-import {computed, onMounted, ref} from "vue";
+import { computed, onMounted, ref } from "vue";
 import Spinner from "@/components/core/Spinner.vue";
 import store from "../store";
-import {PRODUCTS_PER_PAGE} from "../constants.js";
+import { PRODUCTS_PER_PAGE } from "../constants.js";
+import  TableHeaderCell  from "@/components/core/Table/TableHeaderCell.vue";
 const perPage = ref(PRODUCTS_PER_PAGE);
 const search = ref("");
 const products = computed(() => store.state.products);
-
+const sortField = ref('updated_at');
+const sortDirection = ref('desc')
 onMounted(() => {
-    getProducts(null);
+  getProducts(null);
 });
 
 function getProducts(url = null) {
-    // store.dispatch("getProducts"  , {url});
-    store.dispatch("getProducts", { url, perPage: perPage.value, search: search.value});
-    // store.dispatch("getProducts", {perPage: perPage.value, page, search: search.value});
+  // store.dispatch("getProducts"  , {url});
+  store.dispatch("getProducts", {
+    url,
+    perPage: perPage.value,
+    search: search.value,
+  });
+  // store.dispatch("getProducts", {perPage: perPage.value, page, search: search.value});
 }
 
 function getForPage(ev, link) {
@@ -120,6 +175,30 @@ function getForPage(ev, link) {
   if (!link.url || link.active) {
     return;
   }
-  getProducts(link.url)
+  getProducts(link.url);
 }
+
+function sortProducts(field) {
+  if (field === sortField.value) {
+    if (sortDirection.value === 'desc') {
+      sortDirection.value = 'asc'
+    } else {
+      sortDirection.value = 'desc'
+    }
+  } else {
+    sortField.value = field;
+    sortDirection.value = 'asc'
+  }
+
+  getProducts()
+}
+// function sortProducts(field) {
+//     debugger
+// //   store.dispatch("getProducts", {
+// //     sortField: field,
+// //     sortDirection: products.sortDirection,
+// //     perPage: perPage.value,
+// //     search: search.value,
+// //   });
+// }
 </script>
