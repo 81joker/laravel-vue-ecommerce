@@ -110,7 +110,8 @@ onMounted(() => {
 });
 
 function getProducts(url = null) {
-    store.dispatch("getProducts"  , {url});
+    // store.dispatch("getProducts"  , {url});
+    store.dispatch("getProducts", { url, perPage: perPage.value, search: search.value});
     // store.dispatch("getProducts", {perPage: perPage.value, page, search: search.value});
 }
 
