@@ -18,7 +18,8 @@ class ProductFactory extends Factory
     {
         return [
             'title' => $this->faker->text(),
-            'image' => $this->faker->imageUrl(640, 480),
+            'image' => "https://picsum.photos/800/600?random={$this->faker->numberBetween(1, 100)}",
+            // 'image' => $this->faker->imageUrl(640, 480, 'products'),
             // 'image' => $this->faker->image('public/storage/products', 640, 480, null, false),
             // 'image_mime' => $this->faker->mimeType(),
             // 'image_size' => $this->faker->randomNumber(8),

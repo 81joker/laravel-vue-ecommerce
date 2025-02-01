@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- <pre>{{ products.data }}</pre> -->
+    <!-- <pre>{{ products.links }}</pre> -->
     <div class="flex items-center justify-between mb-3">
       <h1 class="text-3xl font-semibold">Products</h1>
       <button
@@ -9,7 +9,7 @@
       >
         Add new Product
       </button>
-    </div>
+    </div> 
 
     <div class="bg-white p-4 rounded-lg shadow animate-fade-in-down">
       <div class="flex justify-between border-b-2 pb-3">
@@ -34,7 +34,8 @@
             placeholder="Type to Search products"
           />
         </div>
-      </div>
+      </div>            page:response.page,
+
       <Spinner v-if="products.loading" />
         <template v-else>
             <table class="table-auto w-full">
@@ -63,13 +64,30 @@
             <div class="flex items-center justify-between mt-5 bg-red">
                 <span>
                     Showing  from {{ products.from }} to {{ products.to }}  products
-                    <!-- Showing  from {{ products.meta.from }} to {{ products.meta.to }} of {{ products.meta.total }} products -->
                 </span>
                 <nav v-if="products.total > products.limit"
                     class="relative z-0 inline-flex rounded-md justify-center shadow-sm -space-x-px"
-                    aria-label="pagination">
-                <!-- <nav v-if="products.meta.last_page > products.limit"> -->
+                    aria-label="Pagination">
+                  <a
+                  v-for="(link, i) of products.links"
+          :key="i"
+          :disabled="!link.url"
+          href="#"
+          @click="getForPage($event, link)"
+          aria-current="page"
+          class="relative inline-flex items-center px-4 py-2 border text-sm font-medium whitespace-nowrap"
+          :class="[
+              link.active
+                ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600'
+                : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50',
+              i === 0 ? 'rounded-l-md' : '',
+              i === products.links.length - 1 ? 'rounded-r-md' : '',
+              !link.url ? ' bg-gray-100 text-gray-700': ''
+            ]"
+          v-html="link.label"
+                  >
 
+                  </a>
 
                 </nav>
             </div>
@@ -91,8 +109,16 @@ onMounted(() => {
     getProducts(null);
 });
 
-function getProducts() {
-    store.dispatch("getProducts");
+function getProducts(url = null) {
+    store.dispatch("getProducts"  , {url});
     // store.dispatch("getProducts", {perPage: perPage.value, page, search: search.value});
+}
+
+function getForPage(ev, link) {
+  ev.preventDefault();
+  if (!link.url || link.active) {
+    return;
+  }
+  getProducts(link.url)
 }
 </script>

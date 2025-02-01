@@ -11,7 +11,18 @@ export function setToken (state, token) {
     }
 }
 
-export function setProducts (state, [loading,response = []]) {
+export function setProducts (state, [loading,response = null]) {
+    if(response){
+        state.products = {
+            data:response.data,
+            links: response.meta.links,
+            from: response.meta.from,
+            to: response.meta.to,
+            page: response.meta.current_page,
+            limit: response.meta.per_page,
+            total: response.meta.total,
+        }
+        }
     state.products.loading = loading
-    state.products.data = response.data
+    // state.products.data = response.data
 }
