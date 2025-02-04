@@ -1,17 +1,5 @@
 <template>
-  <div>
-    <!-- <pre>{{ products.links }}</pre> -->
-    <div class="flex items-center justify-between mb-3">
-      <h1 class="text-3xl font-semibold">Products</h1>
-      <button
-        type="button"
-        class="py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-      >
-        Add new Product
-      </button>
-    </div>
-
-    <div class="bg-white p-4 rounded-lg shadow animate-fade-in-down">
+     <div class="bg-white p-4 rounded-lg shadow animate-fade-in-down">
       <div class="flex justify-between border-b-2 pb-3">
         <div class="flex items-center">
           <span class="whitespace-nowrap mr-3">Per Page</span>
@@ -143,13 +131,13 @@
         </div>
       </template>
     </div>
-  </div>
-</template>
-<script setup>
+  </template>
+
+  <script setup>
 import { computed, onMounted, ref } from "vue";
 import Spinner from "@/components/core/Spinner.vue";
-import store from "../store";
-import { PRODUCTS_PER_PAGE } from "../constants.js";
+import store from "../../store";
+import { PRODUCTS_PER_PAGE } from "../../constants.js";
 import  TableHeaderCell  from "@/components/core/Table/TableHeaderCell.vue";
 const perPage = ref(PRODUCTS_PER_PAGE);
 const search = ref("");
@@ -166,6 +154,9 @@ function getProducts(url = null) {
     url,
     perPage: perPage.value,
     search: search.value,
+    // per_page: perPage.value,
+    sort_field: sortField.value,
+    sort_direction: sortDirection.value
   });
   // store.dispatch("getProducts", {perPage: perPage.value, page, search: search.value});
 }
@@ -192,13 +183,8 @@ function sortProducts(field) {
 
   getProducts()
 }
-// function sortProducts(field) {
-//     debugger
-// //   store.dispatch("getProducts", {
-// //     sortField: field,
-// //     sortDirection: products.sortDirection,
-// //     perPage: perPage.value,
-// //     search: search.value,
-// //   });
-// }
-</script>
+  </script>
+
+  <style scoped>
+
+  </style>

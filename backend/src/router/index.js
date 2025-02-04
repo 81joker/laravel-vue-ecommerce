@@ -5,7 +5,7 @@ import RequestPassword from "../views/RequestPassword.vue";
 import ResetPassword from "../views/ResetPassword.vue";
 import AppLayout from "@/components/AppLayout.vue";
 import Dashboard from "@/views/Dashboard.vue";
-import Products from "@/views/Products.vue";
+import Products from "@/views/Products/Products.vue";
 import NotFount from "@/views/NotFount.vue";
 import store from "@/store";
 
@@ -70,8 +70,8 @@ const router = createRouter({
 });
 
 
-// to represents the route object that is being navigated to. 
-// from represents the route object that is being navigated away from. 
+// to represents the route object that is being navigated to.
+// from represents the route object that is being navigated away from.
 // next is a function that must be called to resolve the navigation.
 router.beforeEach((to, from, next) => {
     if (to.meta.requiresAuth && !store.state.user.token) {
