@@ -15,8 +15,10 @@ class Product extends Model
     use SoftDeletes;
     use HasFactory;
     use HasApiTokens;
-    protected $guarded = [];
-    // protected $fillable = ['title' , 'slug' , 'image' , 'image_mime' , 'image_size' , 'description' , 'price' , 'created_by' , 'updated_by' , 'deleted_by'];
+    // protected $guarded = [];
+    // protected $fillable = ['title', 'image', 'price', 'description', 'created_by', 'updated_by', 'slug'];
+     protected $fillable = ['title' , 'slug' , 'image' , 'image_mime' , 'image_size' , 'description' , 'price' , 'created_by' , 'updated_by' ];
+    //  protected $fillable = ['title' , 'slug' , 'image' , 'image_mime' , 'image_size' , 'description' , 'price' , 'created_by' , 'updated_by' , 'deleted_by'];
 
     /**
      * Get the options for generating the slug.

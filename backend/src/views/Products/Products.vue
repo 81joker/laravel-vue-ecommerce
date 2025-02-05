@@ -31,13 +31,5 @@ const showModal = ref(false)
   function showProductModal() {
     showModal.value = true
   }
-// function sortProducts(field) {
-//     debugger
-// //   store.dispatch("getProducts", {
-// //     sortField: field,
-// //     sortDirection: products.sortDirection,
-// //     perPage: perPage.value,
-// //     search: search.value,
-// //   });
-// }
+
 </script>

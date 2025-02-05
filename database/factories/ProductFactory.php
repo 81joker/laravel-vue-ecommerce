@@ -19,10 +19,6 @@ class ProductFactory extends Factory
         return [
             'title' => $this->faker->text(),
             'image' => "https://picsum.photos/800/600?random={$this->faker->numberBetween(1, 100)}",
-            // 'image' => $this->faker->imageUrl(640, 480, 'products'),
-            // 'image' => $this->faker->image('public/storage/products', 640, 480, null, false),
-            // 'image_mime' => $this->faker->mimeType(),
-            // 'image_size' => $this->faker->randomNumber(8),
             'description' => $this->faker->realText(2000),
             'price' => $this->faker->randomFloat(2, 20,5000),
             // 'created_by' => now(),
@@ -31,8 +27,8 @@ class ProductFactory extends Factory
             'updated_at' => now(),
             'created_by' => 1,
             'updated_by' => 1,
-            'deleted_at' => null,
-            'deleted_by' => 1,
+            // 'deleted_at' => null,
+            // 'deleted_by' => 1,
         ];
     }
 }
