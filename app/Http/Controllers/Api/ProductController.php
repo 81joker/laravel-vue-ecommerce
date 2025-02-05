@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
+
 
 class ProductController extends Controller
 {
@@ -72,13 +74,36 @@ $data = $request->validated();
         return  new ProductResource($product);
     }
 
-    /**
+      /**
      * Update the specified resource in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Product      $product
+     * @return \Illuminate\Http\Response
      */
-    public function update(ProductResource $request, Product $product)
+    public function update(ProductRequest $request, Product $product)
     {
-        return new ProductResource($product->update($request->validated()));
-        // return ProductResource::make($product->update($request->validated()));
+        $data = $request->validated();
+        $data['updated_by'] = $request->user()->id;
+
+        /** @var \Illuminate\Http\UploadedFile $image */
+        $image = $data['image'] ?? null;
+        // Check if image was given and save on local file system
+        if ($image) {
+            $relativePath = $this->saveImage($image);
+            $data['image'] = URL::to(Storage::url($relativePath));
+            $data['image_mime'] = $image->getClientMimeType();
+            $data['image_size'] = $image->getSize();
+
+            // If there is an old image, delete it
+            if ($product->image) {
+                Storage::deleteDirectory('/public/' . dirname($product->image));
+            }
+        }
+
+        $product->update($data);
+
+        return new ProductResource($product);
     }
 
     /**

@@ -11,25 +11,44 @@
         Add new Product
       </button>
     </div>
+    <ProductsTable @clickEdit="editProduct" />
   <ProductModal v-model="showModal"  :product="productModel" />
-  <ProductsTable />
   </div>
 </template>
 <script setup>
 import { ref } from "vue";
 import ProductModal from "./ProductModal.vue";
 import ProductsTable from "./ProductsTable.vue";
+import store from "../../store";
 
 const productModel = ref({
-  id: null,
+  id: '',
   title: "",
-  image: null,
+  image: '',
   description: "",
-  price: 0,
+  price: '',
 });
+
+// function showAddNewModal() {
+//   showProductModal.value = true
+// }
+
+
+
 const showModal = ref(false)
+
+
   function showProductModal() {
     showModal.value = true
   }
+
+  function editProduct(p) {
+  store.dispatch('getProduct', p.id)
+    .then(({data}) => {
+      productModel.value = data
+      showProductModal()
+      // showAddNewModal();
+    })
+}
 
 </script>

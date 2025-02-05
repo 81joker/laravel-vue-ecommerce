@@ -54,6 +54,10 @@ export function getProducts(
     // })
 }
 
+export function getProduct({commit}, id) {
+    return axiosClient.get(`/products/${id}`)
+  }
+
 export function createProduct({ commit }, product) {
     if (product.image instanceof File) {
         const form = new FormData();
@@ -82,9 +86,10 @@ export function updateProduct({ commit }, product) {
 }
 
 export function deleteProduct({ commit }, id) {
-    return axiosClient.delete(`/products/${id}`).then(() => {
-        commit("deleteProduct", id);
-    });
+    return axiosClient.delete(`/products/${id}`)
+    // .then(() => {
+    //     commit("deleteProduct", id);
+    // });
 }
 // export function deleteProduct({commit}, id) {
 //   return axiosClient.delete(`/products/${id}`)
