@@ -54,7 +54,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="product in products.data" :key="product.id">
+          <tr v-for="(product , index) in products.data" :key="product.id" class="animate-fade-in-down" :style="{'animation-delay': `${index * 0.2}s`}">
             <td class="border-b p-2">{{ product.id }}</td>
             <td class="border-b p-2">
               <img :src="product.image" :alt="product.title" class="w-14 h-10 object-cover rounded-full" />
