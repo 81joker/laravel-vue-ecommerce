@@ -27,6 +27,9 @@ export function setProducts (state, [loading,response = null]) {
     state.products.loading = loading
     // state.products.data = response.data
 }
+// export function setProduct(state, product) {
+//     state.product = { ...product, image: product.image || null };
+//   }
 // export function setProducts(state, [loading, data = null]) {
 
 //     if (data) {

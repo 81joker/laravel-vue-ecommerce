@@ -57,7 +57,8 @@
       </tr>
       </tbody>
       <tbody v-else>
-      <tr v-for="(product, index) of products.data">
+      <tr v-for="product of products.data">
+        <!-- <tr v-for="(product, index) of products.data" class="animate-fade-in-down" :style="{'animation-delay': (index * 0.1) + 's'}"> -->
         <td class="border-b p-2 ">{{ product.id }}</td>
         <td class="border-b p-2 ">
           <img class="w-16 h-16 object-cover" :src="product.image" :alt="product.title">
@@ -233,9 +234,7 @@ function showAddNewModal() {
   showProductModal.value = true
 }
 
-function editProduct(p) {
-  emit('clickEdit', p)
-}
+
 function deleteProduct(product) {
   if (!confirm(`Are you sure you want to delete the product?`)) {
     return
@@ -247,7 +246,9 @@ function deleteProduct(product) {
     })
 }
 
-
+function editProduct(p) {  
+  emit('clickEdit', p)
+}
 </script>
 
 <style scoped>

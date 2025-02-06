@@ -68,10 +68,13 @@ $data = $request->validated();
 
     /**
      * Display the specified resource.
+     *
+     * @param \App\Models\Product $product
+     * @return \Illuminate\Http\Response
      */
     public function show(Product $product)
     {
-        return  new ProductResource($product);
+        return new ProductResource($product);
     }
 
       /**
@@ -125,4 +128,18 @@ $data = $request->validated();
 
         return $path . '/' ;
     }
+
+    // private function saveImage($image)
+    // {
+    //     $folderPath = 'products/' . now()->format('Y/m/d');
+    //     $fileName = Str::random(20) . '.' . $image->getClientOriginalExtension();
+    
+    //     $relativePath = Storage::disk('public')->putFileAs(
+    //         $folderPath,
+    //         $image,
+    //         $fileName
+    //     );
+    
+    //     return $relativePath;
+    // }
 }

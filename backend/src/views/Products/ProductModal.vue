@@ -119,7 +119,7 @@
 
   function onSubmit() {
     loading.value = true
-    if (product.value.id) {
+    if (product.value.id) {      
       store.dispatch('updateProduct', product.value)
         .then(response => {
           loading.value = false;
@@ -128,6 +128,11 @@
             store.dispatch('getProducts')
             closeModal()
           }
+        })
+        .catch(err => {
+          loading.value = false;
+          console.error(err);
+          // TODO show error notification
         })
     } else {
       store.dispatch('createProduct', product.value)

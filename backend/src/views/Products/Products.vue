@@ -44,7 +44,7 @@ const showModal = ref(false)
 
   function editProduct(p) {
   store.dispatch('getProduct', p.id)
-    .then(({data}) => {
+    .then(({data}) => {      
       productModel.value = data
       showProductModal()
       // showAddNewModal();
