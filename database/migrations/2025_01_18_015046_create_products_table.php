@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('title' , 2000);
-            $table->string('slug' , 2000);
+            $table->string('slug' , 2000)->nullable();
             $table->string('image' )->nullable();
             $table->string('image_mime')->nullable();
             $table->string('image_size')->nullable();
@@ -25,7 +25,8 @@ return new class extends Migration
             // $table->foreignIdFor(User::class , 'deleted_by')->nullable();
             $table->foreignId('created_by')->constrained('users')->nullable();
             $table->foreignId('updated_by')->constrained('users')->nullable();
-            $table->foreignId('deleted_by')->constrained('users')->nullable();
+            // $table->foreignId('deleted_by')->constrained('users')->nullable();
+            // $table->foreignId('deleted_by')->constrained('users')->nullable()->default(null);
             $table->softDeletes();
             $table->timestamps();
         });

@@ -1,20 +1,21 @@
+1. Install the database. You can find the schema in this link.
 
+2. Install Vite.
 
-1- install Database you can find the schema in this link 
+3. Install Vue.
 
-2- install vita 
+4. Install Tailwind CSS.
 
-3- install vue 
+5. Install [Headless UI](https://headlessui.com/) because we need templates and JavaScript with Tailwind CSS.
+   - [Tailwind UI](https://tailwindui.com/)
+   - [Headless UI](https://headlessui.com/)
+   - [Heroicons](https://heroicons.com/)
 
-4- install TailwinddCss 
+   ```bash
+   npm install -D @headlessui/vue@latest @heroicons/vue @tailwindcss/forms
+   ```
 
-5- install https://headlessui.com/ because we need to templat and javascript with tailwindcss
-##[tailwindui](https://tailwindui.com/)
-##[headlessui](https://headlessui.com/)
-##[heroicons](https://heroicons.com/)
-
-npm install -D  @headlessui/vue@latest @heroicons/vue @tailwindcss/forms
-
+6. Install [Laravel Sluggable](https://github.com/spatie/laravel-sluggable) to generate slugs.
 
 
 sail artisan cache:clear
@@ -22,3 +23,5 @@ sail artisan view:clear
 sail artisan route:clear
 sail artisan clear-compiled
 sail artisan config:cache
+sail aritisan make:controller ProductController --api --model=Product
+
