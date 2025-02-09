@@ -1,6 +1,6 @@
 <x-app-layout>
  <!-- Session Status -->
- <form method="POST" action="{{ route('password.email') }}" class="w-[400px] mx-auto p-6 my-16">
+ <form method="POST" action="{{ route('password.email') }}" class="w-[400px] mx-auto p-6 my-20">
         <x-auth-session-status class="mb-5" :status="session('status')" />
         @csrf
         <h2 class="text-2xl font-semibold text-center mb-5">
