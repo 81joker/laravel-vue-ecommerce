@@ -66,6 +66,8 @@ class="flex justify-between bg-slate-800 shadow-md text-white"
         <!--/ Cart Items Counter -->
       </a>
     </li>
+    @if(!Auth::guest())
+
     <li x-data="{open: false}" class="relative">
       <a
         @click="open = !open"
@@ -180,32 +182,39 @@ class="flex justify-between bg-slate-800 shadow-md text-white"
           </a>
         </li>
         <li class="hover:bg-slate-900">
-          <a
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type="submit" class="w-full flex items-center px-3 py-2 hover:bg-slate-900">
+                    <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5 mr-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                    />
+                  </svg>
+                  Logout
+                </button>
+            </form>
+          {{-- <a
             href="/src/logout.html"
             class="flex items-center px-3 py-2 hover:bg-slate-900"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5 mr-2"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-              />
-            </svg>
-            Logout
-          </a>
+          > --}}
+
+          {{-- </a> --}}
         </li>
       </ul>
     </li>
+    @else
     <li>
       <a
-        href="/src/login.html"
+        href="{{ route('login') }}"
         class="flex items-center py-2 px-3 transition-colors hover:bg-slate-800"
       >
         <svg
@@ -227,13 +236,14 @@ class="flex justify-between bg-slate-800 shadow-md text-white"
     </li>
     <li class="px-3 py-3">
       <a
-        href="/src/signup.html"
+        href="{{ route('register') }}"
         class="block text-center text-white bg-emerald-600 py-2 px-3 rounded shadow-md hover:bg-emerald-700 active:bg-emerald-800 transition-colors w-full"
       >
         Register now
       </a>
     </li>
   </ul>
+    @endif
 </div>
 <!--/ Responsive Menu -->
 <nav class="hidden md:block">
@@ -411,26 +421,26 @@ class="flex justify-between bg-slate-800 shadow-md text-white"
           </a>
         </li>
         <li>
-          <a
-            href="/src/logout.html"
-            class="flex px-3 py-2 hover:bg-slate-900"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5 mr-2"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-              />
-            </svg>
-            Logout
-          </a>
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type="submit" class="flex w-full px-3 py-2 hover:bg-slate-900">
+                    <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5 mr-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                    />
+                  </svg>
+                  Logout
+                </button>
+            </form>
         </li>
       </ul>
     </li>
