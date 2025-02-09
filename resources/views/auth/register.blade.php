@@ -15,22 +15,12 @@
         </div>
         </p>
         <div class="mb-4">
-            {{-- <input placeholder="Your Email" type="email" name="email" x-model="form.email" @input="validateEmail()"
-                class="border-gray-300 focus:outline-none  rounded-md w-full"
-                :class="errors.email ? errorClasses : (form.email ? successClasses : defaultClasses)" />
-            <small x-show="errors.email" x-text="errors.email" class="text-red-600"></small> --}}
-            {{-- <x-input-label for="email" :value="__('Email')" /> --}}
             <x-text-input id="email"
             placeholder="Your Email"
             class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
         <div class="mb-4">
-            {{-- <input placeholder="Password" type="password" name="password" x-model="form.password"
-                @input="validatePassword()" class="border-gray-300 focus:outline-none  rounded-md w-full"
-                :class="errors.password ? errorClasses : (form.password ? successClasses : defaultClasses)" />
-            <small x-show="errors.password" x-text="errors.password" class="text-red-600"></small> --}}
-            {{-- <x-input-label for="password" :value="__('Password')" /> --}}
             <x-text-input id="password" class="block mt-1 w-full"
                             type="password"
                             name="password"
@@ -55,9 +45,9 @@
             </a>
 
         </div>
-        <button class="btn-primary bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 w-full">
+        <x-primary-button class="btn-primary bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 w-full">
             Signup
-        </button>
+        </x-primary-button>
     </form>
 
 </x-app-layout>

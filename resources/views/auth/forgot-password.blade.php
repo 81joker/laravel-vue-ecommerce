@@ -23,11 +23,8 @@
           <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
           <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
-        <button
-          class="btn-primary bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 w-full"
-        >
+        <x-primary-button>
         {{ __('Email Password Reset Link') }}
-
-        </button>
+        </x-primary-button>
       </form>
 </x-app-layout>

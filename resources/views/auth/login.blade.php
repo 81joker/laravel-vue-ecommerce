@@ -60,18 +60,9 @@
           </a>
       @endif
         </div>
-        <button
-          class="btn-primary bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 w-full"
-        >
+        <x-primary-button>
           Login
-        </button>
-        {{-- ST --}}
-        {{-- <x-primary-button
-        class="btn-primary bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 w-full"
-        >
-            {{ __('Log in') }}
-        </x-primary-button> --}}
-        {{-- En --}}
+        </x-primary-button>
       </form>
 
 </x-app-layout>
