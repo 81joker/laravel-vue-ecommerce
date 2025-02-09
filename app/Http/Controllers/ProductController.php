@@ -11,4 +11,9 @@ class ProductController extends Controller
         $products = Product::query()->orderBy('updated_at', 'desc')->paginate(4);
         return view('product.index', ['products' => $products]);
     }
+
+    public function show(Product $product){
+        dd($product);
+        return view('product.show', ['product' => $product]);
+    }
 }

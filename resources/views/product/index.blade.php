@@ -10,13 +10,13 @@
                 price: 17.99
             })"
                 class="border border-1 border-gray-200 rounded-md hover:border-purple-600 transition-colors bg-white">
-                <a href="{{ $product->slug }}" class="block overflow-hidden">
+                <a href="{{ route('product.view', $product->slug) }}" class="block overflow-hidden">
                     <img src="{{ $product->image }}" alt=""
                         class="rounded-lg hover:scale-105 hover:rotate-1 transition-transform" />
                 </a>
                 <div class="p-4">
                     <h3 class="text-lg">
-                        <a href="{{ $product->slug }}">{{ $product->title }}</a>
+                        <a href="{{ route('product.view', $product->slug) }}">{{ $product->title }}</a>
                     </h3>
                     <h5 class="font-bold">${{ $product->price }}</h5>
                 </div>
