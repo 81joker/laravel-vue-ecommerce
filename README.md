@@ -25,3 +25,10 @@ sail artisan clear-compiled
 sail artisan config:cache
 sail aritisan make:controller ProductController --api --model=Product
 
+
+Note: We can make the show  product controller available to id  like $product->id and display the product
+   ##
+   but when we need to display show with slug we should make model/api/product becuse the route in axios not 
+   intgrate with like /product/slug instaed product/id in action store 
+   the resoultion for this issue 
+   we make in copy from Model product to folder API/Prduct model and implement in Product model
