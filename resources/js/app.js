@@ -88,7 +88,7 @@ document.addEventListener("alpine:init", () => {
                 this.$dispatch("notify", {
                     message: "The item was removed from the cart",
                 })
-                this.cartItems = this.cartItems.filtrte(p => item.id !== this.product.id);
+                this.cartItems = this.cartItems.filter(p => item.id !== this.product.id);
             })
         },
 

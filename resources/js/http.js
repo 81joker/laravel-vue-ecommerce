@@ -4,7 +4,7 @@ export function request(method, url, data = {}) {
         headers: {
             "Content-Type": "application/json",
             'Accept': 'application/json',
-            'X-CRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content
+            'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content
         },
         // body: JSON.stringify(data),
         ...(method === 'GET' ? {} : {body: JSON.stringify(data)})

@@ -19,22 +19,18 @@ class Cart {
             return CartItem::where('user_id', $user->id)->sum('quantity');
         } else {
              $cartItems = self::getCookieCartItems();
-             return array_reduce(
-                $cartItems,
-                function ($carry, $item) {
-                    return $carry + $item['quantity'];
-                },
-                0
-             );
-            //  array_reduce(
+            //  return array_reduce(
             //     $cartItems,
-            //     function ($carry, $item) {
-            //         $carry += $item['quantity'];
-            //         return $carry;
+            //     fn($carry, $item) {
+            //         return $carry + $item['quantity'];
             //     },
             //     0
-            //  )
-         
+            //  );
+            return array_reduce(
+                $cartItems,
+                fn($carry, $item) => $carry + $item['quantity'],
+                0
+            );
         }
         
     }
@@ -64,7 +60,7 @@ class Cart {
     public static function getCookieCartItems():array {
         // return session()->get('cart', []);
         $request = \request();
-        return json_decode($request->cookie('cart_items' , []), true);
+        return json_decode($request->cookie('cart_items' , '[]'), true);
     }
     public static function getCountFromItems($cartItems) {
         return array_reduce(

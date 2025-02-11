@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
@@ -9,12 +10,10 @@ Route::middleware(['guestOrVerified'])->group(function () {
     Route::get('/product/{product:slug}', [ProductController::class, 'view'])->name('product.view');
 
     Route::prefix('/cart')->name('cart.')->group(function(){
-        Route::get('/', [ProductController::class, 'cart'])->name('index');
-        Route::post('/add/{product:slug}', [ProductController::class, 'addToCart'])->name('add');
-        Route::post('/update/{product:slug}', [ProductController::class, 'updateCart'])->name('update');
-        Route::post('/remove/{product:slug}', [ProductController::class, 'removeFromCart'])->name('remove');
-        Route::post('/updated-quantity', [ProductController::class, 'updateQuantity'])->name('update-quantity');
-        // Route::post('/clear', [ProductController::class, 'clearCart'])->name('clear');
+        Route::get('/', [CartController::class, 'index'])->name('index');
+        Route::post('/add/{product:slug}', [CartController::class, 'add'])->name('add');
+        Route::post('/remove/{product:slug}', [CartController::class, 'remove'])->name('remove');
+        Route::post('/update-quantity/{product:slug}', [CartController::class, 'updateQuantity'])->name('update-quantity');
     });
 });
 
