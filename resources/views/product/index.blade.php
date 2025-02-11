@@ -3,12 +3,15 @@
     <div class="grid gap-8 grig-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-5 gap-4">
         @foreach ($products as $product)
             <!-- Product Item -->
-            <div x-data="productItem({
-                id: 1,
-                image: 'img/1_1.jpg',
-                title: 'Logitech G502 HERO High Performance Wired Gaming Mouse, HERO 25K Sensor, 25,600 DPI, RGB, Adjustable Weights, 11',
-                price: 17.99
-            })"
+            <div x-data="productItem({{ json_encode([
+                'id' => $product->id,
+                'title' => $product->title,
+                'image' => $product->image,
+                // 'description' => $product->description,
+                'price' => $product->price,
+                'addToCartUrl' => route('cart.add', $product),
+
+            ]) }})"
                 class="border border-1 border-gray-200 rounded-md hover:border-purple-600 transition-colors bg-white">
                 <a href="{{ route('product.view', $product->slug) }}" class="block overflow-hidden">
                     <img src="{{ $product->image }}" alt=""
@@ -30,7 +33,7 @@
                                 d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                         </svg>
                     </button>
-                    <button class="btn-primary" @click="addToCart(id)">
+                    <button class="btn-primary" @click="addToCart()">
                         Add to Cart
                     </button>
                 </div>
