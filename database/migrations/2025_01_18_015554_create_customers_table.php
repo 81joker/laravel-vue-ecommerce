@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use App\Models\User;
 
 return new class extends Migration
 {
@@ -16,12 +17,12 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('phone')->nullable();
-            $table->string('status' , 45);
-            // $table->foreignIdFor(User::class , 'created_by')->nullable();
-            // $table->foreignIdFor(User::class , 'updated_by')->nullable();
-            $table->foreignId('created_by')->constrained('users')->nullable();
-            $table->foreignId('updated_by')->constrained('users')->nullable();
+            $table->string('status', 45)->nullable();
             $table->timestamps();
+            $table->foreignIdFor(User::class, 'created_by')->nullable();
+            $table->foreignIdFor(User::class, 'updated_by')->nullable();
+            // // $table->foreignIdFor(User::class , 'created_by')->nullable();
+            // // $table->foreignIdFor(User::class , 'updated_by')->nullable();
         });
     }
 

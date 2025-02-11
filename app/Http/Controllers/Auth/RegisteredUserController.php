@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use App\Helpers\Cart;
+use App\Models\Customer;
 
 class RegisteredUserController extends Controller
 {
@@ -43,6 +44,15 @@ class RegisteredUserController extends Controller
         ]);
 
         event(new Registered($user));
+
+        $customer = new Customer();
+        $name = explode(" ", $request->name);
+        $customer->user_id = $user->id;
+
+        $customer->first_name = $name[0];
+        $customer->last_name = $name[1]?? '';
+        $customer->save();
+
 
         Auth::login($user);
         Cart::moveCartItemsIntoDb();
