@@ -1,5 +1,16 @@
 <x-app-layout>
-  <div class="container mx-auto">
+  <div class="container mx-auto" 
+  x-data="productItem({{ json_encode([
+    'id' => $product->id,
+    'title' => $product->title,
+    'description' => $product->description,
+    'image' => $product->image,
+    'price' => $product->price,
+    'addToCartUrl' => route('cart.add', $product),
+
+]) }})"
+  
+  >
       <div class="grid gap-6 grid-cols-1 lg:grid-cols-5">
           <div class="lg:col-span-3">
               <div
@@ -85,9 +96,7 @@ init() {
               </div>
           </div>
           <div class="lg:col-span-2">
-              <h1 class="text-lg font-semibold">
-                  {{$product->title}}
-              </h1>
+              <h1 class="text-lg font-semibold" x-text="product.title"></h1>
               <div class="text-xl font-bold mb-6">${{$product->price}}</div>
               <div class="flex items-center justify-between mb-5">
                   <label for="quantity" class="block font-bold mr-4">
@@ -96,13 +105,14 @@ init() {
                   <input
                       type="number"
                       name="quantity"
+                      min="1"
                       x-ref="quantityEl"
                       value="1"
                       class="w-32 focus:border-purple-500 focus:outline-none rounded"
                   />
               </div>
               <button
-                  @click="addToCart(id, $refs.quantityEl.value)"
+                  @click="addToCart($refs.quantityEl.value)"
                   class="btn-primary py-4 text-lg flex justify-center min-w-0 w-full mb-6"
               >
                   <svg
@@ -123,12 +133,11 @@ init() {
               </button>
               <div class="mb-6" x-data="{expanded: false}">
                   <div
+                      x-text="product.description"
                       x-show="expanded"
                       x-collapse.min.120px
                       class="text-gray-500 wysiwyg-content"
-                  >
-                      {{ $product->description }}
-                  </div>
+                  >                  </div>
                   <p class="text-right">
                       <a
                           @click="expanded = !expanded"
