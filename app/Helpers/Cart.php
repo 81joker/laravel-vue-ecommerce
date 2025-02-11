@@ -35,7 +35,7 @@ class Cart {
         
     }
 
-    public static function getCartItems():array {
+    public static function getCartItems() {
         // return session()->get('cart', []);
         $request = \request();
         // $user = session()->get('user');
