@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('countries', function (Blueprint $table) {
 
-            $table->json('states')->change();
+            $table->json('states')->change()->nullable();
         });
     }
 
