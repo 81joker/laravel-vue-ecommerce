@@ -15,11 +15,10 @@ class ProfileContrller extends Controller
         $user = $request->user();
         /** @var \App\Models\Customer $customer */
         $customer = $user->customer;
-        $shippingAddress = $customer->shippingAddress?: new CustomerAddress(['type' => AddressType::Shipping]);
-        $billingAddress = $customer->billingAddress?: new CustomerAddress(['type' => AddressType::Billing]);
-        // $billingAddress = $customer->billingAddress?: new CustomerAddress(['address_type' => AddressType::BILLING]);
+        $shippingAddress = $customer->shippingAddress ?? new CustomerAddress(['type' => AddressType::Shipping]);
+        $billingAddress = $customer->billingAddress?? new CustomerAddress(['type' => AddressType::Billing]);
         $countries = Country::query()->orderBy('name', 'asc')->get();
-        dd($customer ,$shippingAddress->attributesToArray() , $billingAddress->attributesToArray());
+        // dd($customer ,$shippingAddress->attributesToArray() , $billingAddress->attributesToArray());
         return view('profile.view' , compact('customer', 'shippingAddress', 'billingAddress', 'countries'));
     }
 }
