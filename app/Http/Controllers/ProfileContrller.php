@@ -2,12 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Country;
+use App\Enums\AddressType;
 use Illuminate\Http\Request;
+use App\Models\CustomerAddress;
 
 class ProfileContrller extends Controller
 {
     public function view(Request $request)
     {
-        return view('profile.view');
+        /**  @var \App\Models\User $user */
+        $user = $request->user();
+        /** @var \App\Models\Customer $customer */
+        $customer = $user->customer;
+        $shippingAddress = $customer->shippingAddress?: new CustomerAddress(['type' => AddressType::Shipping]);
+        $billingAddress = $customer->billingAddress?: new CustomerAddress(['type' => AddressType::Billing]);
+        // $billingAddress = $customer->billingAddress?: new CustomerAddress(['address_type' => AddressType::BILLING]);
+        $countries = Country::query()->orderBy('name', 'asc')->get();
+        dd($customer ,$shippingAddress->attributesToArray() , $billingAddress->attributesToArray());
+        return view('profile.view' , compact('customer', 'shippingAddress', 'billingAddress', 'countries'));
     }
 }
