@@ -19,8 +19,8 @@ class DatabaseSeeder extends Seeder
             AdminUserSeeder::class,
             ProductSeeder::class,
             CountrySeeder::class,
-            CustomerSeeder::class,
-            CustomerAddressSeeder::class
+            // CustomerSeeder::class,
+            // CustomerAddressSeeder::class
         ]);
         // User::factory()->create([
         //     'name' => 'Test User',
