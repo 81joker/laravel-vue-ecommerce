@@ -42,3 +42,6 @@ Note: We can make the show  product controller available to id  like $product->i
 4. Create a test card.
 5. Add your API keys to your .env file.   
 
+
+### 2- Instal https://github.com/stripe/stripe-php
+
