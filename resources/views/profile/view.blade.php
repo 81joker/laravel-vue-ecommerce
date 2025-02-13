@@ -246,15 +246,15 @@
                         </div>
                     </div>
 
-                    <button class="w-full">Update</button>
+                    <x-primary-button class="w-full">Update</x-primary-button>
                 </form>
             </div>
-            {{-- <div class="bg-white p-3 shadow rounded-lg">
+            <div class="bg-white p-3 shadow rounded-lg">
                 <form action="{{route('profile_password.update')}}" method="post">
                     @csrf
                     <h2 class="text-xl font-semibold mb-2">Update Password</h2>
                     <div class="mb-3">
-                        <x-text-input-profile
+                        <x-text-input
                             type="password"
                             name="old_password"
                             placeholder="Your Current Password"
@@ -262,7 +262,7 @@
                         />
                     </div>
                     <div class="mb-3">
-                        <x-text-input-profile
+                        <x-text-input
                             type="password"
                             name="new_password"
                             placeholder="New Password"
@@ -270,7 +270,7 @@
                         />
                     </div>
                     <div class="mb-3">
-                        <x-text-input-profile
+                        <x-text-input
                             type="password"
                             name="new_password_confirmation"
                             placeholder="Repeat New Password"
@@ -279,7 +279,7 @@
                     </div>
                     <x-primary-button>Update</x-primary-button>
                 </form>
-            </div> --}}
+            </div>
         </div>
     </div>
 </x-app-layout>

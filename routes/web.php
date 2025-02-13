@@ -21,7 +21,7 @@ Route::middleware(['guestOrVerified'])->group(function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile' , [ProfileContrller::class, 'view'])->name('profile');
     Route::post('/profile', [ProfileContrller::class, 'store'])->name('profile.update');
-    // Route::post('/profile/password-update', [ProfileContrller::class, 'passwordUpdate'])->name('profile_password.update');
+    Route::post('/profile/password-update', [ProfileContrller::class, 'passwordUpdate'])->name('profile_password.update');
 });
 
 
@@ -31,9 +31,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // })->middleware(['auth', 'verified'])->name('dashboard');
 
 // Route::middleware('auth')->group(function () {
-//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-//     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-//     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+//     Route::get('/profiles', [ProfileController::class, 'edit'])->name('profile.edit');
+//     Route::patch('/profiles', [ProfileController::class, 'update'])->name('profile.update');
+//     Route::delete('/profiles', [ProfileController::class, 'destroy'])->name('profile.destroy');
 // });
 
 require __DIR__.'/auth.php';

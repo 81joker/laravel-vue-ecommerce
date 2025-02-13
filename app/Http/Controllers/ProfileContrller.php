@@ -7,6 +7,8 @@ use App\Enums\AddressType;
 use Illuminate\Http\Request;
 use App\Models\CustomerAddress;
 use App\Http\Requests\ProfileRequest;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\PasswordUpdateRequest;
 
 class ProfileContrller extends Controller
 {
@@ -62,5 +64,30 @@ class ProfileContrller extends Controller
         // $billingAddress = $customer->billingAddress;
         // $billingAddress->update($request->only('address1', 'address2', 'city', 'state', 'zipcode', 'country_code'));
         // return redirect()->route('profile.view');
+    }
+
+    public function passwordUpdate(PasswordUpdateRequest $request)
+    {
+        /** @var \App\Models\User $user */
+        $user = $request->user();
+
+        $passwordData = $request->validated();
+
+        $user->password = Hash::make($passwordData['new_password']);
+        $user->save();
+
+        $request->session()->flash('flash_message', 'Your password was successfully updated.');
+
+        return redirect()->route('profile');
+
+        // $validated = $request->validateWithBag('updatePassword', [
+        //     'current_password' => ['required', 'current_password'],
+        //     'password' => ['required', Password::defaults(), 'confirmed'],
+        // ]);
+
+        // $request->user()->update([
+        //     'password' => Hash::make($validated['password']),
+        // ]);
+
     }
 }
