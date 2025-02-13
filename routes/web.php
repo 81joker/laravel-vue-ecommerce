@@ -22,16 +22,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile' , [ProfileContrller::class, 'view'])->name('profile');
     Route::post('/profile', [ProfileContrller::class, 'store'])->name('profile.update');
     Route::post('/profile/password-update', [ProfileContrller::class, 'passwordUpdate'])->name('profile_password.update');
+    Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
 });
 
 
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
+    // })->middleware(['auth', 'verified'])->name('dashboard');
 
-// Route::middleware('auth')->group(function () {
-//     Route::get('/profiles', [ProfileController::class, 'edit'])->name('profile.edit');
+    // Route::middleware('auth')->group(function () {
+    //     Route::get('/profiles', [ProfileController::class, 'edit'])->name('profile.edit');
 //     Route::patch('/profiles', [ProfileController::class, 'update'])->name('profile.update');
 //     Route::delete('/profiles', [ProfileController::class, 'destroy'])->name('profile.destroy');
 // });

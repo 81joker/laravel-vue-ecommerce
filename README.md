@@ -45,3 +45,6 @@ Note: We can make the show  product controller available to id  like $product->i
 
 ### 2- Instal https://github.com/stripe/stripe-php
 
+1- Go to the https://docs.stripe.com/payments/accept-a-payment and we pick the type from payment 
+
+

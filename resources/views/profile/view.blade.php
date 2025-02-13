@@ -64,7 +64,7 @@
                         <x-text-input-profile
                             type="text"
                             name="email"
-                            {{-- value="{{old('email', $user->email)}}" --}}
+                            value="{{old('email', $user->email)}}"
                             placeholder="Your Email"
                             class="w-full focus:border-purple-600 focus:ring-purple-600 border-gray-300 rounded"
                         />
