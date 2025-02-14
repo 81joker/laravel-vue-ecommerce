@@ -5,6 +5,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProfileContrller;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CheckoutController;
 
 Route::middleware(['guestOrVerified'])->group(function () {
     Route::get('/', [ProductController::class, 'index'])->name('home');
@@ -22,7 +23,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile' , [ProfileContrller::class, 'view'])->name('profile');
     Route::post('/profile', [ProfileContrller::class, 'store'])->name('profile.update');
     Route::post('/profile/password-update', [ProfileContrller::class, 'passwordUpdate'])->name('profile_password.update');
-    Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+    Route::post('/cart/checkout', [CheckoutController::class, 'checkout'])->name('cart.checkout');
+    Route::post('/cart/checkout/success',  action: [CheckoutController::class, 'success'])->name('cart.success');
+    Route::post('/cart/checkout/cancel',  action: [CheckoutController::class, 'cancel'])->name('cart.cancel');
 });
 
 
