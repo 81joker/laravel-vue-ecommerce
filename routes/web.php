@@ -23,9 +23,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile' , [ProfileContrller::class, 'view'])->name('profile');
     Route::post('/profile', [ProfileContrller::class, 'store'])->name('profile.update');
     Route::post('/profile/password-update', [ProfileContrller::class, 'passwordUpdate'])->name('profile_password.update');
-    Route::post('/cart/checkout', [CheckoutController::class, 'checkout'])->name('cart.checkout');
-    Route::post('/cart/checkout/success',  action: [CheckoutController::class, 'success'])->name('cart.success');
-    Route::post('/cart/checkout/cancel',  action: [CheckoutController::class, 'cancel'])->name('cart.cancel');
+    Route::post('/checkout', [CheckoutController::class, 'checkout'])->name('cart.checkout');
+    Route::get('/checkout/success',  [CheckoutController::class, 'success'])->name('checkout.success');
+    Route::get('/checkout/failure',   [CheckoutController::class, 'failure'])->name('checkout.failure');
 });
 
 
