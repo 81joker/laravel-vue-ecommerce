@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileContrller;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\OrderController;
 
 Route::middleware(['guestOrVerified'])->group(function () {
     Route::get('/', [ProductController::class, 'index'])->name('home');
@@ -26,6 +27,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/checkout', [CheckoutController::class, 'checkout'])->name('cart.checkout');
     Route::get('/checkout/success',  [CheckoutController::class, 'success'])->name('checkout.success');
     Route::get('/checkout/failure',   [CheckoutController::class, 'failure'])->name('checkout.failure');
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index'); 
+    Route::get('/orders/view/:order', [OrderController::class, 'view'])->name('orders.view'); 
 });
 
 
