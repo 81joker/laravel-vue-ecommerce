@@ -2,7 +2,7 @@
         <div class="container lg:w-2/3 xl:w-2/3 mx-auto">
             <h1 class="text-3xl font-bold mb-6">Your Cart Items</h1>
 
-            
+
             <div class="bg-white p-4 rounded-lg shadow" x-data="{
                 cartItems: {{ json_encode(
                     $products->map(
@@ -70,15 +70,18 @@
                             Shipping and taxes calculated at checkout.
                         </p>
 
-                        <button type="submit" class="btn-primary w-full py-3 text-lg">
-                            Proceed to Checkout
-                        </button>
+
+                        <form action="{{ route('cart.checkout') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn-primary w-full py-3 text-lg">Proceed to Checkout</button>
+                          </form>
+
                     </div>
                 </div>
                 </template>
                 <template x-if="!cartItems.length">
-                    <div class="text-gray-600 py-3 text-center">
-                        You have no items in your cart.
+                    <div class="text-gray-500 py-8 text-center">
+                        <h4>You don't have any items in cart</h4>
                     </div>
                 </template>
 

@@ -22,7 +22,7 @@ class ProfileContrller extends Controller
         $billingAddress = $customer->billingAddress?? new CustomerAddress(['type' => AddressType::Billing]);
         $countries = Country::query()->orderBy('name', 'asc')->get();
         // dd($customer ,$shippingAddress->attributesToArray() , $billingAddress->attributesToArray());
-        return view('profile.view' , compact('customer', 'shippingAddress', 'billingAddress', 'countries'));
+        return view('profile.view' , compact('customer', 'user','shippingAddress', 'billingAddress', 'countries'));
     }
     public function store(ProfileRequest $request)
     {
@@ -59,7 +59,7 @@ class ProfileContrller extends Controller
         // /** @var \App\Models\Customer $customer */
         // $customer = $user->customer;
         // $customer->update($request->only('first_name', 'last_name'));
-        // $shippingAddress = $customer->shippingAddress;          
+        // $shippingAddress = $customer->shippingAddress;
         // $shippingAddress->update($request->only('address1', 'address2', 'city', 'state', 'zipcode', 'country_code'));
         // $billingAddress = $customer->billingAddress;
         // $billingAddress->update($request->only('address1', 'address2', 'city', 'state', 'zipcode', 'country_code'));

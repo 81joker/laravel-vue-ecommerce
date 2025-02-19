@@ -9,15 +9,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cookie;
 
+
+
 class CartController extends Controller
 {
     public function index()
     {
-        $cartItems = Cart::getCartItems();
+        // list($products, $cartItems) = $this->getProductsAndCartItems();
+        [$products, $cartItems] = CartItem::getProductsAndCartItems();
 
-        $ids = Arr::pluck($cartItems, 'product_id');
-        $products = Product::query()->whereIn('id', $ids)->get();
-        $cartItems = Arr::keyBy($cartItems, 'product_id');
         $total = 0;
         foreach ($products as $product) {
             $total += $product->price * $cartItems[$product->id]['quantity'];
@@ -122,4 +122,7 @@ class CartController extends Controller
             return response(['count' => Cart::getCountFromItems($cartItems)]);
         }
     }
+
+
+
 }

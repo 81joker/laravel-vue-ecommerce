@@ -32,3 +32,19 @@ Note: We can make the show  product controller available to id  like $product->i
    intgrate with like /product/slug instaed product/id in action store 
    the resoultion for this issue 
    we make in copy from Model product to folder API/Prduct model and implement in Product model
+
+## Stripe Checkout & Orders
+### 1-Make account in Stripe
+
+1. Go to https://dashboard.stripe.com/
+2. Create an account and add your API keys.
+3. Create an account.
+4. Create a test card.
+5. Add your API keys to your .env file.   
+
+
+### 2- Instal https://github.com/stripe/stripe-php
+
+1- Go to the https://docs.stripe.com/payments/accept-a-payment and we pick the type from payment 
+
+
