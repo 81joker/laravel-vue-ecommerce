@@ -1,7 +1,7 @@
     <x-app-layout>
         <div class="container lg:w-2/3 xl:w-2/3 mx-auto">
             <h1 class="text-3xl font-bold mb-6">My Orders</h1>
-    
+
             <div class="bg-white p-3 rounded-md shadow-md">
               <table class="table table-auto w-full">
                 <thead class="border-b-2">
@@ -14,7 +14,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                    @foreach ($orders as $item)          
+                    @foreach ($orders as $item)
                     <tr class="border-b">
                       <td>
                         <a
@@ -109,6 +109,8 @@
                           </template>
                         </div>
                        @if (!$item->isPaid())
+                        <form action="{{ route('cart.checkout-order', $item) }}" method="post">
+                        @csrf
                        <button class="btn-primary py-1 px-2 flex items-center">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -125,7 +127,8 @@
                           />
                         </svg>
                         Pay
-                      </button>   
+                      </button>
+                    </form>
                        @endif
                       </td>
                     </tr>

@@ -25,10 +25,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/profile', [ProfileContrller::class, 'store'])->name('profile.update');
     Route::post('/profile/password-update', [ProfileContrller::class, 'passwordUpdate'])->name('profile_password.update');
     Route::post('/checkout', [CheckoutController::class, 'checkout'])->name('cart.checkout');
+    Route::post('/checkout/{order}', [CheckoutController::class, 'checkoutOrder'])->name('cart.checkout-order');
     Route::get('/checkout/success',  [CheckoutController::class, 'success'])->name('checkout.success');
     Route::get('/checkout/failure',   [CheckoutController::class, 'failure'])->name('checkout.failure');
-    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index'); 
-    Route::get('/orders/view/:order', [OrderController::class, 'view'])->name('orders.view'); 
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/view/:order', [OrderController::class, 'view'])->name('orders.view');
 });
 
 
