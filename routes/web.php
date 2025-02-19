@@ -29,7 +29,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/checkout/success',  [CheckoutController::class, 'success'])->name('checkout.success');
     Route::get('/checkout/failure',   [CheckoutController::class, 'failure'])->name('checkout.failure');
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
-    Route::get('/orders/view/{order}', [OrderController::class, 'view'])->name('orders.view');
+    Route::get('/order/view/{order}', [OrderController::class, 'view'])->name('order.view');
 });
 
 
