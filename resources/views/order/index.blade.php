@@ -10,6 +10,7 @@
                     <th>Date</th>
                     <th>Status</th>
                     <th>Total</th>
+                    <th>Items</th>
                     <th class="w-64">Actions</th>
                   </tr>
                 </thead>
@@ -32,6 +33,7 @@
                         <small class="text-white p-1 rounded text-sm {{ $statusClass }}">{{ ucfirst($item->status) }}</small>
                       </td>
                       <td>${{ $item->total_price }}</td>
+                      <td class="white-space-nowrap">{{ $item->items()->count() }} itms(s)</td>
                       <td class="flex gap-3">
                         <div x-data="{open: false}">
                           <button
@@ -133,9 +135,11 @@
                       </td>
                     </tr>
                     @endforeach
-
                 </tbody>
               </table>
+              <div class="py-3">
+                {{ $orders->links() }}
+              </div>
             </div>
           </div>
 

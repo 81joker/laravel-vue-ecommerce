@@ -80,8 +80,8 @@
                 </div>
                 </template>
                 <template x-if="!cartItems.length">
-                    <div class="text-gray-600 py-3 text-center">
-                        You have no items in your cart.
+                    <div class="text-gray-500 py-8 text-center">
+                        <h4>You don't have any items in cart</h4>
                     </div>
                 </template>
 
