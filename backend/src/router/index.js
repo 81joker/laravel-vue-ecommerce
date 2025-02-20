@@ -6,6 +6,7 @@ import ResetPassword from "../views/ResetPassword.vue";
 import AppLayout from "@/components/AppLayout.vue";
 import Dashboard from "@/views/Dashboard.vue";
 import Products from "@/views/Products/Products.vue";
+import Orders from "@/views/Orders/Orders.vue";
 import NotFount from "@/views/NotFount.vue";
 import store from "@/store";
 
@@ -35,7 +36,12 @@ const router = createRouter({
                   path: 'products',
                   name: 'app.products',
                   component: Products
-                }
+                },
+                {
+                  path: 'orders',
+                  name: 'app.orders',
+                  component: Orders
+                },
                 // {
                 //   path: 'users',
                 //   name: 'app.users',
