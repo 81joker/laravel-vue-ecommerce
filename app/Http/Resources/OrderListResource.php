@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Nette\Utils\DateTime;
 
-class OrderResource extends JsonResource
+class OrderListResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -20,7 +20,7 @@ class OrderResource extends JsonResource
             'total_price' => $this->total_price,
             'status' => $this->status,
             'number_of_items' => $this->items()->count(),
-            'user' => new UserResource($this->user),
+            'customer' => new UserCustomerListResource($this->user),
             // 'created_by' => $this->created_by,
             // 'updated_by' => $this->updated_by,
             'created_at' => (new DateTime($this->created_at))->format('Y-m-d H:i:s'),

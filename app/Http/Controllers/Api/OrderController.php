@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\OrderListResource;
 use App\Http\Resources\OrderResource;
 
 class OrderController extends Controller
@@ -23,8 +24,10 @@ class OrderController extends Controller
             ->where('id', 'like', "%{$search}%")
             ->orderBy($sortField, $sortDirection)
             ->paginate($perPage);
-
-        return OrderResource::collection($query);
+//             $orders = Order::with('items')->get();
+// $order = $query->first();
+// return $order->items->count();
+        return OrderListResource::collection($query);
         // return ProductListResource::collection(Product::query()->paginate(  10));
     }
     /**

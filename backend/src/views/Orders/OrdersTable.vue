@@ -26,21 +26,22 @@
         <TableHeaderCell field="id" :sort-field="sortField" :sort-direction="sortDirection" @click="sortOrders('id')">
           ID
         </TableHeaderCell>
+        <TableHeaderCell :sort-field="sortField" :sort-direction="sortDirection"
+        @click="sortOrders('number_of_items')" >
+          Customer
+        </TableHeaderCell>
         <TableHeaderCell field="status" :sort-field="sortField" :sort-direction="sortDirection"  @click="sortOrders('status')">
           Status
+        </TableHeaderCell>
+        <TableHeaderCell field="total_price" :sort-field="sortField" :sort-direction="sortDirection"
+                         @click="sortOrders('total_price')">
+        Total Price
         </TableHeaderCell>
         <TableHeaderCell field="created_by" :sort-field="sortField" :sort-direction="sortDirection"
                          @click="sortOrders('created_by')">
         Date
         </TableHeaderCell>
-        <TableHeaderCell field="total_price" :sort-field="sortField" :sort-direction="sortDirection"
-                         @click="sortOrders('total_price')">
-        Total
-        </TableHeaderCell>
-        <TableHeaderCell field="number_of_items" :sort-field="sortField" :sort-direction="sortDirection"
-                         @click="sortOrders('number_of_items')">
-          Number Items
-        </TableHeaderCell>
+
         <TableHeaderCell field="actions">
           Actions
         </TableHeaderCell>
@@ -64,16 +65,17 @@
             <span>{{ orders.status }}</span>
           <!-- <img class="w-16 h-16 object-cover" :src="orders.image" :alt="orders.title"> -->
         </td>
-        <td class="border-b p-2 max-w-[200px] whitespace-nowrap overflow-hidden text-ellipsis">
-          {{ orders.created_at }}
+        <td class="border-b p-2 ">
+          {{ orders.customer.first_name }} {{ orders.customer.last_name }}
         </td>
         <td class="border-b p-2">
           ${{ orders.total_price }}
         </td>
-        <td class="border-b p-2 ">
-          {{  number_of_items  }}
-          <!-- {{  order.number_of_items > 1 ? 'items' : 'item' }} -->
+        <td class="border-b p-2 max-w-[200px] whitespace-nowrap overflow-hidden text-ellipsis">
+          {{ orders.created_at }}
         </td>
+
+
         <td class="border-b p-2 ">
           <Menu as="div" class="relative inline-block text-left">
             <div>

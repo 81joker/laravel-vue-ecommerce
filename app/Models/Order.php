@@ -6,6 +6,7 @@ use App\Models\Payment;
 use App\Enums\OrderStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\OrderItem;
 
 class Order extends Model
 {
@@ -23,10 +24,10 @@ class Order extends Model
     }
 
     public function  user(){
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class , 'created_by');
     }
 
     public function  items(){
-        return $this->hasMany(OrderItem::class);
+        return $this->hasMany(OrderItem::class );
     }
 }
