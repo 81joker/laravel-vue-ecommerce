@@ -46,3 +46,32 @@ export function setProducts (state, [loading,response = null]) {
 //     }
 //     state.products.loading = loading;
 //   }
+
+
+// Set Orders
+export function setOrders (state, [loading,response = null]) {
+    if(response){
+        state.orders = {
+          ...state.orders,
+            data:response.data,
+            links: response.meta.links,
+            from: response.meta.from,
+            to: response.meta.to,
+            page: response.meta.current_page,
+            limit: response.meta.per_page,
+            total: response.meta.total,
+        }
+        }
+    state.orders.loading = loading
+    // state.products.data = response.data
+}
+
+
+export function showToast(state, message) {
+    state.toast.show = true;
+    state.toast.message = message;
+}
+export function hideToast(state, message) {
+    state.toast.show = true;
+    state.toast.message = message;
+}
