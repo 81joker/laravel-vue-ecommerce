@@ -23,5 +23,9 @@ const state = {
         limit: null,
         total: null,
     },
+    toast: {
+        show: false,
+        message: "",
+    }
 };
 export default state;
