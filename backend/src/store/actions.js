@@ -71,25 +71,7 @@ export function createProduct({ commit }, product) {
     }
     return axiosClient.post("/products", product);
 }
-export function updateProduct({ commit }, product) {
-    const id = product.id;
 
-    let form = new FormData();
-    form.append("id", product.id);
-    form.append("title", product.title);
-    form.append("description", product.description);
-    form.append("price", product.price);
-    form.append("_method", "PUT");
-
-    // Append image only if it's a File instance
-    if (product.image instanceof File) {
-        form.append("image", product.image);
-    }
-
-    return axiosClient.post(`/products/${id}`, form, {
-        headers: { "Content-Type": "multipart/form-data" },
-    });
-}
 
 
 export function deleteProduct({ commit }, id) {
@@ -102,6 +84,49 @@ export function deleteProduct({ commit }, id) {
 //   return axiosClient.delete(`/products/${id}`)
 // }
 
+// Users Action
+export function getUsers(
+    { commit },
+    { url = null, search = "", perPage, sort_field, sort_direction } = {}
+) {
+    commit("setUsers", [true]);
+    url = url || "/users";
+    return axiosClient
+        .get(url, {
+            params: {
+                search: search,
+                per_page: perPage,
+                sort_field: sort_field,
+                sort_direction: sort_direction,
+            },
+        })
+
+        .then((res) => {
+            commit("setUsers", [false, res.data]);
+        })
+        .catch(() => {
+            commit("setUsers", [false]);
+        });
+    // .then(({data}) => {
+    //       debugger;
+    //     commit('setProducts', [false, data]);
+    //     return data;
+    // })
+}
+
+
+
+  export function createUser({commit}, user) {
+    return axiosClient.post('/users', user)
+  }
+  
+  export function updateUser({commit}, user) {
+    return axiosClient.put(`/users/${user.id}`, user)
+  }
+  export function deleteUser({ commit }, id) {
+    return axiosClient.delete(`/users/${id}`)
+ 
+}
 
 // Orders Action
 

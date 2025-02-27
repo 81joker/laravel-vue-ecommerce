@@ -27,6 +27,28 @@ export function setProducts (state, [loading,response = null]) {
     state.products.loading = loading
     // state.products.data = response.data
 }
+
+
+
+// Set Users
+export function setUsers (state, [loading,response = null]) {
+    if(response){
+        state.users = {
+          ...state.users,
+            data:response.data,
+            links: response.meta.links,
+            from: response.meta.from,
+            to: response.meta.to,
+            page: response.meta.current_page,
+            limit: response.meta.per_page,
+            total: response.meta.total,
+        }
+        }
+    state.users.loading = loading
+    // state.products.data = response.data
+}
+
+
 // export function setProduct(state, product) {
 //     state.product = { ...product, image: product.image || null };
 //   }

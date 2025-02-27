@@ -6,6 +6,7 @@ import ResetPassword from "../views/ResetPassword.vue";
 import AppLayout from "@/components/AppLayout.vue";
 import Dashboard from "@/views/Dashboard.vue";
 import Products from "@/views/Products/Products.vue";
+import Users from "@/views/Users/Users.vue";
 import Orders from "@/views/Orders/Orders.vue";
 import OrdersView from "@/views/Orders/OrdersView.vue";
 import NotFount from "@/views/NotFount.vue";
@@ -48,11 +49,11 @@ const router = createRouter({
                   name: 'app.orders.view',
                   component: OrdersView,
                 },
-                // {
-                //   path: 'users',
-                //   name: 'app.users',
-                //   component: Users
-                // },
+                {
+                  path: 'users',
+                  name: 'app.users',
+                  component: Users
+                },
             ],
         },
         {

@@ -1,5 +1,4 @@
 <template>
-  {{ toast }}
     <!-- Toast -->
     <div
       v-show="toast.show"
