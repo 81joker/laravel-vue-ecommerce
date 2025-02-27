@@ -47,6 +47,23 @@ export function setUsers (state, [loading,response = null]) {
     state.users.loading = loading
     // state.products.data = response.data
 }
+// Set Customers
+export function setCustomers (state, [loading,response = null]) {
+    if(response){
+        state.customers = {
+          ...state.customers,
+            data:response.data,
+            links: response.meta.links,
+            from: response.meta.from,
+            to: response.meta.to,
+            page: response.meta.current_page,
+            limit: response.meta.per_page,
+            total: response.meta.total,
+        }
+        }
+    state.customers.loading = loading
+    // state.products.data = response.data
+}
 
 
 // export function setProduct(state, product) {
