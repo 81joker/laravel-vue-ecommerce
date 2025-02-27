@@ -47,18 +47,11 @@ export function getProducts(
         .catch(() => {
             commit("setProducts", [false]);
         });
-    // .then(({data}) => {
-    //       debugger;
-    //     commit('setProducts', [false, data]);
-    //     return data;
-    // })
 }
 
 export function getProduct({commit}, id) {
     return axiosClient.get(`/products/${id}`)
   }
-
- 
 
 export function createProduct({ commit }, product) {
     if (product.image instanceof File) {
@@ -71,18 +64,9 @@ export function createProduct({ commit }, product) {
     }
     return axiosClient.post("/products", product);
 }
-
-
-
 export function deleteProduct({ commit }, id) {
     return axiosClient.delete(`/products/${id}`)
-    // .then(() => {
-    //     commit("deleteProduct", id);
-    // });
 }
-// export function deleteProduct({commit}, id) {
-//   return axiosClient.delete(`/products/${id}`)
-// }
 
 // Users Action
 export function getUsers(
@@ -114,19 +98,17 @@ export function getUsers(
     // })
 }
 
-
-
   export function createUser({commit}, user) {
     return axiosClient.post('/users', user)
   }
-  
+
   export function updateUser({commit}, user) {
     return axiosClient.put(`/users/${user.id}`, user)
   }
   export function deleteUser({ commit }, id) {
     return axiosClient.delete(`/users/${id}`)
- 
 }
+
 
 // Customers Action
 export function getCustomers(
@@ -154,17 +136,20 @@ export function getCustomers(
 }
 
 
+  export function getCustomer({commit}, id) {
+    return axiosClient.get(`/customers/${id}`)
+  }
 
   export function createCustomer({commit}, customer) {
     return axiosClient.post('/customers', customer)
   }
-  
+
   export function updateCustomer({commit}, customer) {
     return axiosClient.put(`/customers/${customer.id}`, customer)
   }
   export function deleteCustomer({ commit }, id) {
     return axiosClient.delete(`/customers/${id}`)
- 
+
 }
 
 // Orders Action
@@ -172,12 +157,13 @@ export function getCustomers(
 export function getOrder({commit}, id) {
     return axiosClient.get(`/orders/${id}`)
   }
-  
+
 
 export function getOrders(
     { commit },
     { url = null, search = "", perPage, sort_field, sort_direction } = {}
 ) {
+    debugger;
     commit("setOrders", [true]);
     url = url || "/orders";
     return axiosClient

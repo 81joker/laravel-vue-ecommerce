@@ -46,9 +46,36 @@
                   <div class="bg-white px-4 pt-5 pb-4">
                     <CustomInput class="mb-2" v-model="customer.first_name" label="Customer First Name"/>
                     <CustomInput class="mb-2" v-model="customer.last_name" label="Customer Last Name"/>
-                    <!-- <CustomInput type="email" class="mb-2" v-model="customer.email" label="E-mail"/> -->
+                    <CustomInput type="email" class="mb-2" v-model="customer.email" label="E-mail"/>
                     <CustomInput type="number" class="mb-2" v-model="customer.phone" label="Phone"/>
                     <CustomInput type="text" class="mb-2" v-model="customer.status" label="Status" />
+
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h2 class="text-xl font-semibold mt-6 pb-2 border-b border-gray-300">Billing Address</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            <CustomInput  v-model="customer.billingAddress.address1" label="Address"/>
+                            <CustomInput  v-model="customer.billingAddress.address2" label="Address2"/>
+                            <CustomInput  v-model="customer.billingAddress.city" label="City"/>
+                            <CustomInput  v-model="customer.billingAddress.state" label="State"/>
+                            <CustomInput  v-model="customer.billingAddress.zipcode" label="Zip"/>
+                            <CustomInput  v-model="customer.billingAddress.country_code" label="Country Code"/>
+                        </div>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-semibold mt-6 pb-2 border-b border-gray-300">Shipping Address</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            <CustomInput  v-model="customer.shippingAddress.address1" label="Address"/>
+                            <CustomInput  v-model="customer.shippingAddress.address2" label="Address2"/>
+                            <CustomInput  v-model="customer.shippingAddress.city" label="City"/>
+                            <CustomInput  v-model="customer.shippingAddress.state" label="State"/>
+                            <CustomInput  v-model="customer.shippingAddress.zipcode" label="Zip"/>
+                            <CustomInput  v-model="customer.shippingAddress.country_code" label="Country Code"/>
+                            </div>
+                        </div>
+                    </div>
+
                   </div>
                   <footer class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                     <button type="submit"
@@ -78,6 +105,10 @@
   import store from "../../store/index.js";
   import Spinner from "../../components/core/Spinner.vue";
 
+
+  const customer = ref({})
+
+
   const loading = ref(false)
 
   const props = defineProps({
@@ -88,11 +119,6 @@
     }
   })
 
-  const customer = ref({
-    id: props.customer.id,
-    customer: props.customer.customer,
-    // email: props.customer.email
-  })
 
   const emit = defineEmits(['update:modelValue', 'close'])
 
@@ -101,14 +127,20 @@
     set: (value) => emit('update:modelValue', value)
   })
 
-  onUpdated(() => {
+  onUpdated( () =>{
     customer.value = {
-      id: props.customer.id,
-      first_name: props.customer.first_name,
-      last_name: props.customer.last_name,
-      phone: props.customer.phone,
-      // email: props.customer.email,
-      status: props.customer.status
+        id: props.customer.id,
+        first_name: props.customer.first_name,
+        last_name: props.customer.last_name,
+        phone: props.customer.phone,
+        email: props.customer.email,
+        status: props.customer.status,
+        billingAddress: {
+            ...props.customer.billingAddress
+        },
+        shippingAddress: {
+            ...props.customer.shippingAddress
+        }
     }
   })
 
@@ -119,15 +151,13 @@
 
   function onSubmit() {
     loading.value = true
-    console.log('Submitting Customer:', customer.value); 
-
-    if (customer.value.id) {      
-      store.dispatch('updateCustomer', customer.value)
+    if (customer.value.id) {
+      store.dispatch('updateProduct', customer.value)
         .then(response => {
           loading.value = false;
           if (response.status === 200) {
             // TODO show notification
-            store.dispatch('getCustomers')
+            store.dispatch('getCutomers')
             closeModal()
           }
         })
@@ -137,12 +167,12 @@
           // TODO show error notification
         })
     } else {
-      store.dispatch('createCustomer', customer.value)
+      store.dispatch('creatCu', product.value)
         .then(response => {
           loading.value = false;
           if (response.status === 201) {
             // TODO show notification
-            store.dispatch('getCustomers')
+            store.dispatch('getProducts')
             closeModal()
           }
         })

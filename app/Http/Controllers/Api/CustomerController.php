@@ -3,20 +3,15 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Api\User;
-use Illuminate\Http\Request;
-use App\Http\Resources\CustomerListResource;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\CreateUserRequest;
-use App\Http\Requests\UpdateUserRequest;
 use App\Models\Customer;
-use Illuminate\Support\Facades\Hash;
+use App\Enums\CustomerStatus;
+use Illuminate\Http\UploadedFile;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\CustomerRequest;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\UpdateUserRequest;
+use App\Http\Resources\CustomerResource;
+use App\Http\Resources\CustomerListResource;
 
 
 class CustomerController extends Controller
@@ -26,17 +21,6 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        // $perPage = request('per_page', 10);
-        // $search = request('search', '');
-        // $sortField = request('sort_field', 'updated_at');
-        // $sortDirection = request('sort_direction', 'desc');
-        // $query = User::query()
-        //     ->where('title', 'like', "%{$search}%")
-        //     ->orderBy($sortField, $sortDirection)
-        //     ->paginate($perPage);
-
-        // return CustomerListResource::collection($query);
-        // return CustomerListResource::collection(User::query()->paginate(  10));
 
         $perPage = request('per_page', 10);
         $search = request('search', '');
@@ -48,69 +32,91 @@ class CustomerController extends Controller
             ->paginate($perPage);
 
         return CustomerListResource::collection($query);
+        // $perPage = request('per_page', 10);
+        // $search = request('search', '');
+        // $sortField = request('sort_field', 'updated_at');
+        // $sortDirection = request('sort_direction', 'desc');
+
+        // $query = Customer::query()
+        //     ->with('user')
+        //     ->orderBy("customers.$sortField", $sortDirection);
+        // if ($search) {
+        //     $query
+        //         ->where(DB::raw("CONCAT(first_name, ' ', last_name)"), 'like', "%{$search}%")
+        //         ->join('users', 'customers.user_id', '=', 'users.id')
+        //         ->orWhere('users.email', 'like', "%{$search}%")
+        //         ->orWhere('customers.phone', 'like', "%{$search}%");
+        // }
+
+        // $paginator = $query->paginate($perPage);
+
+        // return CustomerListResource::collection($paginator);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(CustomerRequest $request)
-    {
-        $data = $request->validated();
-        
-        // $data['created_by'] = $request->user()->id;
-        // $data['updated_by'] = $request->user()->id;
 
-        $customer = Customer::create($data);
-        return new CustomerListResource($customer);
-    }
 
-    /**
+     /**
      * Display the specified resource.
      *
-     * @param \App\Models\User $user
+     * @param \App\Models\Customer $customer
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show(Customer $customer)
     {
-        return new CustomerListResource($user);
+        return new CustomerResource($customer);
     }
-
       /**
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Models\User      $user
+     * @param \App\Models\Customer     $customer
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateUserRequest $request, User $user)
+    public function update(CustomerRequest $request, Customer $customer)
     {
-        $data = $request->validated();
-        $data['updated_by'] = $request->user()->id;
+        $customerData = $request->validated();
+        $customerData['updated_by'] = $request->user()->id;
+        $customerData['status'] = $customerData['status'] ? CustomerStatus::Active->value : CustomerStatus::Disabled->value;
+        $shippingData = $customerData['shippingAddress'];
+        $billingData = $customerData['billingAddress'];
 
-        $user->update($data);
+        // DB::beginTransaction();
+        // try {
+        //     $customer->update($customerData);
 
-        return new CustomerListResource($user);
+        //     if ($customer->shippingAddress) {
+        //         $customer->shippingAddress->update($shippingData);
+        //     } else {
+        //         $shippingData['customer_id'] = $customer->user_id;
+        //         $shippingData['type'] = AddressType::Shipping->value;
+        //         CustomerAddress::create($shippingData);
+        //     }
+
+        //     if ($customer->billingAddress) {
+        //         $customer->billingAddress->update($billingData);
+        //     } else {
+        //         $billingData['customer_id'] = $customer->user_id;
+        //         $billingData['type'] = AddressType::Billing->value;
+        //         CustomerAddress::create($billingData);
+        //     }
+        // } catch (\Exception $e) {
+        //     DB::rollBack();
+
+        //     Log::critical(__METHOD__ . ' method does not work. '. $e->getMessage());
+        //     throw $e;
+        // }
+
+        // DB::commit();
+
+        return new CustomerResource($customer);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy(Customer $customer)
     {
-         $user->delete();
+         $customer->delete();
          return response()->noContent();
-    }
-
-    private function saveImage(UploadedFile $image)
-    {
-        // $path = 'images/' . Str::random();
-        $path = $image->store('images', 'public');
-        if (!Storage::putFileAS('public/' . $path, $image, $image->getClientOriginalName())) {
-            throw new \Exception("Unable to save file \"{$image->getClientOriginalName()}\"");
-        }
-
-        return $path . '/' ;
     }
 }

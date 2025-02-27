@@ -12,7 +12,7 @@
       </button>
     </div>
     <CustomersTable @clickEdit="editCustomer" />
-  <CustomerModal v-model="showModal"  :customer="customerModel" />
+   <CustomerModal v-model="showModal"  :customer="customerModel" />
   </div>
 </template>
 <script setup>
@@ -28,7 +28,7 @@ const customerModel = ref({
   phone: "",
   status: '',
    email: "",
-  // address: "",      
+  // address: "",
 });
 
 // function showAddNewModal() {
@@ -39,20 +39,20 @@ const showModal = ref(false)
   function showCustomerModal() {
     showModal.value = true
   }
-  
-  function editCustomer(c) {
-    
-      customerModel.value = c
-      showCustomerModal()
-      // showAddNewModal();
-}
-//   function editCustomer(p) {
-//   store.dispatch('getCustomer', p.id)
-//     .then(({data}) => {      
-//       customerModel.value = data
+
+//   function editCustomer(c) {
+
+//       customerModel.value = c
 //       showCustomerModal()
 //       // showAddNewModal();
-//     })
 // }
+  function editCustomer(c) {
+  store.dispatch('getCustomer', c.id)
+    .then(({data}) => {
+    customerModel.value = data
+      showCustomerModal()
+      // showAddNewModal();
+    })
+}
 
 </script>

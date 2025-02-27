@@ -34,6 +34,10 @@
                          @click="sortCustomers('last_name')">
           Last Name
         </TableHeaderCell>
+        <TableHeaderCell field="email" :sort-field="sortField" :sort-direction="sortDirection"
+                         @click="sortCustomers('email')">
+          Email
+        </TableHeaderCell>
         <TableHeaderCell field="phone" :sort-field="sortField" :sort-direction="sortDirection"
                          @click="sortCustomers('phone')">
           Phone
@@ -66,6 +70,9 @@
         </td>
         <td class="border-b p-2">
            {{ customer.last_name }}
+        </td>
+        <td class="border-b p-2">
+           {{ customer.email }}
         </td>
         <td class="border-b p-2 ">
           {{ customer.phone }}
@@ -247,7 +254,7 @@ function deleteCustomer(customer) {
     })
 }
 
-function editCustomer(p) {  
+function editCustomer(p) {
   emit('clickEdit', p)
 }
 </script>
