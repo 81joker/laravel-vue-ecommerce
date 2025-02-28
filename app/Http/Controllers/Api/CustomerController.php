@@ -74,11 +74,16 @@ class CustomerController extends Controller
      */
     public function update(CustomerRequest $request, Customer $customer)
     {
-        $customerData = $request->validated();
+
+
+        $data = $request->validated();
         $customerData['updated_by'] = $request->user()->id;
-        $customerData['status'] = $customerData['status'] ? CustomerStatus::Active->value : CustomerStatus::Disabled->value;
-        $shippingData = $customerData['shippingAddress'];
-        $billingData = $customerData['billingAddress'];
+        $customer->update($data);
+        // $customerData = $request->validated();
+        // $customerData['updated_by'] = $request->user()->id;
+        // $customerData['status'] = $customerData['status'] ? CustomerStatus::Active->value : CustomerStatus::Disabled->value;
+        // $shippingData = $customerData['shippingAddress'];
+        // $billingData = $customerData['billingAddress'];
 
         // DB::beginTransaction();
         // try {

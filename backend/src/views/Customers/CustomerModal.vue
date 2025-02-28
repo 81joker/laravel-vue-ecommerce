@@ -20,7 +20,7 @@
                          class="absolute left-0 top-0 bg-white right-0 bottom-0 flex items-center justify-center"/>
                 <header class="py-3 px-4 flex justify-between items-center">
                   <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900">
-                    {{ customer.id ? `Update customer: "${props.customer.first_name}"` : 'Create new Customer' }}
+                    {{ customer.id ? `Update customer: "${props.customer.first_name} ${props.customer.last_name}"` : 'Create new Customer' }}
                   </DialogTitle>
                   <button
                     @click="closeModal()"
@@ -48,7 +48,7 @@
                     <CustomInput class="mb-2" v-model="customer.last_name" label="Customer Last Name"/>
                     <CustomInput type="email" class="mb-2" v-model="customer.email" label="E-mail"/>
                     <CustomInput type="number" class="mb-2" v-model="customer.phone" label="Phone"/>
-                    <CustomInput type="text" class="mb-2" v-model="customer.status" label="Status" />
+                    <CustomInput type="checkbox" class="mb-2" v-model="customer.status" label="Status" />
 
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -152,7 +152,7 @@
   function onSubmit() {
     loading.value = true
     if (customer.value.id) {
-      store.dispatch('updateProduct', customer.value)
+      store.dispatch('updateCustomer', customer.value)
         .then(response => {
           loading.value = false;
           if (response.status === 200) {
