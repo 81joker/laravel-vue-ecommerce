@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\CustomerResource;
 use App\Http\Resources\CustomerListResource;
+use App\Models\Country;
+use App\Http\Resources\CountryResource;
 
 
 class CustomerController extends Controller
@@ -74,10 +76,8 @@ class CustomerController extends Controller
      */
     public function update(CustomerRequest $request, Customer $customer)
     {
-
-
         $data = $request->validated();
-        $customerData['updated_by'] = $request->user()->id;
+        // $customerData['updated_by'] = $request->user()->id;
         $customer->update($data);
         // $customerData = $request->validated();
         // $customerData['updated_by'] = $request->user()->id;
@@ -123,5 +123,9 @@ class CustomerController extends Controller
     {
          $customer->delete();
          return response()->noContent();
+    }
+    public function countries()
+    {
+        return CountryResource::collection(Country::query()->orderBy('name', 'asc')->get());
     }
 }

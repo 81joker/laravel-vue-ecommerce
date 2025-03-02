@@ -71,7 +71,14 @@
                             <CustomInput  v-model="customer.shippingAddress.city" label="City"/>
                             <CustomInput  v-model="customer.shippingAddress.state" label="State"/>
                             <CustomInput  v-model="customer.shippingAddress.zipcode" label="Zip"/>
-                            <CustomInput  v-model="customer.shippingAddress.country_code" label="Country Code"/>
+                            <CustomInput type="select" v-model="customer.shippingAddress.country_code" label="Country Code"/>
+
+                              <select name="shipping[country_code]" id="">
+                                <option value="US">United States</option>
+                                <option value="CA">Canada</option>
+                                <option value="MX">Mexico</option>
+                              </select>
+
                             </div>
                         </div>
                     </div>

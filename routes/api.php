@@ -9,11 +9,12 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Models\Customer;
 
-Route::apiResource('customers', CustomerController::class);
 Route::middleware(['auth:sanctum' ,'admin'])->group(function () {
     Route::get('/user', [AuthController::class, 'getUser']);
     Route::post('/logout', action: [AuthController::class, 'logout']);
     Route::apiResource('users', UserController::class);
+    Route::apiResource('customers', CustomerController::class);
+    Route::get('/countries', [CustomerController::class, 'countries']);
     Route::apiResource('/products', ProductController::class);
     Route::get('/orders', [OrderController::class, 'index']);
     Route::get('/orders', [OrderController::class, 'index']);
