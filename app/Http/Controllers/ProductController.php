@@ -8,7 +8,7 @@ use App\Models\Product;
 class ProductController extends Controller
 {
     public function index(){
-        $products = Product::query()->orderBy('updated_at', 'desc')->paginate(4);
+        $products = Product::query()->orderBy('updated_at', 'desc')->paginate(8);
         return view('product.index', ['products' => $products]);
     }
 

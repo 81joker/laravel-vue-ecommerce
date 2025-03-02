@@ -47,27 +47,26 @@ export function setUsers (state, [loading,response = null]) {
     state.users.loading = loading
     // state.products.data = response.data
 }
+// Set Customers
+export function setCustomers (state, [loading,response = null]) {
+    if(response){
+        state.customers = {
+          ...state.customers,
+            data:response.data,
+            links: response.meta.links,
+            from: response.meta.from,
+            to: response.meta.to,
+            page: response.meta.current_page,
+            limit: response.meta.per_page,
+            total: response.meta.total,
+        }
+        }
+    state.customers.loading = loading
+    // state.products.data = response.data
+}
 
 
-// export function setProduct(state, product) {
-//     state.product = { ...product, image: product.image || null };
-//   }
-// export function setProducts(state, [loading, data = null]) {
 
-//     if (data) {
-//       state.products = {
-//         ...state.products,
-//         data: data.data,
-//         links: data.meta?.links,
-//         page: data.meta.current_page,
-//         limit: data.meta.per_page,
-//         from: data.meta.from,
-//         to: data.meta.to,
-//         total: data.meta.total,
-//       }
-//     }
-//     state.products.loading = loading;
-//   }
 
 
 // Set Orders

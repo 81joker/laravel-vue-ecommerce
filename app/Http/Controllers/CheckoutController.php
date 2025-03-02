@@ -18,7 +18,7 @@ class CheckoutController extends Controller
 
     public function checkout(Request $request)
     {
-        \Stripe\Stripe::setApiKey(getenv('STRIPE_SECRET_KEY'));
+        \Stripe\Stripe::setApiKey(config('services.stripe.token'));
 
         [$products, $cartItems] = CartItem::getProductsAndCartItems();
 
@@ -110,9 +110,9 @@ class CheckoutController extends Controller
     }
     public function success(Request $request)
     {
-        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+        \Stripe\Stripe::setApiKey(config('services.stripe.token'));
 
-        $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET_KEY'));
+        $stripe = new \Stripe\StripeClient(config('services.stripe.token'));
 
         try {
             $session = $stripe->checkout->sessions->retrieve(id: $_GET['session_id']);

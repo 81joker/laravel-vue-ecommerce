@@ -23,8 +23,8 @@ class OrderListResource extends JsonResource
             // 'customer' => new UserCustomerListResource($this->user),
             'customer' => [
                 'id' => $this->user->id,
-                'first_name' => $this->user->customer->first_name,
-                'last_name' => $this->user->customer->last_name,
+                'first_name' => $this->user->customer->first_name ?? '',
+                'last_name' => $this->user->customer->last_name ?? '',
             ],
             'created_at' => (new DateTime($this->created_at))->format('Y-m-d H:i:s'),
             'updated_at' => (new DateTime($this->updated_at))->format('Y-m-d H:i:s'),
