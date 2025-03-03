@@ -58,11 +58,13 @@
                             <CustomInput  v-model="customer.billingAddress.address1" label="Address"/>
                             <CustomInput  v-model="customer.billingAddress.address2" label="Address2"/>
                             <CustomInput  v-model="customer.billingAddress.city" label="City"/>
-                            <CustomInput  v-model="customer.billingAddress.state" label="State"/>
                             <CustomInput  v-model="customer.billingAddress.zipcode" label="Zip"/>
-                            <CustomInput  :select-options="countries" v-model="customer.billingAddress.country_code" label="Country Code"/>
 
-                            <pre>{{ countries }}</pre>
+                            
+                            <CustomInput type="select" :select-options="countries" v-model="customer.billingAddress.country_code" label="Country Code"/>
+                            <!-- <CustomInput type="select" :select-options="stateOptions" v-model="customer.billingAddress.state" label="State"/> -->
+                            <CustomInput v-if="!billingCountry.states" v-model="customer.billingAddress.state" label="State"/>
+                            <CustomInput v-else type="select" :select-options="shippingStateOptions" v-model="customer.billingAddress.state" label="State"/>
 
                         </div>
                         </div>
@@ -72,17 +74,11 @@
                             <CustomInput  v-model="customer.shippingAddress.address1" label="Address"/>
                             <CustomInput  v-model="customer.shippingAddress.address2" label="Address2"/>
                             <CustomInput  v-model="customer.shippingAddress.city" label="City"/>
-                            <CustomInput  v-model="customer.shippingAddress.state" label="State"/>
                             <CustomInput  v-model="customer.shippingAddress.zipcode" label="Zip"/>
-                            <CustomInput type="select" v-model="customer.shippingAddress.country_code" label="Country Code"/>
+                            <CustomInput type="select" :select-options="countries" v-model="customer.shippingAddress.country_code" label="Country Code"/>
 
-                            <pre>{{ customer.shippingAddress.country_code }}</pre>
-
-                              <select name="shipping[country_code]" id="">
-                                <option value="US">United States</option>
-                                <option value="CA">Canada</option>
-                                <option value="MX">Mexico</option>
-                              </select>
+                            <CustomInput v-if="!billingCountry.states" v-model="customer.shippingAddress.state" label="State"/>
+                            <CustomInput v-else type="select" :select-options="shippingStateOptions" v-model="customer.shippingAddress.state" label="State"/>
 
                             </div>
                         </div>
@@ -126,8 +122,8 @@
   const props = defineProps({
     modelValue: Boolean,
     customer: {
-      required: true,
-      type: Object,
+      billingAddress: {},
+      shippingAddress: {}
     }
   })
 
@@ -138,9 +134,16 @@
     get: () => props.modelValue,
     set: (value) => emit('update:modelValue', value)
   })
-
+  
   const countries = computed(() => store.state.countries.map(c => ({key: c.code, text: c.name})))
+  const shippingCountry = computed(() => store.state.countries.find(c => c.code === customer.value.shippingAddress.country_code))
+  const billingCountry = computed(() => store.state.countries.find(c => c.code === customer.value.billingAddress.country_code))
 
+  const shippingStateOptions = computed(() => {
+    if (!shippingCountry.value || !shippingCountry.value.states) return [];
+
+    return Object.entries(shippingCountry.value.states).map(c => ({key: c[0], text: c[1]}))
+  })
   onUpdated( () =>{
     customer.value = {
         id: props.customer.id,
