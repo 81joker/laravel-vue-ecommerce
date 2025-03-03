@@ -25,6 +25,13 @@ export async function logout({ commit }) {
         throw error; // Re-throw the error for further handling
     }
 }
+
+export function getCountries() {
+    return axiosClient.get("/countries")
+    .then(({ data }) => {
+        return data;
+    });
+}
 export function getProducts(
     { commit },
     { url = null, search = "", perPage, sort_field, sort_direction } = {}

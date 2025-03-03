@@ -1,5 +1,7 @@
 <!-- This example requires Tailwind CSS v2.0+ -->
 <template>
+       <pre>{{ countries }}</pre>
+
     <TransitionRoot as="template" :show="show">
       <Dialog as="div" class="relative z-10" @close="show = false">
         <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0" enter-to="opacity-100"
@@ -71,7 +73,7 @@
                             <CustomInput  v-model="customer.shippingAddress.city" label="City"/>
                             <CustomInput  v-model="customer.shippingAddress.state" label="State"/>
                             <CustomInput  v-model="customer.shippingAddress.zipcode" label="Zip"/>
-                            <CustomInput type="select" v-model="customer.shippingAddress.country_code" label="Country Code"/>
+                            <CustomInput type="select" :selectOptions="countries" v-model="customer.shippingAddress.country_code" label="Country Code"/>
 
                               <select name="shipping[country_code]" id="">
                                 <option value="US">United States</option>
@@ -134,6 +136,7 @@
     set: (value) => emit('update:modelValue', value)
   })
 
+  const countries  = computed(() => store.state.countries);
   onUpdated( () =>{
     customer.value = {
         id: props.customer.id,

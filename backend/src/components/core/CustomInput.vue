@@ -6,6 +6,15 @@
               class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
           {{ prepend }}
         </span>
+        <template v-if="type === 'select'">
+        <select :name="name"
+                :required="required"
+                :value="props.modelValue"
+                :class="inputClasses"
+                @change="onChange($event.target.value)">
+          <option v-for="option of selectOptions" :value="option.key">{{ option.text }}</option>
+        </select>
+      </template>
         <template v-if="type === 'textarea'">
         <textarea :name="name"
                   :required="required"
@@ -71,7 +80,8 @@
     append: {
       type: String,
       default: ''
-    }
+    },
+    selectOptions: Array,
   })
 
   const inputClasses = computed(() => {

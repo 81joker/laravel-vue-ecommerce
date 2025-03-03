@@ -33,7 +33,7 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -48,10 +48,11 @@ class RegisteredUserController extends Controller
         $customer = new Customer();
         $name = explode(" ", $request->name);
         $customer->user_id = $user->id;
-
-        $customer->first_name = $name[0];
-        $customer->last_name = $name[1]?? '';
-        $customer->save();
+        if (!isset($customer)) {
+            $customer->first_name = $name[0];
+            $customer->last_name = $name[1] ?? '';
+            $customer->save();
+        }
 
 
         Auth::login($user);
