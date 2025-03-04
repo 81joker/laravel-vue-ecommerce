@@ -24,9 +24,24 @@ class CountrySeeder extends Seeder
             ['code' => 'geo', 'name' => 'Georgia', 'states' => null],
             ['code' => 'ind', 'name' => 'India', 'states' => null],
             ['code' => 'usa', 'name' => 'United States of America', 'states' => json_encode($usaStates)],
+            // ['code' => 'usa', 'name' => 'Austria', 'states' => json_encode($usaStates)],
             ['code' => 'ger', 'name' => 'Germany', 'states' => null],
         ];
         Country::insert($countries);
 
     }
 }
+
+// {
+//     "BG": "Burgenland",
+//     "K": "Kärnten",
+//     "NÖ": "Niederösterreich",
+//     "OÖ": "Oberösterreich",
+//     "S": "Salzburg",
+//     "ST": "Steiermark",
+//     "T": "Tirol",
+//     "V": "Vorarlberg",
+//     "W": "Wien"
+//   }
+
+// {"AK": "Alaska", "AL": "Alabama", "AR": "Arkansas", "AZ": "Arizona", "CA": "California"}

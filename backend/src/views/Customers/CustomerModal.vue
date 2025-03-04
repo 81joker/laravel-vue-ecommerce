@@ -65,7 +65,7 @@
                             <CustomInput type="select" :select-options="countries" v-model="customer.billingAddress.country_code" label="Country Code"/>
                             <!-- <CustomInput type="select" :select-options="stateOptions" v-model="customer.billingAddress.state" label="State"/> -->
                             <CustomInput v-if="!billingCountry.states" v-model="customer.billingAddress.state" label="State"/>
-                            <CustomInput v-else type="select" :select-options="shippingStateOptions" v-model="customer.billingAddress.state" label="State"/>
+                            <CustomInput v-else type="select" :select-options="billingStateOptions" v-model="customer.billingAddress.state" label="State"/>
 
                         </div>
                         </div>
@@ -139,6 +139,12 @@
   const countries = computed(() => store.state.countries.map(c => ({key: c.code, text: c.name})))
   const shippingCountry = computed(() => store.state.countries.find(c => c.code === customer.value.shippingAddress.country_code))
   const billingCountry = computed(() => store.state.countries.find(c => c.code === customer.value.billingAddress.country_code))
+
+    const billingStateOptions = computed(() => {
+    if (!billingCountry.value || !billingCountry.value.states) return [];
+
+    return Object.entries(billingCountry.value.states).map(c => ({key: c[0], text: c[1]}))
+  })
 
   const shippingStateOptions = computed(() => {
     if (!shippingCountry.value || !shippingCountry.value.states) return [];

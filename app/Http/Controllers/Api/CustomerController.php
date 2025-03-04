@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\CustomerResource;
 use App\Http\Resources\CustomerListResource;
+use Illuminate\Support\Facades\DB;
 
 
 class CustomerController extends Controller
@@ -31,30 +32,17 @@ class CustomerController extends Controller
         $sortField = request('sort_field', 'updated_at');
         $sortDirection = request('sort_direction', 'desc');
 
-        $query = Customer::query()
-            ->orderBy($sortField, $sortDirection)
-            ->paginate($perPage);
-
-        return CustomerListResource::collection($query);
-        // $perPage = request('per_page', 10);
-        // $search = request('search', '');
-        // $sortField = request('sort_field', 'updated_at');
-        // $sortDirection = request('sort_direction', 'desc');
-
-        // $query = Customer::query()
-        //     ->with('user')
-        //     ->orderBy("customers.$sortField", $sortDirection);
-        // if ($search) {
-        //     $query
-        //         ->where(DB::raw("CONCAT(first_name, ' ', last_name)"), 'like', "%{$search}%")
-        //         ->join('users', 'customers.user_id', '=', 'users.id')
-        //         ->orWhere('users.email', 'like', "%{$search}%")
-        //         ->orWhere('customers.phone', 'like', "%{$search}%");
-        // }
-
-        // $paginator = $query->paginate($perPage);
-
-        // return CustomerListResource::collection($paginator);
+        $query = Customer::query()->with('user')
+        ->orderBy("customers.$sortField", $sortDirection);
+        if ($search) {
+            $query->where(DB::raw("CONCAT(first_name, ' ', last_name)"), 'like', "%{$search}%")
+            ->join('users', 'customers.user_id', '=', 'users.id')
+            ->orWhere('users.email', 'like', "%{$search}%")
+            ->orWhere('customers.phone', 'like', "%{$search}%");
+    
+        }
+        $paginator = $query->paginate($perPage);
+        return CustomerListResource::collection($paginator);
     }
 
 
@@ -79,6 +67,7 @@ class CustomerController extends Controller
     public function update(CustomerRequest $request, Customer $customer)
     {
         $customerData = $request->validated();
+        //@todo Nehad user_id instead of updated_by
         $customerData['updated_by'] = $request->user()->id;
         $customerData['status'] = $customerData['status'] ? CustomerStatus::Active->value : CustomerStatus::Disabled->value;
         $shippingData = $customerData['shippingAddress'];
