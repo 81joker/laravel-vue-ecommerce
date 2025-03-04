@@ -15,7 +15,7 @@
           <option v-for="option of selectOptions" :value="option.key">{{option.text}}</option>
         </select>
       </template>
-        <template v-if="type === 'textarea'">
+        <template v-else-if="type === 'textarea'">
         <textarea :name="name"
                   :required="required"
                   :value="props.modelValue"
