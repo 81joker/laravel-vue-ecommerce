@@ -37,6 +37,7 @@ const state = {
         limit: null,
         total: null
       },
+      countries: [],
     customers: {
         loading: false,
         data: [],

@@ -66,6 +66,9 @@ export function setCustomers (state, [loading,response = null]) {
 }
 
 
+
+
+
 // Set Orders
 export function setOrders (state, [loading,response = null]) {
     if(response){
@@ -94,7 +97,7 @@ export function hideToast(state, message) {
     state.toast.message = message;
 }
 
-// Set Countries
+
 export function setCountries (state, countries) {
-    state.countries = countries
+    state.countries = countries.data
 }

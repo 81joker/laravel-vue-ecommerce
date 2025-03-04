@@ -1,7 +1,5 @@
 <!-- This example requires Tailwind CSS v2.0+ -->
 <template>
-       <pre>{{ countries }}</pre>
-
     <TransitionRoot as="template" :show="show">
       <Dialog as="div" class="relative z-10" @close="show = false">
         <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0" enter-to="opacity-100"
@@ -50,7 +48,8 @@
                     <CustomInput class="mb-2" v-model="customer.last_name" label="Customer Last Name"/>
                     <CustomInput type="email" class="mb-2" v-model="customer.email" label="E-mail"/>
                     <CustomInput type="number" class="mb-2" v-model="customer.phone" label="Phone"/>
-                    <CustomInput type="checkbox" class="mb-2" v-model="customer.status" label="Status" />
+                    <CustomInput type="checkbox" class="mb-2" v-model="customer.status"
+                    :label="customer.status ? 'Active' : 'Inactive'" />
 
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -60,9 +59,14 @@
                             <CustomInput  v-model="customer.billingAddress.address1" label="Address"/>
                             <CustomInput  v-model="customer.billingAddress.address2" label="Address2"/>
                             <CustomInput  v-model="customer.billingAddress.city" label="City"/>
-                            <CustomInput  v-model="customer.billingAddress.state" label="State"/>
                             <CustomInput  v-model="customer.billingAddress.zipcode" label="Zip"/>
-                            <CustomInput  v-model="customer.billingAddress.country_code" label="Country Code"/>
+
+
+                            <CustomInput type="select" :select-options="countries" v-model="customer.billingAddress.country_code" label="Country Code"/>
+                            <!-- <CustomInput type="select" :select-options="stateOptions" v-model="customer.billingAddress.state" label="State"/> -->
+                            <CustomInput v-if="!billingCountry.states" v-model="customer.billingAddress.state" label="State"/>
+                            <CustomInput v-else type="select" :select-options="billingStateOptions" v-model="customer.billingAddress.state" label="State"/>
+
                         </div>
                         </div>
                         <div>
@@ -71,15 +75,11 @@
                             <CustomInput  v-model="customer.shippingAddress.address1" label="Address"/>
                             <CustomInput  v-model="customer.shippingAddress.address2" label="Address2"/>
                             <CustomInput  v-model="customer.shippingAddress.city" label="City"/>
-                            <CustomInput  v-model="customer.shippingAddress.state" label="State"/>
                             <CustomInput  v-model="customer.shippingAddress.zipcode" label="Zip"/>
-                            <CustomInput type="select" :selectOptions="countries" v-model="customer.shippingAddress.country_code" label="Country Code"/>
+                            <CustomInput type="select" :select-options="countries" v-model="customer.shippingAddress.country_code" label="Country Code"/>
 
-                              <select name="shipping[country_code]" id="">
-                                <option value="US">United States</option>
-                                <option value="CA">Canada</option>
-                                <option value="MX">Mexico</option>
-                              </select>
+                            <CustomInput v-if="!shippingCountry.states" v-model="customer.shippingAddress.state" label="State"/>
+                            <CustomInput v-else type="select" :select-options="shippingStateOptions" v-model="customer.shippingAddress.state" label="State"/>
 
                             </div>
                         </div>
@@ -123,8 +123,8 @@
   const props = defineProps({
     modelValue: Boolean,
     customer: {
-      required: true,
-      type: Object,
+      billingAddress: {},
+      shippingAddress: {}
     }
   })
 
@@ -136,7 +136,21 @@
     set: (value) => emit('update:modelValue', value)
   })
 
-  const countries  = computed(() => store.state.countries);
+  const countries = computed(() => store.state.countries.map(c => ({key: c.code, text: c.name})))
+  const shippingCountry = computed(() => store.state.countries.find(c => c.code === customer.value.shippingAddress.country_code))
+  const billingCountry = computed(() => store.state.countries.find(c => c.code === customer.value.billingAddress.country_code))
+
+    const billingStateOptions = computed(() => {
+    if (!billingCountry.value || !billingCountry.value.states) return [];
+
+    return Object.entries(billingCountry.value.states).map(c => ({key: c[0], text: c[1]}))
+  })
+
+  const shippingStateOptions = computed(() => {
+    if (!shippingCountry.value || !shippingCountry.value.states) return [];
+    return Object.entries(shippingCountry.value.states).map(c => ({key: c[0], text: c[1]}))
+  })
+
   onUpdated( () =>{
     customer.value = {
         id: props.customer.id,
@@ -162,6 +176,7 @@
   function onSubmit() {
     loading.value = true
     if (customer.value.id) {
+    customer.value.status = !!customer.value.status
       store.dispatch('updateCustomer', customer.value)
         .then(response => {
           loading.value = false;

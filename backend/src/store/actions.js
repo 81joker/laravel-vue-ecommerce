@@ -26,12 +26,13 @@ export async function logout({ commit }) {
     }
 }
 
-export function getCountries() {
-    return axiosClient.get("/countries")
-    .then(({ data }) => {
-        return data;
-    });
-}
+export function getCountries({commit}) {
+    return axiosClient.get('countries')
+      .then(({data}) => {
+        commit('setCountries', data)
+      })
+  }
+
 export function getProducts(
     { commit },
     { url = null, search = "", perPage, sort_field, sort_direction } = {}
