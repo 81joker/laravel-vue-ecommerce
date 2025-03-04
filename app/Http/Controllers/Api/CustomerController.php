@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Country;
 use App\Models\Api\User;
 use App\Models\Customer;
+use App\Enums\AddressType;
 use App\Enums\CustomerStatus;
+use App\Models\CustomerAddress;
 use Illuminate\Http\UploadedFile;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CustomerRequest;
+use App\Http\Resources\CountryResource;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\CustomerResource;
 use App\Http\Resources\CustomerListResource;
-use App\Models\Country;
-use App\Http\Resources\CountryResource;
 
 
 class CustomerController extends Controller
@@ -76,15 +78,30 @@ class CustomerController extends Controller
      */
     public function update(CustomerRequest $request, Customer $customer)
     {
-        $data = $request->validated();
-        // $customerData['updated_by'] = $request->user()->id;
-        $customer->update($data);
-        // $customerData = $request->validated();
-        // $customerData['updated_by'] = $request->user()->id;
-        // $customerData['status'] = $customerData['status'] ? CustomerStatus::Active->value : CustomerStatus::Disabled->value;
-        // $shippingData = $customerData['shippingAddress'];
-        // $billingData = $customerData['billingAddress'];
+        $customerData = $request->validated();
+        $customerData['updated_by'] = $request->user()->id;
+        $customerData['status'] = $customerData['status'] ? CustomerStatus::Active->value : CustomerStatus::Disabled->value;
+        $shippingData = $customerData['shippingAddress'];
+        $billingData = $customerData['billingAddress'];
 
+        $customer->update($customerData);
+
+        if ($customer->shippingAddress) {
+            $customer->shippingAddress->update($shippingData);
+        } else {
+            $shippingData['customer_id'] = $customer->user_id;
+            $shippingData['type'] = AddressType::Shipping->value;
+            CustomerAddress::create($shippingData);
+        }
+        if ($customer->billingAddress) {
+            $customer->billingAddress->update($billingData);
+        } else {
+            $billingData['customer_id'] = $customer->user_id;
+            $billingData['type'] = AddressType::Billing->value;
+            CustomerAddress::create($billingData);
+        }
+
+        return new CustomerResource($customer);
         // DB::beginTransaction();
         // try {
         //     $customer->update($customerData);
@@ -113,7 +130,7 @@ class CustomerController extends Controller
 
         // DB::commit();
 
-        return new CustomerResource($customer);
+        // return new CustomerResource($customer);
     }
 
     /**

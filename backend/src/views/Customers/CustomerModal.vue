@@ -48,7 +48,8 @@
                     <CustomInput class="mb-2" v-model="customer.last_name" label="Customer Last Name"/>
                     <CustomInput type="email" class="mb-2" v-model="customer.email" label="E-mail"/>
                     <CustomInput type="number" class="mb-2" v-model="customer.phone" label="Phone"/>
-                    <CustomInput type="checkbox" class="mb-2" v-model="customer.status" label="Status" />
+                    <CustomInput type="checkbox" class="mb-2" v-model="customer.status"
+                    :label="customer.status ? 'Active' : 'Inactive'" />
 
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -60,7 +61,7 @@
                             <CustomInput  v-model="customer.billingAddress.city" label="City"/>
                             <CustomInput  v-model="customer.billingAddress.zipcode" label="Zip"/>
 
-                            
+
                             <CustomInput type="select" :select-options="countries" v-model="customer.billingAddress.country_code" label="Country Code"/>
                             <!-- <CustomInput type="select" :select-options="stateOptions" v-model="customer.billingAddress.state" label="State"/> -->
                             <CustomInput v-if="!billingCountry.states" v-model="customer.billingAddress.state" label="State"/>
@@ -77,7 +78,7 @@
                             <CustomInput  v-model="customer.shippingAddress.zipcode" label="Zip"/>
                             <CustomInput type="select" :select-options="countries" v-model="customer.shippingAddress.country_code" label="Country Code"/>
 
-                            <CustomInput v-if="!billingCountry.states" v-model="customer.shippingAddress.state" label="State"/>
+                            <CustomInput v-if="!shippingCountry.states" v-model="customer.shippingAddress.state" label="State"/>
                             <CustomInput v-else type="select" :select-options="shippingStateOptions" v-model="customer.shippingAddress.state" label="State"/>
 
                             </div>
@@ -134,16 +135,16 @@
     get: () => props.modelValue,
     set: (value) => emit('update:modelValue', value)
   })
-  
+
   const countries = computed(() => store.state.countries.map(c => ({key: c.code, text: c.name})))
   const shippingCountry = computed(() => store.state.countries.find(c => c.code === customer.value.shippingAddress.country_code))
   const billingCountry = computed(() => store.state.countries.find(c => c.code === customer.value.billingAddress.country_code))
 
   const shippingStateOptions = computed(() => {
     if (!shippingCountry.value || !shippingCountry.value.states) return [];
-
     return Object.entries(shippingCountry.value.states).map(c => ({key: c[0], text: c[1]}))
   })
+
   onUpdated( () =>{
     customer.value = {
         id: props.customer.id,
@@ -169,6 +170,7 @@
   function onSubmit() {
     loading.value = true
     if (customer.value.id) {
+    customer.value.status = !!customer.value.status
       store.dispatch('updateCustomer', customer.value)
         .then(response => {
           loading.value = false;
