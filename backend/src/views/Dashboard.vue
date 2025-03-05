@@ -83,5 +83,7 @@ axiosClient.get('/dashboard/orders-count').
 then(({data}) =>{ paidOrdersCount.value = data; loading.value.paidOrdersCount = false;});
 
 axiosClient.get('/dashboard/income-count').
-then(({data}) => {totalIncome.value = data; loading.value.totalIncome = false;});
+then(({data}) => {totalIncome.value = new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" })
+.format(Math.random(data)),
+loading.value.totalIncome = false;});
 </script>
