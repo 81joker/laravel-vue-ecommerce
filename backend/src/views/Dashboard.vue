@@ -26,10 +26,17 @@
         </div>
         <!-- Total Income -->
 
-
+        <div>
+            <!-- Order Country -->
+            <Doughnut  />
+          <!-- Order Country -->
+        </div>
     </div>
 </template>
 <script setup>
-import AppLayout from '@/components/AppLayout.vue';
+import Doughnut from '@/components/Charts/Doughnut.vue';
+
+
+
 
 </script>
