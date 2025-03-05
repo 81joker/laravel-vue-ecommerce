@@ -48,6 +48,11 @@
         </div>
         <div class="bg-white py-6 px-5 text-center shadow rounded-lg flex flex-col items-center justify-center">
             Customers
+              <!-- {{ latestCustomers }} -->
+             <div v-for="c in latestCustomers" :key="c.user_id">
+                <h3>{{ c.first_name }} {{ c.last_naem }}</h3>
+             </div>
+         
         </div>
     </div>
 </template>
@@ -62,13 +67,16 @@ const loading = ref({
     cousomersCount: true,
     productsCount: true,
     paidOrdersCount: true,
-    totalIncome: true
+    totalIncome: true,
+    latestCoustomers: true
+    
 });
 
 const cousomersCount = ref();
 const productsCount = ref();
 const paidOrdersCount = ref();
 const totalIncome = ref();
+const latestCustomers = ref([]);
 
 axiosClient.get('/dashboard/customers-count').
 then(({data}) => {
@@ -86,4 +94,15 @@ axiosClient.get('/dashboard/income-count').
 then(({data}) => {totalIncome.value = new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" })
 .format(Math.random(data)),
 loading.value.totalIncome = false;});
+
+axiosClient.get('/dashboard/latest-customers').
+then(({data: customers}) => {
+    latestCustomers.value = customers; 
+    loading.value.latestCustomers = false;});
+// axiosClient.get('/dashboard/latest-customers')
+// .then(({data}) => {
+//     latestCustomers.value = data; 
+//     loading.value.latestCustomers = false;});
+
+
 </script>
