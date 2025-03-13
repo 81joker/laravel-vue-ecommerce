@@ -59,12 +59,26 @@ class DashboardController extends Controller
         return $query->get();
     }
 
-    // public function latestCustomers() {
-    //     return Customer::query()
-    //     // TODO: Revview join table
-    //     ->select(['first_name' , 'last_name' , 'u.email'])
-    //     ->join('users AS u' , 'customers.user_id' , '=', 'u.id')
-    //     ->where('status' , CustomerStatus::Active->value)
-    //     ->orderBy('created_at' , 'desc')->limit(5)->get();  
-    // }
+    public function latestCustomers() {
+        return Customer::query()
+        // TODO: Revview join table
+        ->select(['id', 'first_name', 'last_name', 'u.email', 'phone', 'u.created_at'])
+        ->join('users AS u' , 'customers.user_id' , '=', 'u.id')
+        ->where('status' , CustomerStatus::Active->value)
+        ->orderBy('created_at' , 'desc')->limit(5)->get();  
+    }
+
+    public function latestOrders() { 
+        return Order::query()
+        ->select(['o.id' ,'o.created_by' , DB::row('COUNT(oi.id as ) as items') , 'o.first_name' , 'o.last_name'])
+        ->from('orders as o')
+        ->join('order_items as oi' , 'oi.order_id'  ,'=' , 'o.id')
+        ->join('customer as c' , 'c.user_id' , 'orders.created_by')
+        ->where('status' , OrderStatus::Paid->value)
+        ->orderBy('o.created_at' , 'decs')
+        ->groupBy('o.id')
+        ->limit(5)
+        ->get();
+    }      
 }
+

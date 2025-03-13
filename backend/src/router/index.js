@@ -8,6 +8,7 @@ import Dashboard from "@/views/Dashboard.vue";
 import Products from "@/views/Products/Products.vue";
 import Users from "@/views/Users/Users.vue";
 import Customers from "@/views/Customers/Customers.vue";
+import CustomerView from "@/views/Customers/CustomerView.vue";
 import Orders from "@/views/Orders/Orders.vue";
 import OrdersView from "@/views/Orders/OrdersView.vue";
 import NotFount from "@/views/NotFount.vue";
@@ -60,7 +61,12 @@ const router = createRouter({
                   name: 'app.customers',
                   component: Customers
                 },
-            ],
+                {
+                  path: 'customers/:id',
+                  name: 'app.customers.view',
+                  component: CustomerView
+                },
+        ],
         },
         {
             path: "/login",

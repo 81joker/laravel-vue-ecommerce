@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Doughnut :data="data" :options="options" />
+    <Doughnut :data="chartData" :options="options"   />
   </div>
 </template>
 
@@ -10,16 +10,18 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
 import { Doughnut } from 'vue-chartjs'
 
 ChartJS.register(ArcElement, Tooltip, Legend)
+const props = defineProps({
+  data: {
+    type: Object,
+    required: true
+  },  
+  options: {
+    type: Object,
+    required: true
+  }
+})
 
-const data = {
-  labels: ['VueJs', 'EmberJs', 'ReactJs', 'AngularJs'],
-  datasets: [
-    {
-      backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16'],
-      data: [40, 20, 80, 10]
-    }
-  ]
-}
+const chartData = props.data
 
 const options = {
   responsive: true,
