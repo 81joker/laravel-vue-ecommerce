@@ -48,11 +48,12 @@ class RegisteredUserController extends Controller
         $customer = new Customer();
         $name = explode(" ", $request->name);
         $customer->user_id = $user->id;
-        if (!isset($customer)) {
+        // dd($name[0]);
+        // if (!isset($customer)) {
             $customer->first_name = $name[0];
             $customer->last_name = $name[1] ?? '';
             $customer->save();
-        }
+        // }
 
 
         Auth::login($user);

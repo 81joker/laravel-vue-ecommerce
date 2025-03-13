@@ -44,22 +44,24 @@
             Products
         </div>
         <div class="bg-white py-6 px-5 text-center shadow rounded-lg flex flex-col items-center justify-center">
-        <DoughnutChart   />
-        </div>
+        <DoughnutChart />
+    </div>
         <div class="bg-white py-6 px-5 text-center shadow rounded-lg flex flex-col items-center justify-center">
             Customers
               <!-- {{ latestCustomers }} -->
              <div v-for="c in latestCustomers" :key="c.user_id">
                 <h3>{{ c.first_name }} {{ c.last_naem }}</h3>
              </div>
-         
         </div>
     </div>
 </template>
 <script setup>
 import axiosClient from '@/axios';
 import DoughnutChart from '@/components/Charts/DoughnutChart.vue';
+// import Doughnut from '@/components/Charts/Bar.vue';
+
 import Spinner from '@/components/core/Spinner.vue';
+import { data } from 'autoprefixer';
 import { ref } from 'vue';
 
 
@@ -77,6 +79,8 @@ const productsCount = ref();
 const paidOrdersCount = ref();
 const totalIncome = ref();
 const latestCustomers = ref([]);
+const orderByCountry = ref([]);
+
 
 axiosClient.get('/dashboard/customers-count').
 then(({data}) => {
@@ -95,10 +99,30 @@ then(({data}) => {totalIncome.value = new Intl.NumberFormat("de-DE", { style: "c
 .format(Math.random(data)),
 loading.value.totalIncome = false;});
 
-axiosClient.get('/dashboard/latest-customers').
-then(({data: customers}) => {
-    latestCustomers.value = customers; 
-    loading.value.latestCustomers = false;});
+axiosClient.get('/dashboard/orders-by-country').
+then(({data: countries}) => {
+
+    const chartData = {
+     labels : [],
+     datasets : [{
+         backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16'],
+        data: [],
+    }],
+    };
+
+    countries.forEach(c => {
+        chartData.labels.push(c.name),
+        chartData.datasets[0].data.push( c.count)
+    })
+    orderByCountry.value = chartData
+    ; loading.value.orderByCountry = false;
+});
+
+
+// axiosClient.get('/dashboard/latest-customers').
+// then(({data: customers}) => {
+//     latestCustomers.value = customers; 
+//     loading.value.latestCustomers = false;});
 // axiosClient.get('/dashboard/latest-customers')
 // .then(({data}) => {
 //     latestCustomers.value = data; 

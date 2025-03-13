@@ -11,6 +11,7 @@ use App\Enums\CustomerStatus;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use App\Enums\AddressType;
+use Illuminate\Support\Facades\Log;
 
 class DashboardController extends Controller
 {
@@ -31,33 +32,39 @@ class DashboardController extends Controller
         return  Order::where('status', OrderStatus::Paid->value)->sum('total_price');
     }
 
-     // TODO: again review this method and code 
-    // public function ordersByCountry()
-    // {
-    //     $fromDate = $this->getFromDate();
-    //     $query = Order::query()
-    //         ->select(['c.name', DB::raw('count(orders.id) as count')])
-    //         ->join('users', 'created_by', '=', 'users.id')
-    //         ->join('customer_addresses AS a', 'users.id', '=', 'a.customer_id')
-    //         ->join('countries AS c', 'a.country_code', '=', 'c.code')
-    //         ->where('status', OrderStatus::Paid->value)
-    //         ->where('a.type', AddressType::Billing->value)
-    //         ->groupBy('c.name')
-    //         ;
 
-    //     if ($fromDate) {
-    //         $query->where('orders.created_at', '>', $fromDate);
-    //     }
-
-    //     return $query->get();
-    // }
-
-    public function latestCustomers() {
-        return Customer::query()
-        // TODO: Revview join table
-        ->select(['first_name' , 'last_name' , 'u.email'])
-        ->join('users AS u' , 'customers.user_id' , '=', 'u.id')
-        ->where('status' , CustomerStatus::Active->value)
-        ->orderBy('created_at' , 'desc')->limit(5)->get();  
+    public function getFromDate() {
+        return now()->startOfMonth(); // Example: returns the start of the current month
     }
+     // TODO: again review this method and code 
+    public function ordersByCountry()
+    {
+        $fromDate = $this->getFromDate();
+        $query = Order::query()
+            ->select(['c.name', DB::raw('count(orders.id) as count')])
+            ->join('users', 'created_by', '=', 'users.id')
+            ->join('customer_addresses AS a', 'users.id', '=', 'a.customer_id')
+            ->join('countries AS c', 'a.country_code', '=', 'c.code')
+            ->where('status', OrderStatus::Paid->value)
+            ->where('a.type', AddressType::Billing->value)
+            ->groupBy('c.name')
+            ;
+
+        // if ($fromDate) {
+        //     $query->where('orders.created_at', '>', $fromDate);
+        // }
+        $result = $query->get();
+        Log::info('Query result:', $result->toArray());
+
+        return $query->get();
+    }
+
+    // public function latestCustomers() {
+    //     return Customer::query()
+    //     // TODO: Revview join table
+    //     ->select(['first_name' , 'last_name' , 'u.email'])
+    //     ->join('users AS u' , 'customers.user_id' , '=', 'u.id')
+    //     ->where('status' , CustomerStatus::Active->value)
+    //     ->orderBy('created_at' , 'desc')->limit(5)->get();  
+    // }
 }
