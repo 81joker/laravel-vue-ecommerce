@@ -70,15 +70,15 @@ class DashboardController extends Controller
 
     public function latestOrders() { 
         return Order::query()
-        ->select(['o.id' ,'o.created_by' , DB::row('COUNT(oi.id as ) as items') , 'o.first_name' , 'o.last_name'])
+        ->select(['o.id', 'o.total_price', 'o.created_at', DB::raw('COUNT(oi.id) AS items'),
+        'c.user_id', 'c.first_name', 'c.last_name'])
         ->from('orders as o')
         ->join('order_items as oi' , 'oi.order_id'  ,'=' , 'o.id')
-        ->join('customer as c' , 'c.user_id' , 'orders.created_by')
-        ->where('status' , OrderStatus::Paid->value)
-        ->orderBy('o.created_at' , 'decs')
+        ->join('customers AS c' , 'c.user_id' , 'o.created_by')
+        ->where('o.status' , OrderStatus::Paid->value)
+        ->orderBy('o.created_at' , 'desc')
         ->groupBy('o.id')
         ->limit(5)
         ->get();
     }      
 }
-
