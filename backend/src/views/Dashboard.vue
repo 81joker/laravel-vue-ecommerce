@@ -36,14 +36,18 @@
             <Spinner v-else  text="" class=""/>
         </div>
         <!-- Total Income -->
-
     </div>
     <div class="grid grid-rows-2  grid-flow-col grid-cols-1 md:grid-cols-3 mt-2 gap-3">
         <div class="col-span-2 row-span-2 bg-white py-6 px-5 text-center shadow">
-            Products
-            <pre>{{ latestOrders }}</pre>
             <label class="text-lg font-semibold block mb-2">Latest Orders</label>
-
+            <template v-if="!loading.latestOrders">
+                <router-link :to="{name: 'app.orders.view', params: {id: o.id}}" v-for="o of latestOrders" :key="o.id"
+                             class="mb-3 flex">
+                    <h1>
+                    Order #{{ o.id }} - {{ o.items }} items - {{ o.created_at }}
+                    </h1>
+                </router-link>
+            </template>
         </div>
         <div class="bg-white py-6 px-5 text-center shadow rounded-lg flex flex-col items-center justify-center">
         <DoughnutChart :width="140" :height="200" :data="orderByCountry" v-if="orderByCountry.datasets && orderByCountry.datasets[0].data.length > 0"/>
@@ -83,7 +87,7 @@ const loading = ref({
     totalIncome: true,
     latestCustomers: true,
     latestOrders: true,
-    
+
 });
 
 const cousomersCount = ref();
@@ -95,20 +99,20 @@ const latestOrders = ref([]);
 const orderByCountry = ref({
     labels : [],
      datasets : [{
-         backgroundColor: [],
-        //  backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16', '#FFC312'],
+        //  backgroundColor: [],
+         backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16', '#FFC312'],
         data: [],
     }]
 });
 
-function getRandomColor() {
-    const letters = '0123456789ABCDEF';
-    let color = '#';
-    for (let i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-}
+// function getRandomColor() {
+//     const letters = '0123456789ABCDEF';
+//     let color = '#';
+//     for (let i = 0; i < 6; i++) {
+//         color += letters[Math.floor(Math.random() * 16)];
+//     }
+//     return color;
+// }
 
 axiosClient.get('/dashboard/customers-count').
 then(({data}) => {
@@ -128,27 +132,27 @@ then(({data}) => {totalIncome.value = new Intl.NumberFormat("de-DE", { style: "c
 loading.value.totalIncome = false;});
 
 axiosClient.get('/dashboard/orders-by-country').
-then(({data: countries}) => {   
+then(({data: countries}) => {
     if (countries && countries.length > 0) {
     countries.forEach(c => {
         orderByCountry.value.labels.push(c.name),
-        orderByCountry.value.datasets[0].data.push( c.count),
-        orderByCountry.value.datasets[0].backgroundColor.push(getRandomColor())
-    })
+        orderByCountry.value.datasets[0].data.push( c.count)
+        // orderByCountry.value.datasets[0].backgroundColor.push(getRandomColor())
+    });
     // orderByCountry.value = orderByCountry
 }
-    ; loading.value.orderByCountry = false;
+     loading.value.orderByCountry = false;
 });
 
-  
+
 axiosClient.get('/dashboard/latest-customers')
 .then(({data}) => {
-    latestCustomers.value = data; 
+    latestCustomers.value = data;
     loading.value.latestCustomers = false;
 });
 axiosClient.get('/dashboard/latest-orders')
 .then(({data}) => {
-    latestOrders.value = data; 
+    latestOrders.value = data;
     loading.value.latestOrders = false;
 });
 
