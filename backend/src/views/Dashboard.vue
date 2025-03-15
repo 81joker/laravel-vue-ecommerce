@@ -1,8 +1,10 @@
 <template>
-    <h1 class="text-4xl mb-2">Dashbboard</h1>
+    <div class="mb-2">
+        <h1 class="text-3xl font-semibold">Dashbboard</h1>
+    </div>
     <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
         <!-- ACtivae Customers -->
-        <div class="bg-white py-6 px-5 text-center shadow rounded-lg flex flex-col items-center justify-center">
+        <div class="animate-fade-in-down  bg-white py-6 px-5 text-center shadow rounded-lg flex flex-col items-center justify-center">
             <label>Active Customers</label>
             <template v-if="!loading.cousomersCount">
                 <span class="text-3xl font-semibold">{{ cousomersCount }}</span>
@@ -11,7 +13,7 @@
         </div>
         <!-- ACtivae Customers -->
         <!-- ACtivae Products -->
-        <div class="bg-white py-6 px-5 text-center shadow rounded-lg flex flex-col items-center justify-center">
+        <div class="animate-fade-in-down bg-white py-6 px-5 text-center shadow rounded-lg flex flex-col items-center justify-center" style="animation-delay: 0.1s;">
             <label>Active Products</label>
             <template v-if="!loading.productsCount">
                 <span class="text-3xl font-semibold">{{ productsCount }}</span>
@@ -20,7 +22,7 @@
         </div>
         <!-- ACtivae Products -->
         <!--Paid Order -->
-        <div class="bg-white py-6 px-5 text-center shadow rounded-lg flex flex-col items-center justify-center">
+        <div class="animate-fade-in-down bg-white py-6 px-5 text-center shadow rounded-lg flex flex-col items-center justify-center" style="animation-delay: 0.2ms;">
             <label>Total Paid Order</label>
             <template v-if="!loading.paidOrdersCount">
                 <span class="text-3xl font-semibold">{{ productsCount }}</span>
@@ -29,7 +31,7 @@
         </div>
         <!--Paid Order -->
         <!-- Total Income -->
-        <div class="bg-white py-6 px-5 text-center shadow rounded-lg flex flex-col items-center justify-center">
+        <div class="animate-fade-in-down bg-white py-6 px-5 text-center shadow rounded-lg flex flex-col items-center justify-center" style="animation-delay: 0.3s;">
             <label>Total Income</label>
             <template v-if="!loading.totalIncome">
                 <span class="text-3xl font-semibold">{{ totalIncome }}</span>
@@ -60,14 +62,18 @@
                     </p>
                 </div>
             </template>
+            <Spinner v-else text="" class=""/>
         </div>
         <!--/ Latest Orders  -->
         <!-- DoughnutChart  -->
         <div class="bg-white py-6 px-5 shadow rounded-lg flex flex-col items-center justify-center">
+            <template v-if="!loading.orderByCountry">
             <DoughnutChart :width="140" :height="200" :data="orderByCountry" v-if="
                 orderByCountry.datasets &&
                 orderByCountry.datasets[0].data.length > 0
             " />
+            </template>
+            <Spinner v-else text="" class="" />
         </div>
         <!--/ DoughnutChart  -->
         <!-- Latest Customers -->
@@ -106,6 +112,7 @@ const loading = ref({
     totalIncome: true,
     latestCustomers: true,
     latestOrders: true,
+    orderByCountry: true,
 });
 
 const cousomersCount = ref();
@@ -170,7 +177,7 @@ axiosClient.get("/dashboard/orders-by-country").then(({ data: countries }) => {
                 orderByCountry.value.datasets[0].data.push(c.count);
             // orderByCountry.value.datasets[0].backgroundColor.push(getRandomColor())
         });
-        // orderByCountry.value = orderByCountry
+        orderByCountry.value = orderByCountry
     }
     loading.value.orderByCountry = false;
 });
