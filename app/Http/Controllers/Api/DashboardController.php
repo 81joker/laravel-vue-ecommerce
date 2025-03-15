@@ -11,6 +11,7 @@ use App\Enums\CustomerStatus;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use App\Enums\AddressType;
+use App\Http\Resources\Dashboard\OrderResource;
 use Illuminate\Support\Facades\Log;
 
 class DashboardController extends Controller
@@ -69,7 +70,7 @@ class DashboardController extends Controller
     }
 
     public function latestOrders() { 
-        return Order::query()
+        return   OrderResource::collection( Order::query()
         ->select(['o.id', 'o.total_price', 'o.created_at', DB::raw('COUNT(oi.id) AS items'),
         'c.user_id', 'c.first_name', 'c.last_name'])
         ->from('orders as o')
@@ -77,8 +78,7 @@ class DashboardController extends Controller
         ->join('customers AS c' , 'c.user_id' , 'o.created_by')
         ->where('o.status' , OrderStatus::Paid->value)
         ->orderBy('o.created_at' , 'desc')
-        ->groupBy('o.id')
-        ->limit(5)
-        ->get();
+        ->groupBy('o.id', 'o.total_price', 'o.created_at', 'c.user_id', 'c.first_name', 'c.last_name')
+        ->get());
     }      
 }
