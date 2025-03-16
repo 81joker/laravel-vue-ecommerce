@@ -1,6 +1,10 @@
 <template>
-    <div class="mb-2">
+    <div class="mb-2 flex justify-between items-center">
         <h1 class="text-3xl font-semibold">Dashbboard</h1>
+        <div class="flex items-center">
+            <label for="" class="mr-2">Change Date Period</label>
+            <CustomInput type="select" v-model="chosenDate" @change="onDatePickerChange" :select-options="dateOptions"/>
+        </div>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
         <!-- ACtivae Customers -->
@@ -99,11 +103,29 @@
 <script setup>
 import axiosClient from "@/axios";
 import DoughnutChart from "@/components/Charts/DoughnutChart.vue";
+import CustomInput from "@/components/core/CustomInput.vue";
+
 // import Doughnut from '@/components/Charts/Bar.vue';
 
 import Spinner from "@/components/core/Spinner.vue";
 import { data } from "autoprefixer";
 import { ref } from "vue";
+
+
+
+
+
+const dateOptions = ref([
+    { key: "1d", text: "Last Day" },
+    { key: "1w", text: "Last Week" },
+    { key: "2w", text: "Last 2 Weeks" },
+    { key: "1m", text: "Last Month" },
+    { key: "3m", text: "Last 3 Months" },
+    { key: "6m", text: "Last 6 Months" },
+    { key: "all", text: "All Time" },
+])
+
+const chosenDate = ref('all')
 
 const loading = ref({
     cousomersCount: true,
@@ -137,15 +159,6 @@ const orderByCountry = ref({
         },
     ],
 });
-
-// function getRandomColor() {
-//     const letters = '0123456789ABCDEF';
-//     let color = '#';
-//     for (let i = 0; i < 6; i++) {
-//         color += letters[Math.floor(Math.random() * 16)];
-//     }
-//     return color;
-// }
 
 axiosClient.get("/dashboard/customers-count").then(({ data }) => {
     cousomersCount.value = data;
@@ -190,4 +203,62 @@ axiosClient.get("/dashboard/latest-orders").then(({ data: ordres }) => {
     latestOrders.value = ordres.data;
     loading.value.latestOrders = false;
 });
+
+const onDatePickerChange = () => {
+    updateDashboard()
+}
+function updateDashboard() {
+    const d = chosenDate.value
+
+    loading.value = {
+        cousomersCount: true,
+        productsCount: true,
+        paidOrdersCount: true,
+        totalIncome: true,
+        latestCustomers: true,
+        latestOrders: true,
+        orderByCountry: true,
+    }
+    axiosClient.get(`/dashboard/customers-count`, {params: {d}}).then(({data}) => {
+        cousomersCount.value = data
+        loading.value.cousomersCount = false;
+    })
+    axiosClient.get(`/dashboard/products-count`, {params: {d}}).then(({data}) => {
+        productsCount.value = data;
+        loading.value.productsCount = false;
+    })
+
+    axiosClient.get(`/dashboard/orders-count`, {params: {d}}).then(({data}) => {
+        paidOrdersCount.value = data;
+        loading.value.paidOrdersCount = false;
+    })
+    axiosClient.get(`/dashboard/income-amount`, {params: {d}}).then(({data}) => {
+        (totalIncome.value = new Intl.NumberFormat("de-DE", {
+            style: "currency",
+            currency: "EUR",
+        }).format(Math.random(data))),
+        (loading.value.totalIncome = false);
+    })
+    axiosClient.get(`/dashboard/orders-by-country`, {params: {d}}).then(({data: countries}) => {
+        if (countries && countries.length > 0) {
+            countries.forEach((c) => {
+                orderByCountry.value.labels.push(c.name),
+                orderByCountry.value.datasets[0].data.push(c.count);
+                // orderByCountry.value.datasets[0].backgroundColor.push(getRandomColor())
+            });
+            orderByCountry.value = orderByCountry
+        }
+        loading.value.orderByCountry = false;
+    })
+    axiosClient.get(`/dashboard/latest-customers`, {params: {d}}).then(({data}) => {
+        latestCustomers.value = data;
+        loading.value.latestCustomers = false;
+    })
+    axiosClient.get(`/dashboard/latest-orders`, {params: {d}}).then(({data: ordres}) => {
+        latestOrders.value = ordres.data;
+        loading.value.latestOrders = false;
+    })
+
+
+}
 </script>

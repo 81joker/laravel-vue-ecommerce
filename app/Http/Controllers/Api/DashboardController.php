@@ -16,7 +16,8 @@ use Illuminate\Support\Facades\Log;
 
 class DashboardController extends Controller
 {
-    public function activeCustomers () {
+    public function activeCustomers (Request $request) {
+        $d = $request->get('d');
        return  Customer::where('status', CustomerStatus::Active->value)->count();
     //    return  Customer::where('status', operator: operator: 1)->count();
     }
@@ -37,7 +38,7 @@ class DashboardController extends Controller
     public function getFromDate() {
         return now()->startOfMonth(); // Example: returns the start of the current month
     }
-     // TODO: again review this method and code 
+     // TODO: again review this method and code
     public function ordersByCountry()
     {
         $fromDate = $this->getFromDate();
@@ -66,10 +67,10 @@ class DashboardController extends Controller
         ->select(['id', 'first_name', 'last_name', 'u.email', 'phone', 'u.created_at'])
         ->join('users AS u' , 'customers.user_id' , '=', 'u.id')
         ->where('status' , CustomerStatus::Active->value)
-        ->orderBy('created_at' , 'desc')->limit(5)->get();  
+        ->orderBy('created_at' , 'desc')->limit(5)->get();
     }
 
-    public function latestOrders() { 
+    public function latestOrders() {
         return   OrderResource::collection( Order::query()
         ->select(['o.id', 'o.total_price', 'o.created_at', DB::raw('COUNT(oi.id) AS items'),
         'c.user_id', 'c.first_name', 'c.last_name'])
@@ -80,5 +81,5 @@ class DashboardController extends Controller
         ->orderBy('o.created_at' , 'desc')
         ->groupBy('o.id', 'o.total_price', 'o.created_at', 'c.user_id', 'c.first_name', 'c.last_name')
         ->get());
-    }      
+    }
 }
