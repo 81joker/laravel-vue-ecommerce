@@ -2,43 +2,57 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Order;
-use App\Models\Customer;
-use App\Enums\OrderStatus;
-use App\Models\Api\Product;
-use Illuminate\Http\Request;
-use App\Enums\CustomerStatus;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
 use App\Enums\AddressType;
+use App\Enums\CustomerStatus;
+use App\Enums\OrderStatus;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\Dashboard\OrderResource;
-use Illuminate\Support\Facades\Log;
+use App\Models\Customer;
+use App\Models\Order;
+use App\Models\Product;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
-    public function activeCustomers (Request $request) {
-        $d = $request->get('d');
-       return  Customer::where('status', CustomerStatus::Active->value)->count();
-    //    return  Customer::where('status', operator: operator: 1)->count();
-    }
-    public function activeProducts () {
-        // TODO: Implement where for product active status
-       return  Product::count();
-    }
-    public function paidOrders () {
-        return  Order::where('status', OrderStatus::Paid->value)->count();
-        // return  Order::where('status', 'paid')->count();
+    public function activeCustomers()
+    {
+        return Customer::where('status', CustomerStatus::Active->value)->count();
     }
 
-    public function totalIncome () {
-        return  Order::where('status', OrderStatus::Paid->value)->sum('total_price');
+    public function activeProducts()
+    {
+        // TODO Implement where for active products
+        return Product::count();
     }
 
+    public function paidOrders()
+    {
+        $fromDate = $this->getFromDate();
+        $query = Order::query()->where('status', OrderStatus::Paid->value);
 
-    public function getFromDate() {
-        return now()->startOfMonth(); // Example: returns the start of the current month
+        if ($fromDate) {
+            $query->where('created_at', '>', $fromDate);
+        }
+        return $query->count();
     }
-     // TODO: again review this method and code
+
+    public function totalIncome()
+    {
+
+        $fromDate = $this->getFromDate();
+
+        $query = Order::query()->where('status', OrderStatus::Paid->value);
+
+        if ($fromDate) {
+            // \Log::info('Received date param:', ['dfromDate' => $fromDate]);
+
+            $query->where('created_at', '>', $fromDate);
+        }
+        return $query->sum('total_price');
+    }
+
     public function ordersByCountry()
     {
         $fromDate = $this->getFromDate();
@@ -52,34 +66,55 @@ class DashboardController extends Controller
             ->groupBy('c.name')
             ;
 
-        // if ($fromDate) {
-        //     $query->where('orders.created_at', '>', $fromDate);
-        // }
-        $result = $query->get();
-        Log::info('Query result:', $result->toArray());
+        if ($fromDate) {
+            $query->where('orders.created_at', '>', $fromDate);
+        }
 
         return $query->get();
     }
 
-    public function latestCustomers() {
+    public function latestCustomers()
+    {
         return Customer::query()
-        // TODO: Revview join table
-        ->select(['id', 'first_name', 'last_name', 'u.email', 'phone', 'u.created_at'])
-        ->join('users AS u' , 'customers.user_id' , '=', 'u.id')
-        ->where('status' , CustomerStatus::Active->value)
-        ->orderBy('created_at' , 'desc')->limit(5)->get();
+            ->select(['id', 'first_name', 'last_name', 'u.email', 'phone', 'u.created_at'])
+            ->join('users AS u', 'u.id', '=', 'customers.user_id')
+            ->where('status', CustomerStatus::Active->value)
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get();
     }
 
-    public function latestOrders() {
-        return   OrderResource::collection( Order::query()
-        ->select(['o.id', 'o.total_price', 'o.created_at', DB::raw('COUNT(oi.id) AS items'),
-        'c.user_id', 'c.first_name', 'c.last_name'])
-        ->from('orders as o')
-        ->join('order_items as oi' , 'oi.order_id'  ,'=' , 'o.id')
-        ->join('customers AS c' , 'c.user_id' , 'o.created_by')
-        ->where('o.status' , OrderStatus::Paid->value)
-        ->orderBy('o.created_at' , 'desc')
-        ->groupBy('o.id', 'o.total_price', 'o.created_at', 'c.user_id', 'c.first_name', 'c.last_name')
-        ->get());
+    public function latestOrders()
+    {
+        return OrderResource::collection(
+            Order::query()
+                ->select(['o.id', 'o.total_price', 'o.created_at', DB::raw('COUNT(oi.id) AS items'),
+                    'c.user_id', 'c.first_name', 'c.last_name'])
+                ->from('orders AS o')
+                ->join('order_items AS oi', 'oi.order_id', '=', 'o.id')
+                ->join('customers AS c', 'c.user_id', '=', 'o.created_by')
+                ->where('o.status', OrderStatus::Paid->value)
+                ->limit(10)
+                ->orderBy('o.created_at', 'desc')
+                ->groupBy('o.id', 'o.total_price', 'o.created_at', 'c.user_id', 'c.first_name', 'c.last_name')
+                ->get()
+        );
+    }
+
+    private function getFromDate()
+    {
+        $request = \request();
+        $paramDate = $request->get('d');
+
+        $array = [
+            '1d' => Carbon::now()->subDays(),
+            '1w' => Carbon::now()->subDays(7),
+            '2w' => Carbon::now()->subDays(14),
+            '1m' => Carbon::now()->subDays(30),
+            '3m' => Carbon::now()->subDays(90),
+            '6m' => Carbon::now()->subDays(180),
+        ];
+
+        return $array[$paramDate] ?? null;
     }
 }

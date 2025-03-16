@@ -101,19 +101,12 @@
     </div>
 </template>
 <script setup>
+import {UserIcon} from '@heroicons/vue/outline'
 import axiosClient from "@/axios";
 import DoughnutChart from "@/components/Charts/DoughnutChart.vue";
 import CustomInput from "@/components/core/CustomInput.vue";
-
-// import Doughnut from '@/components/Charts/Bar.vue';
-
 import Spinner from "@/components/core/Spinner.vue";
-import { data } from "autoprefixer";
-import { ref } from "vue";
-
-
-
-
+import { ref ,onMounted} from "vue";
 
 const dateOptions = ref([
     { key: "1d", text: "Last Day" },
@@ -130,12 +123,12 @@ const chosenDate = ref('all')
 const loading = ref({
     cousomersCount: true,
     productsCount: true,
-    paidOrdersCount: true,
+    paidOrders: true,
     totalIncome: true,
-    latestCustomers: true,
-    latestOrders: true,
     orderByCountry: true,
-});
+    latestCustomers: true,
+    latestOrders: true
+  })
 
 const cousomersCount = ref();
 const productsCount = ref();
@@ -143,81 +136,20 @@ const paidOrdersCount = ref();
 const totalIncome = ref();
 const latestCustomers = ref([]);
 const latestOrders = ref([]);
-const orderByCountry = ref({
-    labels: [],
-    datasets: [
-        {
-            //  backgroundColor: [],
-            backgroundColor: [
-                "#41B883",
-                "#E46651",
-                "#00D8FF",
-                "#DD1B16",
-                "#FFC312",
-            ],
-            data: [],
-        },
-    ],
-});
+const orderByCountry = ref([]);
 
-axiosClient.get("/dashboard/customers-count").then(({ data }) => {
-    cousomersCount.value = data;
-    loading.value.cousomersCount = false;
-});
 
-axiosClient.get("/dashboard/products-count").then(({ data }) => {
-    productsCount.value = data;
-    loading.value.productsCount = false;
-});
 
-axiosClient.get("/dashboard/orders-count").then(({ data }) => {
-    paidOrdersCount.value = data;
-    loading.value.paidOrdersCount = false;
-});
-
-axiosClient.get("/dashboard/income-count").then(({ data }) => {
-    (totalIncome.value = new Intl.NumberFormat("de-DE", {
-        style: "currency",
-        currency: "EUR",
-    }).format(Math.random(data))),
-        (loading.value.totalIncome = false);
-});
-
-axiosClient.get("/dashboard/orders-by-country").then(({ data: countries }) => {
-    if (countries && countries.length > 0) {
-        countries.forEach((c) => {
-            orderByCountry.value.labels.push(c.name),
-                orderByCountry.value.datasets[0].data.push(c.count);
-            // orderByCountry.value.datasets[0].backgroundColor.push(getRandomColor())
-        });
-        orderByCountry.value = orderByCountry
-    }
-    loading.value.orderByCountry = false;
-});
-
-axiosClient.get("/dashboard/latest-customers").then(({ data }) => {
-    latestCustomers.value = data;
-    loading.value.latestCustomers = false;
-});
-axiosClient.get("/dashboard/latest-orders").then(({ data: ordres }) => {
-    latestOrders.value = ordres.data;
-    loading.value.latestOrders = false;
-});
-
-const onDatePickerChange = () => {
-    updateDashboard()
-}
 function updateDashboard() {
-    const d = chosenDate.value
-
+    const d = chosenDate.value    
     loading.value = {
         cousomersCount: true,
         productsCount: true,
         paidOrdersCount: true,
         totalIncome: true,
+        orderByCountry: true,
         latestCustomers: true,
         latestOrders: true,
-        orderByCountry: true,
     }
     axiosClient.get(`/dashboard/customers-count`, {params: {d}}).then(({data}) => {
         cousomersCount.value = data
@@ -232,7 +164,7 @@ function updateDashboard() {
         paidOrdersCount.value = data;
         loading.value.paidOrdersCount = false;
     })
-    axiosClient.get(`/dashboard/income-amount`, {params: {d}}).then(({data}) => {
+    axiosClient.get(`/dashboard/income-count`, {params: {d}}).then(({data}) => {
         (totalIncome.value = new Intl.NumberFormat("de-DE", {
             style: "currency",
             currency: "EUR",
@@ -240,15 +172,19 @@ function updateDashboard() {
         (loading.value.totalIncome = false);
     })
     axiosClient.get(`/dashboard/orders-by-country`, {params: {d}}).then(({data: countries}) => {
-        if (countries && countries.length > 0) {
-            countries.forEach((c) => {
-                orderByCountry.value.labels.push(c.name),
-                orderByCountry.value.datasets[0].data.push(c.count);
-                // orderByCountry.value.datasets[0].backgroundColor.push(getRandomColor())
-            });
-            orderByCountry.value = orderByCountry
-        }
-        loading.value.orderByCountry = false;
+      loading.value.orderByCountry = false;
+      const chartData = {
+        labels: [],
+        datasets: [{
+          backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16'],
+          data: []
+        }]
+      }
+      countries.forEach(c => {
+        chartData.labels.push(c.name);
+        chartData.datasets[0].data.push(c.count);
+      })
+      orderByCountry.value = chartData
     })
     axiosClient.get(`/dashboard/latest-customers`, {params: {d}}).then(({data}) => {
         latestCustomers.value = data;
@@ -261,4 +197,11 @@ function updateDashboard() {
 
 
 }
+
+const onDatePickerChange = () => {
+    updateDashboard()
+}
+onMounted(() => {
+    updateDashboard()
+})
 </script>
