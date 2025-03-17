@@ -1,13 +1,14 @@
 <?php
 
+use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Api\ProductController;
-use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\CustomerController;
-use App\Models\Customer;
+use App\Http\Controllers\Api\DashboardController;
 
 Route::middleware(['auth:sanctum' ,'admin'])->group(function () {
     Route::get('/user', [AuthController::class, 'getUser']);
@@ -21,8 +22,17 @@ Route::middleware(['auth:sanctum' ,'admin'])->group(function () {
 
     Route::get('orders/statuses', [OrderController::class, 'getStatuses']);
     Route::post('orders/change-status/{order}/{status}', [OrderController::class, 'changeStatus']);
-
     Route::get('/orders/{order}', [OrderController::class, 'view']);
+
+    // Dashbaord Routes
+    Route::get('/dashboard/customers-count', [DashboardController::class, 'activeCustomers']);
+    Route::get('/dashboard/products-count', [DashboardController::class, 'activeProducts']);
+    Route::get('/dashboard/orders-count', [DashboardController::class, 'paidOrders']);
+    Route::get('/dashboard/income-count', [DashboardController::class, 'totalIncome']);
+    Route::get('/dashboard/orders-by-country', [DashboardController::class, 'ordersByCountry']);
+    Route::get('/dashboard/latest-customers', [DashboardController::class, 'latestCustomers']);
+    Route::get('/dashboard/latest-orders', [DashboardController::class, 'latestOrders']);
+
 });
 Route::post('/login',  [AuthController::class, 'login'])->name('login');
 
