@@ -28,8 +28,8 @@
         <!--Paid Order -->
         <div class="animate-fade-in-down bg-white py-6 px-5 text-center shadow rounded-lg flex flex-col items-center justify-center" style="animation-delay: 0.2ms;">
             <label>Total Paid Order</label>
-            <template v-if="!loading.paidOrdersCount">
-                <span class="text-3xl font-semibold">{{ productsCount }}</span>
+            <template v-if="!loading.paidOrders">
+                <span class="text-3xl font-semibold">{{ paidOrders }}</span>
             </template>
             <Spinner v-else text="" class="" />
         </div>
@@ -132,7 +132,7 @@ const loading = ref({
 
 const cousomersCount = ref();
 const productsCount = ref();
-const paidOrdersCount = ref();
+const paidOrders = ref();
 const totalIncome = ref();
 const latestCustomers = ref([]);
 const latestOrders = ref([]);
@@ -145,7 +145,7 @@ function updateDashboard() {
     loading.value = {
         cousomersCount: true,
         productsCount: true,
-        paidOrdersCount: true,
+        paidOrders: true,
         totalIncome: true,
         orderByCountry: true,
         latestCustomers: true,
@@ -161,8 +161,8 @@ function updateDashboard() {
     })
 
     axiosClient.get(`/dashboard/orders-count`, {params: {d}}).then(({data}) => {
-        paidOrdersCount.value = data;
-        loading.value.paidOrdersCount = false;
+        paidOrders.value = data;
+        loading.value.paidOrders = false;
     })
     axiosClient.get(`/dashboard/income-count`, {params: {d}}).then(({data}) => {
         (totalIncome.value = new Intl.NumberFormat("de-DE", {
