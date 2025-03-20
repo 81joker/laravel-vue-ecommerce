@@ -14,6 +14,8 @@ import Reports from "@/views/Reports/Reports.vue";
 import OrdersView from "@/views/Orders/OrdersView.vue";
 import NotFount from "@/views/NotFount.vue";
 import store from "@/store";
+import OrdersReports from "@/views/Reports/OrdersReports.vue";
+import CustomersReports from "@/views/Reports/CustomersReports.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -21,6 +23,7 @@ const router = createRouter({
         {
             path: "/",
             name: "home",
+            redirect: "/app/dashboard",
             component: HomeView,
         },
         {
@@ -68,10 +71,25 @@ const router = createRouter({
                     component: CustomerView
                 },
                 {
-                  path: 'reports',
-                  name: 'app.reports',
-                  component: Reports
-                },
+                    path: '/report',
+                    name: 'reports',
+                    component: Reports,
+                    meta: {
+                      requiresAuth: true
+                    },
+                    children: [
+                      {
+                        path: 'reports/orders',
+                        name: 'reports.orders',
+                        component: OrdersReports
+                      },
+                      {
+                        path: 'reports/customers',
+                        name: 'reports.customers',
+                        component: CustomersReports
+                      }
+                    ]
+                  },
             ],
         },
         {
