@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="text-3xl font-semibold">Report</h1>
+    <h1 class="text-3xl font-semibold">Reports</h1>
     <div class="mt-4">
       <p>
         This page is under construction. Please check back later.
@@ -11,6 +11,6 @@
 
 <script>
 export default {
-  name: "Report",
+  name: "Reports",
 };
 </script>

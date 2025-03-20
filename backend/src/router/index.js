@@ -10,6 +10,7 @@ import Users from "@/views/Users/Users.vue";
 import Customers from "@/views/Customers/Customers.vue";
 import CustomerView from "@/views/Customers/CustomerView.vue";
 import Orders from "@/views/Orders/Orders.vue";
+import Reports from "@/views/Reports/Reports.vue";
 import OrdersView from "@/views/Orders/OrdersView.vue";
 import NotFount from "@/views/NotFount.vue";
 import store from "@/store";
@@ -62,11 +63,16 @@ const router = createRouter({
                   component: Customers
                 },
                 {
-                  path: 'customers/:id',
-                  name: 'app.customers.view',
-                  component: CustomerView
+                    path: 'customers/:id',
+                    name: 'app.customers.view',
+                    component: CustomerView
                 },
-        ],
+                {
+                  path: 'reports',
+                  name: 'app.reports',
+                  component: Reports
+                },
+            ],
         },
         {
             path: "/login",
