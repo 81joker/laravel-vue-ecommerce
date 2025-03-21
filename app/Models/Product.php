@@ -16,9 +16,12 @@ class Product extends Model
     use HasFactory;
     use HasApiTokens;
     // protected $guarded = [];
-    protected $fillable = ['title', 'description', 'price', 'image', 'image_mime', 'image_size', 'created_by', 'updated_by'];
+    protected $fillable = ['title', 'description', 'price', 'image', 'image_mime', 'image_size','published', 'created_by', 'updated_by'];
      
-
+    protected $casts = [
+        'published' => 'boolean',
+    ];
+    
     /**
      * Get the options for generating the slug.
      */

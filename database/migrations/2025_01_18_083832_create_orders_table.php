@@ -16,11 +16,8 @@ return new class extends Migration
             $table->id();
             $table->decimal('total_price', 20, 2)->nullable();
             $table->string('status', 45)->nullable();
-            // $table->foreignIdFor(User::class , 'created_by')->nullable();
-            // $table->foreignIdFor(User::class , 'updated_by')->nullable();
             $table->foreignId('created_by')->constrained('users')->nullable();
             $table->foreignId('updated_by')->constrained('users')->nullable();
-
             $table->timestamps();
         });
     }
