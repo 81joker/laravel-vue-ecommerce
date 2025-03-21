@@ -79,12 +79,12 @@ const router = createRouter({
                     },
                     children: [
                       {
-                        path: 'reports/orders',
+                        path: 'orders/:date?',
                         name: 'reports.orders',
                         component: OrdersReports
                       },
                       {
-                        path: 'reports/customers',
+                        path: 'customers/:date?',
                         name: 'reports.customers',
                         component: CustomersReports
                       }
