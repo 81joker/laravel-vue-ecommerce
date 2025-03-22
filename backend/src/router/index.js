@@ -10,9 +10,12 @@ import Users from "@/views/Users/Users.vue";
 import Customers from "@/views/Customers/Customers.vue";
 import CustomerView from "@/views/Customers/CustomerView.vue";
 import Orders from "@/views/Orders/Orders.vue";
+import Reports from "@/views/Reports/Reports.vue";
 import OrdersView from "@/views/Orders/OrdersView.vue";
 import NotFount from "@/views/NotFount.vue";
 import store from "@/store";
+import OrdersReports from "@/views/Reports/OrdersReports.vue";
+import CustomersReports from "@/views/Reports/CustomersReports.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,6 +23,7 @@ const router = createRouter({
         {
             path: "/",
             name: "home",
+            redirect: "/app/dashboard",
             component: HomeView,
         },
         {
@@ -62,11 +66,31 @@ const router = createRouter({
                   component: Customers
                 },
                 {
-                  path: 'customers/:id',
-                  name: 'app.customers.view',
-                  component: CustomerView
+                    path: 'customers/:id',
+                    name: 'app.customers.view',
+                    component: CustomerView
                 },
-        ],
+                {
+                    path: '/report',
+                    name: 'reports',
+                    component: Reports,
+                    meta: {
+                      requiresAuth: true
+                    },
+                    children: [
+                      {
+                        path: 'orders/:date?',
+                        name: 'reports.orders',
+                        component: OrdersReports
+                      },
+                      {
+                        path: 'customers/:date?',
+                        name: 'reports.customers',
+                        component: CustomersReports
+                      }
+                    ]
+                  },
+            ],
         },
         {
             path: "/login",

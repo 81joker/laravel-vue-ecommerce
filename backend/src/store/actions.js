@@ -57,9 +57,13 @@ export function getProducts(
         });
 }
 
+
 export function getProduct({commit}, id) {
     return axiosClient.get(`/products/${id}`)
   }
+
+  
+
 
 export function createProduct({ commit }, product) {
     if (product.image instanceof File) {
@@ -195,4 +199,25 @@ export function getOrders(
     //     commit('setProducts', [false, data]);
     //     return data;
     // })
+}
+
+
+export function updateProduct({ commit }, product) {
+    const id = product.id;
+    let form = new FormData();
+    form.append("id", product.id);
+    form.append("published", product.published ? 1 : 0);
+    form.append("title", product.title);
+    form.append("description", product.description);
+    form.append("price", product.price);
+    form.append("_method", "PUT");
+
+    // Append image only if it's a File instance
+    if (product.image instanceof File) {
+        form.append("image", product.image);
+    }
+
+    return axiosClient.post(`/products/${id}`, form, {
+        headers: { "Content-Type": "multipart/form-data" },
+    });
 }

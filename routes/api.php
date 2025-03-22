@@ -4,11 +4,13 @@ use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\DashboardController;
+use SebastianBergmann\CodeCoverage\Report\Xml\Report;
 
 Route::middleware(['auth:sanctum' ,'admin'])->group(function () {
     Route::get('/user', [AuthController::class, 'getUser']);
@@ -32,6 +34,10 @@ Route::middleware(['auth:sanctum' ,'admin'])->group(function () {
     Route::get('/dashboard/orders-by-country', [DashboardController::class, 'ordersByCountry']);
     Route::get('/dashboard/latest-customers', [DashboardController::class, 'latestCustomers']);
     Route::get('/dashboard/latest-orders', [DashboardController::class, 'latestOrders']);
+
+    // Reports Routes
+    Route::get('/reports/orders',  [ReportController::class, 'orders']);
+    Route::get('/reports/customers',  [ReportController::class, 'customers']);
 
 });
 Route::post('/login',  [AuthController::class, 'login'])->name('login');

@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -19,7 +19,8 @@ class DatabaseSeeder extends Seeder
             AdminUserSeeder::class,
             ProductSeeder::class,
             CountrySeeder::class,
-            // CustomerSeeder::class,
+            OrderSeeder::class,
+            CustomerSeeder::class,
             // CustomerAddressSeeder::class
         ]);
         // User::factory()->create([

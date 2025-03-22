@@ -168,6 +168,7 @@ function updateDashboard() {
         (totalIncome.value = new Intl.NumberFormat("de-DE", {
             style: "currency",
             currency: "EUR",
+            minimumFractionDigits: 0, 
         }).format(Math.random(data))),
         (loading.value.totalIncome = false);
     })
