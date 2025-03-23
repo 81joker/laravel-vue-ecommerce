@@ -23,7 +23,7 @@
     
                 <a  href="{{ route('product.view', $product->slug) }}" class="relative p-2.5 h-96 overflow-hidden rounded-xl bg-clip-border">
                   <img                   
-                   src="https://loremflickr.com/800/800/product?random={{ $product->id }}"
+                   src="{{ $product->image }}"
                     alt="{{ Str::limit($product->title, 10) }}"
                     class="h-full w-full object-cover rounded-md hover:rotate-1 transition-transform"
                   />

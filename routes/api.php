@@ -24,7 +24,7 @@ Route::middleware(['auth:sanctum' ,'admin'])->group(function () {
 
     Route::get('orders/statuses', [OrderController::class, 'getStatuses']);
     Route::post('orders/change-status/{order}/{status}', [OrderController::class, 'changeStatus']);
-    Route::get('/orders/{order}', [OrderController::class, 'view']);
+    Route::get('orders/{order}', [OrderController::class, 'view']);
 
     // Dashbaord Routes
     Route::get('/dashboard/customers-count', [DashboardController::class, 'activeCustomers']);
