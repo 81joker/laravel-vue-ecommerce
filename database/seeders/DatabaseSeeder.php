@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
             AdminUserSeeder::class,
             ProductSeeder::class,
             CountrySeeder::class,
-            OrderSeeder::class,
+            // OrderSeeder::class,
             CustomerSeeder::class,
             // CustomerAddressSeeder::class
         ]);

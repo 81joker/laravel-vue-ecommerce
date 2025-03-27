@@ -3,7 +3,7 @@
     <form @submit.prevent="onSubmit">
       <div class="bg-white px-4 pt-5 pb-4">
         <h1 class="text-2xl font-semibold pb-2">{{ title }}</h1>
-        <CustomInput class="mb-2" v-model="customer.first_name" label="First Name"/>
+        <CustomInput class="mb-2" v-model="customer.first_name" label="First Name"   :errors="errors['first_name']"/>
         <CustomInput class="mb-2" v-model="customer.last_name" label="Last Name"/>
         <CustomInput class="mb-2" v-model="customer.email" label="Email"/>
         <CustomInput class="mb-2" v-model="customer.phone" label="Phone"/>
@@ -35,7 +35,7 @@
               <CustomInput v-model="customer.shippingAddress.address1" label="Address 1"/>
               <CustomInput v-model="customer.shippingAddress.address2" label="Address 2"/>
               <CustomInput v-model="customer.shippingAddress.city" label="City"/>
-              <CustomInput v-model="customer.shippingAddress.zipcode" label="Zip Code"/>
+              <CustomInput v-model="customer.shippingAddress.zipcode" label="Zip Code" />
               <CustomInput type="select" :select-options="countries" v-model="customer.shippingAddress.country_code"
                            label="Country"/>
               <CustomInput v-if="!shippingCountry.states" v-model="customer.shippingAddress.state" label="State"/>
@@ -77,6 +77,25 @@ const customer = ref({
   billingAddress: {},
   shippingAddress: {}
 })
+const errors = ref({
+  first_name: [],
+  last_name: [],
+  email: [],
+  phone: [],
+  status: [],
+  'billingAddress.address1': [],
+  'billingAddress.address2': [],
+  'billingAddress.city': [],
+  'billingAddress.zipcode': [],
+  'billingAddress.country_code': [],
+  'billingAddress.state': [],
+  'shippingAddress.address1': [],
+  'shippingAddress.address2': [],
+  'shippingAddress.city': [],
+  'shippingAddress.zipcode': [],
+  'shippingAddress.country_code': [],
+  'shippingAddress.state': [],
+});
 const loading = ref(false)
 
 const countries = computed(() => store.state.countries.map(c => ({key: c.code, text: c.name})))
@@ -102,10 +121,15 @@ function onSubmit() {
       .then(response => {
         loading.value = false;
         if (response.status === 200) {
-          // TODO show notification
+          store.commit('showToast' , 'Customer has been  successfully updated');
           store.dispatch('getCustomers')
           router.push({name: 'app.customers'})
         }
+      }
+    ).catch(err => {
+        loading.value = false;
+        errors.value = err.response.data.errors
+        // debugger;
       })
   } else {
     store.dispatch('createCustomer', customer.value)
@@ -119,7 +143,8 @@ function onSubmit() {
       })
       .catch(err => {
         loading.value = false;
-        debugger;
+        errors.value = err.response.data.errors
+        // debugger;
       })
   }
 }

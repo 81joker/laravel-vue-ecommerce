@@ -72,6 +72,7 @@ export function createProduct({ commit }, product) {
         form.append("image", product.image);
         form.append("description", product.description);
         form.append("price", product.price);
+        form.append("published", product.published ? 1 : 0);
         product = form;
     }
     return axiosClient.post("/products", product);
@@ -159,8 +160,8 @@ export function getCustomers(
   export function updateCustomer({commit}, customer) {
     return axiosClient.put(`/customers/${customer.id}`, customer)
   }
-  export function deleteCustomer({ commit }, id) {
-    return axiosClient.delete(`/customers/${id}`)
+  export function deleteCustomer({ commit }, customer) {
+    return axiosClient.delete(`/customers/${customer.id}`)
 
 }
 

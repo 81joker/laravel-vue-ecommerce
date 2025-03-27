@@ -44,10 +44,10 @@
                 </header>
                 <form @submit.prevent="onSubmit">
                   <div class="bg-white px-4 pt-5 pb-4">
-                    <CustomInput class="mb-2" v-model="product.title" label="Product Title"/>
-                    <CustomInput type="file" class="mb-2" label="Product Image" @change="file => product.image = file"/>
-                    <CustomInput type="textarea" class="mb-2" v-model="product.description" label="Description"/>
-                    <CustomInput type="number" class="mb-2" v-model="product.price" label="Price" prepend="$"/>
+                    <CustomInput class="mb-2" v-model="product.title" label="Product Title"  :errors="errors['title']"/>
+                    <CustomInput type="file" class="mb-2" label="Product Image" @change="file => product.image = file" :errors="errors['image']"/>
+                    <CustomInput type="textarea" class="mb-2" v-model="product.description" label="Description" :errors="errors['description']"/>
+                    <CustomInput type="number" class="mb-2" v-model="product.price" label="Price" prepend="$" :errors="errors['price']"/>
                     <CustomInput type="checkbox" class="mb-2" v-model="product.published" label="Published" />
                   </div>
                   <footer class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
@@ -96,6 +96,15 @@
     price: props.product.price,
     published: props.product.published
   })
+  const errors = ref({ 
+    title: [],
+    image: [],
+    description: [],
+    price: [],
+    published: [] 
+  }
+  )
+  
 
   const emit = defineEmits(['update:modelValue', 'close'])
 
@@ -139,17 +148,19 @@
         })
     } else {
       store.dispatch('createProduct', product.value)
-        .then(response => {
+      .then(response => {
           loading.value = false;
           if (response.status === 201) {
             // TODO show notification
-            store.dispatch('getProducts')
+            store.dispatch('createProduct')
             closeModal()
           }
         })
         .catch(err => {
-          loading.value = false;
-          debugger;
+          loading.value = false;  
+          errors.value = err.response.data.errors
+          console.log(err.response.data);        
+          // debugger;
         })
     }
   }

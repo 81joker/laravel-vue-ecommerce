@@ -25,6 +25,10 @@ class CheckoutController extends Controller
         // /**  @var \App\Models\User $user */
         // $user = $request->user();
         $user = auth()->user();
+
+        if(!$user->customer->shippingAddress || !$user->customer->billingAddress){
+            return  redirect()->route('profile')->with('error', 'Please provide your Addresse');
+        }
         if ($user && $user->stripe_customer_id) {
             $customer_id = $user->stripe_customer_id;
         } else {
