@@ -139,11 +139,11 @@
         })
     } else {
       store.dispatch('createProduct', product.value)
-        .then(response => {
+      .then(response => {
           loading.value = false;
           if (response.status === 201) {
             // TODO show notification
-            store.dispatch('getProducts')
+            store.dispatch('createProduct')
             closeModal()
           }
         })
