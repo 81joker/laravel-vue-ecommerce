@@ -160,8 +160,8 @@ export function getCustomers(
   export function updateCustomer({commit}, customer) {
     return axiosClient.put(`/customers/${customer.id}`, customer)
   }
-  export function deleteCustomer({ commit }, id) {
-    return axiosClient.delete(`/customers/${id}`)
+  export function deleteCustomer({ commit }, customer) {
+    return axiosClient.delete(`/customers/${customer.id}`)
 
 }
 

@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             ProductSeeder::class,
             CountrySeeder::class,
             // OrderSeeder::class,
-            // CustomerSeeder::class,
+            CustomerSeeder::class,
             // CustomerAddressSeeder::class
         ]);
         // User::factory()->create([

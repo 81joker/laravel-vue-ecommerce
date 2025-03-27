@@ -182,6 +182,7 @@
           loading.value = false;
           if (response.status === 200) {
             // TODO show notification
+            store.commit('showToast' , 'Customer has been  successfully deleted');
             store.dispatch('getCutomers')
             closeModal()
           }
