@@ -97,12 +97,12 @@
               >
                 <div class="px-1 py-1">
                   <MenuItem v-slot="{ active }">
-                    <button
+                  <router-link
+                      :to="{name: 'app.products.edit', params: {id: product.id}}"
                       :class="[
                         active ? 'bg-indigo-600 text-white' : 'text-gray-900',
                         'group flex w-full items-center rounded-md px-2 py-2 text-sm',
                       ]"
-                      @click="editProduct(product)"
                     >
                       <PencilIcon
                         :active="active"
@@ -110,8 +110,23 @@
                         aria-hidden="true"
                       />
                       Edit
-                    </button>
+                    </router-link>
                   </MenuItem>
+                  <!-- Edit with a modal -->
+                  <!-- <button
+                    :class="[
+                      active ? 'bg-indigo-600 text-white' : 'text-gray-900',
+                      'group flex w-full items-center rounded-md px-2 py-2 text-sm',
+                    ]"
+                    @click="editProduct(product)"
+                  >
+                    <PencilIcon
+                      :active="active"
+                      class="mr-2 h-5 w-5 text-indigo-400"
+                      aria-hidden="true"
+                    />
+                    Edit
+                  </button> -->
                   <MenuItem v-slot="{ active }">
                     <button
                       :class="[
@@ -180,6 +195,7 @@ import TableHeaderCell from "../../components/core/Table/TableHeaderCell.vue";
 import {Menu, MenuButton, MenuItem, MenuItems} from "@headlessui/vue";
 import {DotsVerticalIcon, PencilIcon, TrashIcon} from '@heroicons/vue/outline'
 import ProductModal from "./ProductModal.vue";
+import { RouterLink } from "vue-router";
 
 const perPage = ref(PRODUCTS_PER_PAGE);
 const search = ref('');
@@ -241,7 +257,7 @@ function deleteProduct(product) {
   }
   store.dispatch('deleteProduct', product.id)
     .then(res => {
-      // TODO Show notification
+      store.commit('showToast', 'Product was successfully deleted');
       store.dispatch('getProducts')
     })
 }
