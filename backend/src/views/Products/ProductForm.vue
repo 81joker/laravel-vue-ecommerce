@@ -13,6 +13,7 @@
         <div class="col-span-2 px-4 pt-5 pb-4">
           <!-- <CustomCKEditor :errors="errors['description']"/> -->
           <CustomInput class="mb-2" v-model="product.title" label="Product Title" :errors="errors['title']"/>
+          <CustomInput class="mb-2" type="file" @change="file => product.image = file" label="Product Image" :errors="errors['image']"/>
           <CustomInput type="textarea" class="mb-2" v-model="product.description" label="Description" :errors="errors['description']"/>
           <CustomInput type="number" class="mb-2" v-model="product.price" label="Price" prepend="$" :errors="errors['price']"/>
           <CustomInput type="number" class="mb-2" v-model="product.quantity" label="Quantity" :errors="errors['quantity']"/>
@@ -67,6 +68,7 @@ const router = useRouter()
 const product = ref({
   id: null,
   title: null,
+  image: null,
   images: [],
   deleted_images: [],
   image_positions: {},
