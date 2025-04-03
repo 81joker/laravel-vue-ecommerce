@@ -11,8 +11,9 @@
     <form v-if="!loading" @submit.prevent="onSubmit">
       <div class="grid grid-cols-3">
         <div class="col-span-2 px-4 pt-5 pb-4">
+          <!-- <CustomCKEditor :errors="errors['description']"/> -->
           <CustomInput class="mb-2" v-model="product.title" label="Product Title" :errors="errors['title']"/>
-          <CustomInput type="richtext" class="mb-2" v-model="product.description" label="Description" :errors="errors['description']"/>
+          <CustomInput type="textarea" class="mb-2" v-model="product.description" label="Description" :errors="errors['description']"/>
           <CustomInput type="number" class="mb-2" v-model="product.price" label="Price" prepend="$" :errors="errors['price']"/>
           <CustomInput type="number" class="mb-2" v-model="product.quantity" label="Quantity" :errors="errors['quantity']"/>
           <CustomInput type="checkbox" class="mb-2" v-model="product.published" label="Published" :errors="errors['published']"/>

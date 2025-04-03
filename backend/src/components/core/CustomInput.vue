@@ -24,6 +24,18 @@
                   :class="inputClasses"
                   :placeholder="label"></textarea>
         </template>
+        <!-- <template v-else-if="type === 'richtext'">
+          <ckeditor
+          :modelValue="props.modelValue"
+            :config="editorConfig"
+             /> -->
+
+          <!-- <ckeditor :editor="editor"
+                  :model-value="props.modelValue"
+                  @input="onChange"
+                  :class="inputClasses"
+                  :config="editorConfig"></ckeditor> -->
+        <!-- </template> -->
         <template v-else-if="type === 'checkbox'">
             <input :id="id"
                :name="name"
@@ -65,6 +77,8 @@
   <script setup>
 
   import {computed} from "vue";
+  import ckeditor from '@/components/core/CustomCKEditor.vue';
+
 
   const props = defineProps({
     modelValue: [String, Number, File],
@@ -88,6 +102,10 @@
     type: Array,
     required: false
   },
+  editorConfig:{
+    type: Object,
+    default: (() => {})
+  }
   })
 
   const inputClasses = computed(() => {

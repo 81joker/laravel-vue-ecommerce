@@ -9,8 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-vue": "^7.3.0",
     "axios": "^1.7.9",
     "chart.js": "^4.4.8",
+    "ckeditor5": "^44.3.0",
     "pinia": "^2.3.0",
     "vue": "^3.5.13",
     "vue-chartjs": "^5.3.2",
