@@ -14,6 +14,8 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (!Schema::hasTable('product_images')) {
+
         Schema::create('product_images', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->constrained('products');
@@ -24,7 +26,7 @@ return new class extends Migration
             $table->integer('position')->nullable();
             $table->timestamps();
         });
-
+    }
         DB::table('products')
             ->chunkById(100, function (Collection $products) {
                 $products = $products->map(function ($p) {
@@ -32,15 +34,15 @@ return new class extends Migration
                         'product_id' => $p->id,
                         'path' => '',
                         'url' => $p->image,
-                        'mime' => $p->image_mime,
+                        'mime' => $p->image_mime?: null,
                         'size' => $p->image_size,
                         'position' => 1,
                         'created_at' => Carbon::now(),
                         'updated_at' => Carbon::now()
                     ];
                 });
-                dd($products->all());
-                DB::table('product_images')->insert($products->all());
+               $deploy =  DB::table('product_images')->insert($products->all());
+                dd($deploy);
 
             });
 
