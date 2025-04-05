@@ -18,7 +18,7 @@ return new class extends Migration
 
         Schema::create('product_images', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained('products');
+            $table->unsignedBigInteger('product_id');
             $table->string('path', 255);
             $table->string('url', 255);
             $table->string('mime', 55);
@@ -27,30 +27,32 @@ return new class extends Migration
             $table->timestamps();
         });
     }
-        DB::table('products')
-            ->chunkById(100, function (Collection $products) {
-                $products = $products->map(function ($p) {
-                    return [
-                        'product_id' => $p->id,
-                        'path' => '',
-                        'url' => $p->image,
-                        'mime' => $p->image_mime?: null,
-                        'size' => $p->image_size,
-                        'position' => 1,
-                        'created_at' => Carbon::now(),
-                        'updated_at' => Carbon::now()
-                    ];
-                });
-               $deploy =  DB::table('product_images')->insert($products->all());
-                dd($deploy);
 
-            });
-
-        Schema::table('products', function (Blueprint $table) {
-            $table->dropColumn('image');
-            $table->dropColumn('image_mime');
-            $table->dropColumn('image_size');
+    DB::table('products')
+    ->chunkById(100, function ($products) {
+        $mapped = $products->map(function ($p) {
+            return [
+                'product_id' => $p->id,
+                'path' => '',
+                'url' => $p->image,
+                'mime' => $p->image_mime ?:  $p->image,
+                'size' => $p->image_size? $p->image_size : 0,
+                'position' => 1,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ];
         });
+
+        // Insert into product_images table
+        DB::table('product_images')->insert($mapped->toArray());
+    });
+
+
+        // Schema::table('products', function (Blueprint $table) {
+        //     $table->dropColumn('image');
+        //     $table->dropColumn('image_mime');
+        //     $table->dropColumn('image_size');
+        // });
 
     }
 

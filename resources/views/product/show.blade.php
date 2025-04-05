@@ -4,7 +4,7 @@
     'id' => $product->id,
     'title' => $product->title,
     'description' => $product->description,
-    'image' => $product->image,
+    'image' => $product->image ?: '/images/no-image.png',
     'price' => $product->price,
     'addToCartUrl' => route('cart.add', $product),
 
@@ -15,7 +15,7 @@
           <div class="lg:col-span-3">
               <div
                   x-data="{
-images: ['{{$product->image}}'],
+images: ['{{$product->image ?: '/images/no-image.png'}}'],
 activeImage: null,
 prev() {
     let index = this.images.indexOf(this.activeImage);

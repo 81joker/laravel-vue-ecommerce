@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             CountrySeeder::class,
             // OrderSeeder::class,
             CustomerSeeder::class,
+            ProductImageSeeder::class
             // CustomerAddressSeeder::class
         ]);
         // User::factory()->create([
