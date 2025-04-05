@@ -55,7 +55,7 @@ import CustomInput from "../../components/core/CustomInput.vue";
 import store from "../../store/index.js";
 import Spinner from "../../components/core/Spinner.vue";
 import {useRoute, useRouter} from "vue-router";
-// import ImagePreview from "../../components/ImagePreview.vue";
+import ImagePreview from "../../components/ImagePreview.vue";
 // import the component
 // import Treeselect from 'vue3-treeselect'
 // import the styles
