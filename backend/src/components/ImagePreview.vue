@@ -113,7 +113,7 @@ function deleteImage(image) {
 
 //  HOOk
 watch('props.images' , () => {
-    console.log("Image is from watch" ,props.images);
+    // console.log("Image is from watch" ,props.images);
     if('props.images' !== undefined){
         imageUrl.value = [
              ...imageUrl.value , 

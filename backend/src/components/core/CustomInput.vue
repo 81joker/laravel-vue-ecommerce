@@ -77,9 +77,6 @@
   <script setup>
 
   import {computed} from "vue";
-  import ckeditor from '@/components/core/CustomCKEditor.vue';
-
-
   const props = defineProps({
     modelValue: [String, Number, File],
     label: String,

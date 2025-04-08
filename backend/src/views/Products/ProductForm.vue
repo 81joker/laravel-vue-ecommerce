@@ -16,6 +16,8 @@
           <!-- <CustomInput class="mb-2" type="file" @change="file => product.image = file" label="Product Image" :errors="errors['image']"/> -->
           <CustomInput type="textarea" class="mb-2" v-model="product.description" label="Description" :errors="errors['description']"/>
           <CustomInput type="number" class="mb-2" v-model="product.price" label="Price" prepend="$" :errors="errors['price']"/>
+          <input type="number" class="mb-2" v-model="product.price" label="Price" prepend="$" :errors="errors['price']">
+          <!-- <CustomInput type="number" class="mb-2" v-model="product.price" label="Price" prepend="$" :errors="errors['price']"/> -->
           <CustomInput type="number" class="mb-2" v-model="product.quantity" label="Quantity" :errors="errors['quantity']"/>
           <CustomInput type="checkbox" class="mb-2" v-model="product.published" label="Published" :errors="errors['published']"/>
           <treeselect v-model="product.categories" :multiple="true" :options="options" :errors="errors['categories']"/>
@@ -79,6 +81,8 @@ const product = ref({
   categories: []
 })
 
+console.log("Product is" ,product.value.price);
+
 const errors = ref({});
 
 const loading = ref(false)
@@ -108,10 +112,14 @@ function onSubmit($event, close = false) {
   product.value.quantity = product.value.quantity || null
   if (product.value.id) {
     store.dispatch('updateProduct', product.value)
+    // console.log('Updating product with data:', JSON.stringify(product.value, null, 2))
       .then(response => {
+
         loading.value = false;
         if (response.status === 200) {
           product.value = response.data
+          console.log('Product updated successfully:', response.data);
+          
           store.commit('showToast', 'Product was successfully updated');
           store.dispatch('getProducts')
           if (close) {
