@@ -23,13 +23,11 @@
         <div class="col-span-1 px-4 pt-5 pb-4">
           <image-preview
               v-model="product.images"  
-              :modelValue="product.images"
+              :images="product.images"
+              v-model:deleted-images="product.deleted_images"
               />
               <pre>{{ product.images }}</pre>
-          <!-- <image-preview v-model="product.images"
-                         :images="product.images"
-                         v-model:deleted-images="product.deleted_images"
-                         v-model:image-positions="product.image_positions"/> -->
+              <pre>{{ product.deleted_images }}</pre>
         </div>
       </div>
       <footer class="bg-gray-50 rounded-b-lg px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
@@ -73,7 +71,6 @@ const router = useRouter()
 const product = ref({
   id: null,
   title: null,
-  // image: null,
   images: [],
   deleted_images: [],
   image_positions: {},
