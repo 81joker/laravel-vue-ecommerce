@@ -20,7 +20,7 @@ class ProductFactory extends Factory
     {
         return [
             'title' => $this->faker->text(),
-            'image' => "https://picsum.photos/800/600?random={$this->faker->numberBetween(1, 100)}",
+            // 'image' => "https://picsum.photos/800/600?random={$this->faker->numberBetween(1, 100)}",
             'description' => $this->faker->realText(2000),
             'price' => $this->faker->randomFloat(2, 1,2),
             // 'created_by' => now(),

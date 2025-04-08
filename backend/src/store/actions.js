@@ -66,16 +66,64 @@ export function getProduct({commit}, id) {
 
 
 export function createProduct({ commit }, product) {
-    if (product.image instanceof File) {
+    if (product.images && product.images.length) {
+        // This is for just one mage
+    // if (product.image instanceof File) {
         const form = new FormData();
         form.append("title", product.title);
-        form.append("image", product.image);
+        // This is for just one mage
+        // form.append("image", product.image);
+        product.images.forEach((im) => {
+            form.append("images[]", im);
+        });
+        if(product.deleted_images && product.deleted_images.length) {
+            product.deleted_images.forEach((im) => {
+                form.append("deleted_images[]", im);
+            });
+        }
         form.append("description", product.description);
         form.append("price", product.price);
         form.append("published", product.published ? 1 : 0);
         product = form;
     }
     return axiosClient.post("/products", product);
+}
+
+export function updateProduct({ commit }, product) {
+
+    const id = product.id;
+    let form = new FormData();
+    form.append("id", product.id);
+    form.append("published", product.published ? 1 : 0);
+    
+    if(product.deleted_images && product.deleted_images.length) {
+        product.deleted_images.forEach((im) => {
+            form.append("deleted_images[]", im);
+        });
+    }
+    form.append("description", product.description);
+    form.append("price", product.price);
+    form.append("published", product.published ? 1 : 0);
+    product = form;
+
+    form.append("title", product.title);
+    form.append("description", product.description);
+    form.append("price", product.price);
+    form.append("_method", "PUT");
+
+    if (product.images && product.images.length) {
+        product.images.forEach((im) => {
+            form.append("images[]", im);
+        });
+    }
+    // Append image only if it's a File instance and for once image
+    // if (product.image instanceof File) {
+    //     form.append("image", product.image);
+    // }
+    
+    return axiosClient.post(`/products/${id}`, form, {
+        headers: { "Content-Type": "multipart/form-data" },
+    });
 }
 export function deleteProduct({ commit }, id) {
     return axiosClient.delete(`/products/${id}`)
@@ -203,22 +251,3 @@ export function getOrders(
 }
 
 
-export function updateProduct({ commit }, product) {
-    const id = product.id;
-    let form = new FormData();
-    form.append("id", product.id);
-    form.append("published", product.published ? 1 : 0);
-    form.append("title", product.title);
-    form.append("description", product.description);
-    form.append("price", product.price);
-    form.append("_method", "PUT");
-
-    // Append image only if it's a File instance
-    if (product.image instanceof File) {
-        form.append("image", product.image);
-    }
-
-    return axiosClient.post(`/products/${id}`, form, {
-        headers: { "Content-Type": "multipart/form-data" },
-    });
-}
