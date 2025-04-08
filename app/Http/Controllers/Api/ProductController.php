@@ -45,9 +45,9 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
-// Log::info('Request Data (excluding files):', $request->except('image'));
+        // Log::info('Request Data (excluding files):', $request->except('image'));
 
-$data = $request->validated();
+        $data = $request->validated();
         $data['created_by'] = $request->user()->id;
         $data['updated_by'] = $request->user()->id;
 
@@ -57,7 +57,7 @@ $data = $request->validated();
 
         if ($images) {
             // $positions = $request->input('positions', []);
-            $this->saveImages($images , [],$product);
+            $this->saveImages($images, $product);
         }
         return new ProductResource($product);
         // Just for one image
@@ -71,8 +71,6 @@ $data = $request->validated();
             $data['image_size'] = $image->getSize();
         }
         */
-
-
     }
 
     /**
@@ -86,7 +84,7 @@ $data = $request->validated();
         return new ProductResource($product);
     }
 
-      /**
+    /**
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
@@ -99,19 +97,16 @@ $data = $request->validated();
         $data['updated_by'] = $request->user()->id;
 
 
-    
-               /** @var \Illuminate\Http\UploadedFile[] $images */
-               $images = $data['images'] ?? [];
-               $deletedImages = $data['deleted_images'] ?? [];
+        /** @var \Illuminate\Http\UploadedFile[] $images */
+        $images = $data['images'] ?? [];
+        $deletedImages = $data['deleted_images'] ?? [];
 
-       
-               if ($images) {
-                   $this->saveImages($images , [],$product);
-                }
-                $this->deleteImages($deletedImages, $product);
-                $product->update($data);
-
-               return new ProductResource($product);
+        if ($images) {
+            $this->saveImages($images, $product);
+        }
+        $this->deleteImages($deletedImages, $product);
+        $product->update($data);
+        return new ProductResource($product);
 
         /*
         ///////////////***Just for one image ///////////////
@@ -138,13 +133,13 @@ $data = $request->validated();
      */
     public function destroy(Product $product)
     {
-         $product->delete();
-         return response()->noContent();
+        $product->delete();
+        return response()->noContent();
     }
 
 
 
-   /**
+    /**
      *
      *
      * @param UploadedFile[] $images
@@ -152,13 +147,13 @@ $data = $request->validated();
      * @throws \Exception
      * @author Nehad Altimimi <nehad.al.timimi@gmail.com>
      */
-    private function saveImages($images, $positions = [], Product $product)
+    private function saveImages($images, Product $product)
     {
-        foreach ($positions as $id => $position) {
-            ProductImage::query()
-                ->where('id', $id)
-                ->update(['position' => $position]);
-        }
+        // foreach ($positions as $id => $position) {
+        //     ProductImage::query()
+        //         ->where('id', $id)
+        //         ->update(['position' => $position]);
+        // }
 
         foreach ($images as $id => $image) {
             $path = 'images/' . Str::random();
@@ -170,8 +165,8 @@ $data = $request->validated();
             //     throw new \Exception("Unable to save file \"{$image->getClientOriginalName()}\"");
             // }
             $name = $image->store('images', 'public');
-            if (!Storage::putFileAS('public/' , $image, $image->getClientOriginalName())) {
-            // if (!Storage::putFileAS('public/' . $path, $image, $image->getClientOriginalName())) {
+            if (!Storage::putFileAS('public/', $image, $image->getClientOriginalName())) {
+                // if (!Storage::putFileAS('public/' . $path, $image, $image->getClientOriginalName())) {
                 throw new \Exception("Unable to save file \"{$image->getClientOriginalName()}\"");
             }
 
@@ -184,7 +179,7 @@ $data = $request->validated();
                 'url' => URL::to(Storage::url($relativePath)),
                 'mime' => $image->getClientMimeType(),
                 'size' => $image->getSize(),
-                'position' => $positions[$id] ?? $id + 1
+                // 'position' => $positions[$id] ?? $id + 1
             ]);
         }
     }
@@ -223,13 +218,13 @@ $data = $request->validated();
     // {
     //     $folderPath = 'products/' . now()->format('Y/m/d');
     //     $fileName = Str::random(20) . '.' . $image->getClientOriginalExtension();
-    
+
     //     $relativePath = Storage::disk('public')->putFileAs(
     //         $folderPath,
     //         $image,
     //         $fileName
     //     );
-    
+
     //     return $relativePath;
     // }
 }
