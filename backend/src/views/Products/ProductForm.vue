@@ -26,8 +26,6 @@
               :images="product.images"
               v-model:deleted-images="product.deleted_images"
               />
-              <pre>{{ product.images }}</pre>
-              <pre>{{ product.deleted_images }}</pre>
         </div>
       </div>
       <footer class="bg-gray-50 rounded-b-lg px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">

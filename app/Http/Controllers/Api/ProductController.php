@@ -102,11 +102,15 @@ $data = $request->validated();
     
                /** @var \Illuminate\Http\UploadedFile[] $images */
                $images = $data['images'] ?? [];
-               $product->update($data);
+               $deletedImages = $data['deleted_images'] ?? [];
+
        
                if ($images) {
                    $this->saveImages($images , [],$product);
-               }
+                }
+                $this->deleteImages($deletedImages, $product);
+                $product->update($data);
+
                return new ProductResource($product);
 
         /*
@@ -182,6 +186,22 @@ $data = $request->validated();
                 'size' => $image->getSize(),
                 'position' => $positions[$id] ?? $id + 1
             ]);
+        }
+    }
+
+    private function deleteImages($imageIds, Product $product)
+    {
+        $images = ProductImage::query()
+            ->where('product_id', $product->id)
+            ->whereIn('id', $imageIds)
+            ->get();
+
+        foreach ($images as $image) {
+            // If there is an old image, delete it
+            if ($image->path) {
+                Storage::deleteDirectory('/public/' . dirname($image->path));
+            }
+            $image->delete();
         }
     }
     /*
