@@ -61,7 +61,8 @@
         <!-- <tr v-for="(product, index) of products.data" class="animate-fade-in-down" :style="{'animation-delay': (index * 0.1) + 's'}"> -->
         <td class="border-b p-2 ">{{ product.id }}</td>
         <td class="border-b p-2 ">
-          <img class="w-16 h-16 object-cover" :src="product.image" :alt="product.title">
+          <img v-if="product.image" class="w-16 h-16 object-cover" :src="product.image" :alt="product.title">
+          <img v-else class="w-16 h-16 object-cover" src="../../assets/images/no-image.png" :alt="product.title">
         </td>
         <td class="border-b p-2 max-w-[200px] whitespace-nowrap overflow-hidden text-ellipsis">
           {{ product.title }}

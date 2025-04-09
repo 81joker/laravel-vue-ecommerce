@@ -13,18 +13,19 @@
         <div class="col-span-2 px-4 pt-5 pb-4">
           <!-- <CustomCKEditor :errors="errors['description']"/> -->
           <CustomInput class="mb-2" v-model="product.title" label="Product Title" :errors="errors['title']"/>
-          <CustomInput class="mb-2" type="file" @change="file => product.image = file" label="Product Image" :errors="errors['image']"/>
+          <!-- <CustomInput class="mb-2" type="file" @change="file => product.image = file" label="Product Image" :errors="errors['image']"/> -->
           <CustomInput type="textarea" class="mb-2" v-model="product.description" label="Description" :errors="errors['description']"/>
-          <CustomInput type="number" class="mb-2" v-model="product.price" label="Price" prepend="$" :errors="errors['price']"/>
+          <CustomInput type="number" class="mb-2" v-model.number="product.price" label="Price" prepend="$" :errors="errors['price']"/>
           <CustomInput type="number" class="mb-2" v-model="product.quantity" label="Quantity" :errors="errors['quantity']"/>
           <CustomInput type="checkbox" class="mb-2" v-model="product.published" label="Published" :errors="errors['published']"/>
           <treeselect v-model="product.categories" :multiple="true" :options="options" :errors="errors['categories']"/>
         </div>
         <div class="col-span-1 px-4 pt-5 pb-4">
-          <image-preview v-model="product.images"
-                         :images="product.images"
-                         v-model:deleted-images="product.deleted_images"
-                         v-model:image-positions="product.image_positions"/>
+          <image-preview
+              v-model="product.images"  
+              :images="product.images"
+              v-model:deleted-images="product.deleted_images"
+              />
         </div>
       </div>
       <footer class="bg-gray-50 rounded-b-lg px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
@@ -55,7 +56,7 @@ import CustomInput from "../../components/core/CustomInput.vue";
 import store from "../../store/index.js";
 import Spinner from "../../components/core/Spinner.vue";
 import {useRoute, useRouter} from "vue-router";
-// import ImagePreview from "../../components/ImagePreview.vue";
+import ImagePreview from "../../components/ImagePreview.vue";
 // import the component
 // import Treeselect from 'vue3-treeselect'
 // import the styles
@@ -68,7 +69,6 @@ const router = useRouter()
 const product = ref({
   id: null,
   title: null,
-  image: null,
   images: [],
   deleted_images: [],
   image_positions: {},
