@@ -32,7 +32,7 @@
                 type="file"
                 @change="onFileChange"
                 accept="image/*"
-                class="absolute left-0 top-0 bottom-0 right-0 w-full h-full"
+                class="absolute left-0 top-0 bottom-0 right-0 w-full h-full invisible"
             />
         </div>
     </div>
@@ -110,6 +110,15 @@ function deleteImage(image) {
 //      files.value.splice(index, 1);
 //      emit('update:modelValue', files.value);
 //  }
+
+function revertImage(image) {
+    // console.log("deletedImages" ,image.id);
+    if (image.isProp) {
+    deletedImages.value = deletedImages.value.filter(imageId => imageId !== image.id);
+    image.deleted = false;
+    emit("update:deletedImages", deletedImages.value);
+    }
+}
 
 //  HOOk
 watch('props.images' , () => {
