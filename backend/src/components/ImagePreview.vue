@@ -32,7 +32,7 @@
                 type="file"
                 @change="onFileChange"
                 accept="image/*"
-                class="absolute left-0 top-0 bottom-0 right-0 w-full h-full invisible"
+                class="absolute left-0 top-0 bottom-0 right-0 w-full h-full opacity-0 cursor-pointer"
             />
         </div>
     </div>
