@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\CategoryResource;
 
 class CategoryController extends Controller
 {
@@ -13,26 +15,18 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $perPage = request('per_page', 10);
-        $search = request('search', '');
+        // $perPage = request('per_page', 10);
+        // $search = request('search', '');
         $sortField = request('sort_field', 'updated_at');
         $sortDirection = request('sort_direction', 'desc');
 
-        $query = Category::query()
-            ->orderBy("categories.$sortField", $sortDirection);
-        if ($search) {
-            $query->where('name', 'like', "%{$search}%");
-        }
-        $paginator = $query->paginate($perPage);
-        return CategoryResource::collection($paginator);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $categories = Category::query()
+            ->orderBy("categories.$sortField", $sortDirection)->get();
+        // if ($search) {
+        //     $query->where('name', 'like', "%{$search}%");
+        // }
+        // $paginator = $query->paginate($perPage);
+        return CategoryResource::collection($categories);
     }
 
     /**
@@ -40,31 +34,21 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
-        //
+        $data = $request->validated();
+        $category = Category::create($data);
+        return new CategoryResource($category);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Category $category)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Category $category)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(UpdateCategoryRequest $request, Category $category)
     {
-        //
+        $data = $request->validated();
+        $category->update($data);
+        return new CategoryResource($category);
     }
 
     /**
@@ -72,6 +56,7 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        $category->delete();
+        return response()->noContent();
     }
 }
