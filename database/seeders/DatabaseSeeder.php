@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             CountrySeeder::class,
             // OrderSeeder::class,
             CustomerSeeder::class,
+            CategorySeeder::class,
             // ProductImageSeeder::class
             // CustomerAddressSeeder::class
         ]);

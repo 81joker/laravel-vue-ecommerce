@@ -17,10 +17,10 @@ return new class extends Migration
             $table->string('slug');
             $table->boolean('active');
             $table->foreignId('parent_id')->nullable()->constrained('categories');
-            $table->timestamp('deleted_at')->nullable();
             $table->foreignIdFor(\App\Models\User::class , 'created_by');
             // $table->foreignIdFor(\App\Models\User::class , 'created_by')->nullable()->constrained('users');
             $table->foreignIdFor(\App\Models\User::class , 'updated_by');
+            // $table->timestamp('deleted_at')->nullable();
             $table->foreignIdFor(\App\Models\User::class , 'deleted_by')->nullable();
             $table->softDeletes();
             $table->timestamps();

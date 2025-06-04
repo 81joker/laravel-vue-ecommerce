@@ -48,5 +48,10 @@ const state = {
         limit: null,
         total: null
       },
+      categories: {
+        loading: true,
+        data: [],
+        links: [],
+      }
 };
 export default state;
