@@ -35,6 +35,8 @@ class CategoryController extends Controller
     public function store(StoreCategoryRequest $request)
     {
         $data = $request->validated();
+        $data['created_by'] = $request->user()->id; 
+        $data['updated_by'] = $request->user()->id; 
         $category = Category::create($data);
         return new CategoryResource($category);
     }
@@ -47,6 +49,7 @@ class CategoryController extends Controller
     public function update(UpdateCategoryRequest $request, Category $category)
     {
         $data = $request->validated();
+        $data['updated_by'] = $request->user()->id;
         $category->update($data);
         return new CategoryResource($category);
     }
