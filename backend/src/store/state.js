@@ -51,7 +51,6 @@ const state = {
       categories: {
         loading: true,
         data: [],
-        links: [],
       }
 };
 export default state;

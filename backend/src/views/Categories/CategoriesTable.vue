@@ -3,10 +3,6 @@
     <div class="flex justify-between border-b-2 pb-3">
       <div class="flex items-center">
         <span class="ml-3">Found {{categories.data.length}} categories</span>
-        
-        <pre>
-          {{ categories }}
-        </pre>
       </div>
     </div>
 
