@@ -53,7 +53,10 @@ class ProductController extends Controller
 
         /** @var \Illuminate\Http\UploadedFile[] $images */
         $images = $data['images'] ?? [];
+        $categories = $data['categories'] ?? [];
+        // $data['categories'] = $categories ? array_map(fn($c) => ['id' => $c], $categories) : [];
         $product = Product::create($data);
+        $this->saveCategories($categories, $product);
 
         if ($images) {
             // $positions = $request->input('positions', []);
@@ -81,6 +84,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
+
         return new ProductResource($product);
     }
 
@@ -121,9 +125,9 @@ class ProductController extends Controller
                 Storage::deleteDirectory('/public/' . dirname($product->image));
             }
         }
-        
+
                 // $product->update($data);
-        
+
                 // return new ProductResource($product);
         */
     }
@@ -184,6 +188,14 @@ class ProductController extends Controller
         }
     }
 
+    private function saveCategories($categories, Product $product)
+    {
+        if (count($categories) > 0) {
+            $product->categories()->sync($categories);
+        } else {
+            $product->categories()->detach();
+        }
+    }
     private function deleteImages($imageIds, Product $product)
     {
         $images = ProductImage::query()
