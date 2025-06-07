@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
+use App\Http\Resources\CategoryTreeResource;
 
 class CategoryController extends Controller
 {
@@ -61,5 +62,11 @@ class CategoryController extends Controller
     {
         $category->delete();
         return response()->noContent();
+    }
+
+    public function getAsTree()
+    {
+        return $categories = Category::getActiveAsTree(CategoryTreeResource::class);
+        // return CategoryResource::collection($categories);
     }
 }
