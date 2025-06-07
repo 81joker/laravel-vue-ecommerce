@@ -62,7 +62,7 @@ export function getProduct({commit}, id) {
     return axiosClient.get(`/products/${id}`)
   }
 
-  
+
 
 
 export function createProduct({ commit }, product) {
@@ -119,7 +119,7 @@ export function updateProduct({commit}, product) {
 //     let form = new FormData();
 //     form.append("id", product.id);
 //     form.append("published", product.published ? 1 : 0);
-    
+
 //     form.append("description", product.description);
 //     form.append("price", product.price);
 //     form.append("published", product.published ? 1 : 0);
@@ -150,7 +150,7 @@ export function updateProduct({commit}, product) {
 //     // if (product.image instanceof File) {
 //     //     form.append("image", product.image);
 //     // }
-    
+
 //     return axiosClient.post(`/products/${id}`, form, {
 //         headers: { "Content-Type": "multipart/form-data" },
 //     });
@@ -298,15 +298,15 @@ export function getCategories({commit, state}, {sort_field, sort_direction} = {}
         commit('setCategories', [false])
       })
   }
-  
+
   export function createCategory({commit}, category) {
     return axiosClient.post('/categories', category)
   }
-  
+
   export function updateCategory({commit}, category) {
     return axiosClient.put(`/categories/${category.id}`, category)
   }
-  
-//   export function deleteCategory({ commit }, category) {
-      
-//   }  
+
+  export function deleteCategory({ commit }, category) {
+    return axiosClient.delete(`/categories/${category.id}`)
+  }

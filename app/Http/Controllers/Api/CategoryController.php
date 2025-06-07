@@ -18,7 +18,7 @@ class CategoryController extends Controller
         // $perPage = request('per_page', 10);
         // $search = request('search', '');
         $sortField = request('sort_field', 'updated_at');
-        $sortDirection = request('sort_direction', 'desc');
+        $sortDirection = request('sort_direction', default: 'desc');
 
         $categories = Category::query()
             ->orderBy("categories.$sortField", $sortDirection)->get();
@@ -35,8 +35,8 @@ class CategoryController extends Controller
     public function store(StoreCategoryRequest $request)
     {
         $data = $request->validated();
-        $data['created_by'] = $request->user()->id; 
-        $data['updated_by'] = $request->user()->id; 
+        $data['created_by'] = $request->user()->id;
+        $data['updated_by'] = $request->user()->id;
         $category = Category::create($data);
         return new CategoryResource($category);
     }
