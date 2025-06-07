@@ -15,6 +15,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\ProductImage;
+use App\Models\ProductCategory;
 
 
 class ProductController extends Controller
@@ -54,7 +55,6 @@ class ProductController extends Controller
         /** @var \Illuminate\Http\UploadedFile[] $images */
         $images = $data['images'] ?? [];
         $categories = $data['categories'] ?? [];
-        // $data['categories'] = $categories ? array_map(fn($c) => ['id' => $c], $categories) : [];
         $product = Product::create($data);
         $this->saveCategories($categories, $product);
 
@@ -62,6 +62,7 @@ class ProductController extends Controller
             // $positions = $request->input('positions', []);
             $this->saveImages($images, $product);
         }
+
         return new ProductResource($product);
         // Just for one image
         // Just for one image
@@ -188,13 +189,12 @@ class ProductController extends Controller
         }
     }
 
-    private function saveCategories($categories, Product $product)
+     private function saveCategories($categoryIds, Product $product)
     {
-        if (count($categories) > 0) {
-            $product->categories()->sync($categories);
-        } else {
-            $product->categories()->detach();
-        }
+        ProductCategory::where('product_id', $product->id)->delete();
+        $data = array_map(fn($id) => (['category_id' => $id, 'product_id' => $product->id]), $categoryIds);
+
+        ProductCategory::insert($data);
     }
     private function deleteImages($imageIds, Product $product)
     {
@@ -240,3 +240,34 @@ class ProductController extends Controller
     //     return $relativePath;
     // }
 }
+
+
+/*
+1. Delete Old Categories Linked to the Product
+php
+ProductCategory::where('product_id', $product->id)->delete();
+What it does: Deletes all records in the ProductCategory table that are linked to the current product ($product->id).
+
+Why?: We remove old categories before adding new ones to avoid duplicates or conflicts.
+
+2. Prepare New Data for Insertion
+php
+$data = array_map(fn($id) => (['category_id' => $id, 'product_id' => $product->id]), $categoryIds);
+array_map: Takes an array ($categoryIds) and creates a new array with modified elements.
+
+What it does: Converts each category_id into an associative array containing category_id and product_id (to establish the relationship).
+
+Example:
+
+If $categoryIds = [1, 5, 10]
+
+Then $data = [ ['category_id' => 1, 'product_id' => 5], ['category_id' => 5, 'product_id' => 5], ... ]
+
+3. Insert the New Categories
+php
+ProductCategory::insert($data);
+What it does: Inserts all the new records ($data) into the ProductCategory table in a single efficient query.
+
+Result: Now the product is linked only to the new categories specified in $categoryIds.
+
+*/

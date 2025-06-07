@@ -19,7 +19,7 @@ class CategoryTreeResource extends JsonResource
             'label' => $this->name,
         ];
 
-        if($this->children ?? false) {
+        if ($this->children ?? false) {
             $data['children'] = $this->children;
         }
 

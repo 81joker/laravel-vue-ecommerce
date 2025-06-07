@@ -3,20 +3,23 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ProductCategory extends Model
 {
-    protected $fillable = ['product_id', 'category_id'];
+        use HasFactory;
 
-    public $timestamps = false;
+    // protected $fillable = ['product_id', 'category_id'];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'product_id' => 'integer',
-        'category_id' => 'integer',
-    ];
+    // public $timestamps = false;
+
+    // /**
+    //  * The attributes that should be cast to native types.
+    //  *
+    //  * @var array
+    //  */
+    // protected $casts = [
+    //     'product_id' => 'integer',
+    //     'category_id' => 'integer',
+    // ];
 }
