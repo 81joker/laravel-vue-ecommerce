@@ -4,7 +4,7 @@
             @foreach ($categoryList as $category)
               <div class="category-item relative">
                 <a href="#" class="block cursor-pointer py-3 px-6  shadow hover:bg-black/10 transition">
-                 {{ $category->name }}                   
+                 {{ $category->name }}
                 </a>
               @if(!is_null($category->children))
                   <x-category-list :categoryList="$category->children" class="absolute top-0 top-[100%] z-50 flex-col hidden" />
@@ -13,8 +13,8 @@
             @endforeach
     @else
         <div class="text-center text-gray-600 py-16 text-xl">
-            No categories available 
+            No categories available
         </div>
     @endif
-   
+
 </div>

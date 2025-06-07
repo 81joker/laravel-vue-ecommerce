@@ -13,6 +13,11 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        Category::factory(6)->create();
+        // Category::factory(6)->create();
+        $categories = ['Books', 'Electronics', 'Clothing', 'Food', 'Toys', 'Furniture' ,'Sports', 'Health', 'Beauty', 'Automotive', 'Gardening', 'Tools', 'Pet Supplies', 'Office Supplies',];
+
+foreach ($categories as $category) {
+    \App\Models\Category::factory()->create(['name' => $category , 'slug' => \Illuminate\Support\Str::slug($category)]);
+}
     }
 }
