@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Category;
 use App\Models\ProductImage;
 use Spatie\Sluggable\HasSlug;
 use Laravel\Sanctum\HasApiTokens;

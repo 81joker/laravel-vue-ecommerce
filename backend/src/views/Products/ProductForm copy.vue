@@ -11,13 +11,15 @@
     <form v-if="!loading" @submit.prevent="onSubmit">
       <div class="grid grid-cols-3">
         <div class="col-span-2 px-4 pt-5 pb-4">
+          <!-- <CustomCKEditor :errors="errors['description']"/> -->
           <CustomInput class="mb-2" v-model="product.title" label="Product Title" :errors="errors['title']"/>
+          <!-- <CustomInput class="mb-2" type="file" @change="file => product.image = file" label="Product Image" :errors="errors['image']"/> -->
           <CustomInput type="textarea" class="mb-2" v-model="product.description" label="Description" :errors="errors['description']"/>
           <CustomInput type="number" class="mb-2" v-model.number="product.price" label="Price" prepend="$" :errors="errors['price']"/>
           <CustomInput type="number" class="mb-2" v-model="product.quantity" label="Quantity" :errors="errors['quantity']"/>
           <CustomInput type="checkbox" class="mb-2" v-model="product.published" label="Published" :errors="errors['published']"/>
-          <!-- <treeselect v-model="product.categories" :multiple="true" :options="options" /> -->
-          <treeselect v-model="product.categories" :multiple="true" :options="options" :errors="errors['categories']"/>
+          <treeselect v-model="product.categories" :multiple="true" :options="options" />
+          <!-- <treeselect v-model="product.categories" :multiple="true" :options="options" :errors="errors['categories']"/> -->
         </div>
         <div class="col-span-1 px-4 pt-5 pb-4">
           <image-preview
@@ -124,8 +126,7 @@ function onSubmit($event, close = false) {
       })
   } else {
     store.dispatch('createProduct', product.value)
-    .then(response => {
-        console.log(product.value);
+      .then(response => {
         loading.value = false;
         if (response.status === 201) {
           product.value = response.data

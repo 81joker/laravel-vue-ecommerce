@@ -50,7 +50,7 @@ class ProductController extends Controller
         $data['updated_by'] = $request->user()->id;
         /** @var \Illuminate\Http\UploadedFile[] $images */
         $images = $data['images'] ?? [];
-        $categories = $data['categories'] ?? [];
+        $categories = $data['categories']?? [];
         $product = Product::create($data);
         $this->saveCategories($categories, $product);
 
@@ -187,12 +187,43 @@ class ProductController extends Controller
         }
     }
 
-     private function saveCategories($categoryIds, Product $product)
-    {
-        ProductCategory::where('product_id', $product->id)->delete();
-        $data = array_map(fn($id) => (['category_id' => $id, 'product_id' => $product->id]), $categoryIds);
+    // private function saveCategories($categoryIds, Product $product)
+    // {
+    //     ProductCategory::where('product_id', $product->id)->delete();
+    //     $data = array_map(fn($id) => (['category_id' => $id, 'product_id' => $product->id]), $categoryIds);
+    //     ProductCategory::insert($data);
+    // }
+    private function saveCategories($categoryIds, Product $product)
+{
+    // Convert JSON string to array if needed
+    if (is_string($categoryIds)) {
+        $categoryIds = json_decode($categoryIds, true) ?? [];
+    }
+
+    // Ensure we have an array (could be null from json_decode)
+    $categoryIds = is_array($categoryIds) ? $categoryIds : [];
+
+    // Filter out any non-numeric values
+    $validCategoryIds = array_filter($categoryIds, function($id) {
+        return is_numeric($id) || (is_string($id) && ctype_digit($id));
+    });
+
+    // Delete existing relationships
+    ProductCategory::where('product_id', $product->id)->delete();
+
+    // Only proceed if we have valid categories
+    if (!empty($validCategoryIds)) {
+        $data = array_map(function($id) use ($product) {
+            return [
+                'category_id' => (int)$id,  // Ensure integer type
+                'product_id' => $product->id,
+
+            ];
+        }, $validCategoryIds);
+
         ProductCategory::insert($data);
     }
+}
     private function deleteImages($imageIds, Product $product)
     {
         $images = ProductImage::query()
