@@ -10,6 +10,7 @@ use App\Http\Controllers\OrderController;
 
 Route::middleware(['guestOrVerified'])->group(function () {
     Route::get('/', [ProductController::class, 'index'])->name('home');
+    Route::get('/category/{category:id}', [ProductController::class, 'category'])->name('byCategory');
     Route::get('/product/{product:slug}', [ProductController::class, 'view'])->name('product.view');
 
     Route::prefix('/cart')->name('cart.')->group(function(){

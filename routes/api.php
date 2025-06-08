@@ -13,15 +13,15 @@ use App\Http\Controllers\Api\DashboardController;
 use SebastianBergmann\CodeCoverage\Report\Xml\Report;
 use App\Http\Controllers\Api\CategoryController;
 
-Route::get('/categories/tree', [CategoryController::class, 'getAsTree']);
 Route::middleware(['auth:sanctum' ,'admin'])->group(function () {
     Route::get('/user', [AuthController::class, 'getUser']);
     Route::post('/logout', action: [AuthController::class, 'logout']);
     Route::apiResource('users', UserController::class);
     Route::apiResource('customers', CustomerController::class);
+    Route::apiResource('/products', controller: ProductController::class);
     Route::apiResource('categories', CategoryController::class)->except(['show']);
     Route::get('/countries', [CustomerController::class, 'countries']);
-    Route::apiResource('/products', ProductController::class);
+    Route::get('/categories/tree', [CategoryController::class, 'getAsTree']);
     Route::get('/orders', [OrderController::class, 'index']);
     Route::get('/orders', [OrderController::class, 'index']);
 

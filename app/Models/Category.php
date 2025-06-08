@@ -2,22 +2,19 @@
 
 namespace App\Models;
 
-use Spatie\Sluggable\HasSlug;
-use PhpParser\Node\Expr\FuncCall;
-use Spatie\Sluggable\SlugOptions;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 class Category extends Model
 {
-    use SoftDeletes;
-    use HasSlug;
     use HasFactory;
-
-    protected $fillable = ['name', 'slug', 'active', 'parent_id', 'created_by', 'updated_by', 'deleted_by'];
+    use HasSlug;
+    use SoftDeletes;
+    // protected $table = 'categories';
+    protected $fillable = ['name', 'slug', 'active', 'parent_id', 'created_by', 'updated_by'];
 
     public function getSlugOptions(): SlugOptions
     {
@@ -26,34 +23,39 @@ class Category extends Model
             ->saveSlugsTo('slug');
     }
 
-
     public function parent()
     {
         return $this->belongsTo(Category::class);
-     }
-    // public function children()
-    // {
-    //     return $this->hasMany(Category::class, 'parent_id');
-    // }
+    }
 
-    public function products(): BelongsToMany
+    public function products()
     {
-        return $this->belongsToMany(Product::class, 'product_categories');
+        return $this->belongsToMany(Product::class , 'product_categories');
     }
 
-    public static function getActiveAsTree($resourceClassName = null){
+    public static function getActiveAsTree($resourceClassName = null)
+    {
         $categories = Category::where('active', true)->orderBy('parent_id')->get();
-        return self::buildCategoryTree($categories ,null,$resourceClassName);
+        return self::buildCategoryTree($categories, null, $resourceClassName);
     }
 
-    private static function buildCategoryTree($categories, $parentId = null ,$resourceClassName = null)
+    public static function getAllChildrenByParent(Category $category)
+    {
+        $categories = Category::where('active', true)->orderBy('parent_id')->get();
+        $result[] = $category;
+        self::getCategoriesArray($categories, $category->id, $result);
+
+        return $result;
+    }
+
+    private static function buildCategoryTree($categories, $parentId = null, $resourceClassName = null)
     {
         $categoryTree = [];
+
         foreach ($categories as $category) {
-            if ($category->parent_id == $parentId) {
-                $children = self::buildCategoryTree($categories,$category->id ,$resourceClassName);
+            if ($category->parent_id === $parentId) {
+                $children = self::buildCategoryTree($categories, $category->id, $resourceClassName);
                 if ($children) {
-                    // $category->children = $children;
                     $category->setAttribute('children', $children);
                 }
                 $categoryTree[] = $resourceClassName ? new $resourceClassName($category) : $category;
@@ -62,38 +64,14 @@ class Category extends Model
 
         return $categoryTree;
     }
-    // Secondary method to get active categories as a tree structure Nehad(^_^)
-    // private static function buildCategoryTree(array $categories, $parentId = null)
-    // {
-    //     $branch = [];
 
-    //     foreach ($categories as $category) {
-    //         if ($category->parent_id == $parentId) {
-    //             $children = self::buildCategoryTree($categories, $category->id);
-    //             if ($children) {
-    //                 $category->children = $children;
-    //             }
-    //             $branch[] = $category;
-    //         }
-    //     }
-
-    //     return $branch;
-    // }
-
-
-    // public function getActiveAsTree(){
-    //     return $this->where('active', true)
-    //         ->with(['parent' => function ($query) {
-    //             $query->select('id', 'name');
-    //         }])
-    //         ->get()
-    //         ->map(function ($category) {
-    //             return [
-    //                 'id' => $category->id,
-    //                 'name' => $category->name,
-    //                 'slug' => $category->slug,
-    //                 'parent' => $category->parent ? $category->parent->name : null,
-    //             ];
-    //         });
-    // }
+    private static function getCategoriesArray($categories, $parentId, &$result)
+    {
+        foreach ($categories as $category) {
+            if ($category->parent_id === $parentId) {
+                $result[] = $category;
+                self::getCategoriesArray($categories, $category->id, $result);
+            }
+        }
+    }
 }

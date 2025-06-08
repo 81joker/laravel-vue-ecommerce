@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class ProductCategory extends Model
 {
         use HasFactory;
+    protected $table = 'product_categories';
 
-    // protected $fillable = ['product_id', 'category_id'];
+    protected $fillable = ['product_id', 'category_id'];
 
-    // public $timestamps = false;
+    public $timestamps = false;
 
     // /**
     //  * The attributes that should be cast to native types.

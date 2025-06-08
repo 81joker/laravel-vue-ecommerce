@@ -3,16 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Api\Product;
-use Illuminate\Http\Request;
 use App\Http\Resources\ProductResource;
 use App\Http\Resources\ProductListResource;
 use App\Http\Requests\ProductRequest;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\ProductImage;
 use App\Models\ProductCategory;
@@ -51,7 +48,6 @@ class ProductController extends Controller
         $data = $request->validated();
         $data['created_by'] = $request->user()->id;
         $data['updated_by'] = $request->user()->id;
-
         /** @var \Illuminate\Http\UploadedFile[] $images */
         $images = $data['images'] ?? [];
         $categories = $data['categories'] ?? [];
@@ -110,7 +106,9 @@ class ProductController extends Controller
             $this->saveImages($images, $product);
         }
         $this->deleteImages($deletedImages, $product);
+        $categories = $data['categories'] ?? [];
         $product->update($data);
+        $this->saveCategories($categories, $product);
         return new ProductResource($product);
 
         /*
@@ -193,7 +191,6 @@ class ProductController extends Controller
     {
         ProductCategory::where('product_id', $product->id)->delete();
         $data = array_map(fn($id) => (['category_id' => $id, 'product_id' => $product->id]), $categoryIds);
-
         ProductCategory::insert($data);
     }
     private function deleteImages($imageIds, Product $product)
