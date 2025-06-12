@@ -62,34 +62,76 @@ export function getProduct({commit}, id) {
     return axiosClient.get(`/products/${id}`)
   }
 
-  
 
+
+
+// export function createProduct({ commit }, product) {
+//     if (product.images && product.images.length) {
+//         // This is for just one mage
+//     // if (product.image instanceof File) {
+//         const form = new FormData();
+//         form.append("title", product.title);
+//         // This is for just one mage
+//         // form.append("image", product.image);
+//         product.images.forEach((im) => {
+//             form.append("images[]", im);
+//         });
+//         if(product.deleted_images && product.deleted_images.length) {
+//             product.deleted_images.forEach((im) => {
+//                 form.append("deleted_images[]", im);
+//             });
+//         }
+//         form.append("description", product.description);
+//         form.append("price", product.price);
+//         form.append("published", product.published ? 1 : 0);
+//           // Append categories as JSON array
+//   form.append('categories', product.categories || []);
+// //   formData.append('categories', JSON.stringify(product.categories || []));
+//         product = form;
+//     }
+//     return axiosClient.post("/products", product);
+// }
 
 export function createProduct({ commit }, product) {
+    const form = new FormData();
+
+    // Append basic fields
+    form.append("title", product.title);
+    form.append("description", product.description);
+    form.append("price", product.price);
+    form.append("published", product.published ? 1 : 0);
+
+    // Handle categories - ensure it's always an array and properly stringified
+    const categories = Array.isArray(product.categories) ? product.categories : [];
+    form.append("categories", JSON.stringify(categories));
+
+    // Handle images
     if (product.images && product.images.length) {
-        // This is for just one mage
-    // if (product.image instanceof File) {
-        const form = new FormData();
-        form.append("title", product.title);
-        // This is for just one mage
-        // form.append("image", product.image);
         product.images.forEach((im) => {
-            form.append("images[]", im);
+            if (im instanceof File) {
+                form.append("images[]", im);
+            }
         });
-        if(product.deleted_images && product.deleted_images.length) {
-            product.deleted_images.forEach((im) => {
-                form.append("deleted_images[]", im);
-            });
-        }
-        form.append("description", product.description);
-        form.append("price", product.price);
-        form.append("published", product.published ? 1 : 0);
-        product = form;
     }
-    return axiosClient.post("/products", product);
+
+    // Handle deleted images
+    if (product.deleted_images && product.deleted_images.length) {
+        product.deleted_images.forEach((im) => {
+            form.append("deleted_images[]", im);
+        });
+    }
+
+    // Debug output (remove in production)
+    for (let [key, value] of form.entries()) {
+        console.log(key, value);
+    }
+
+    return axiosClient.post("/products", form, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
 }
-
-
 export function updateProduct({commit}, product) {
     const id = product.id
     if (product.images && product.images.length) {
@@ -119,7 +161,7 @@ export function updateProduct({commit}, product) {
 //     let form = new FormData();
 //     form.append("id", product.id);
 //     form.append("published", product.published ? 1 : 0);
-    
+
 //     form.append("description", product.description);
 //     form.append("price", product.price);
 //     form.append("published", product.published ? 1 : 0);
@@ -150,7 +192,7 @@ export function updateProduct({commit}, product) {
 //     // if (product.image instanceof File) {
 //     //     form.append("image", product.image);
 //     // }
-    
+
 //     return axiosClient.post(`/products/${id}`, form, {
 //         headers: { "Content-Type": "multipart/form-data" },
 //     });
@@ -282,3 +324,31 @@ export function getOrders(
 }
 
 
+// Categories Action
+
+export function getCategories({commit, state}, {sort_field, sort_direction} = {}) {
+    commit('setCategories', [true])
+    return axiosClient.get('/categories', {
+      params: {
+        sort_field, sort_direction
+      }
+    })
+      .then((response) => {
+        commit('setCategories', [false, response.data])
+      })
+      .catch(() => {
+        commit('setCategories', [false])
+      })
+  }
+
+  export function createCategory({commit}, category) {
+    return axiosClient.post('/categories', category)
+  }
+
+  export function updateCategory({commit}, category) {
+    return axiosClient.put(`/categories/${category.id}`, category)
+  }
+
+  export function deleteCategory({ commit }, category) {
+    return axiosClient.delete(`/categories/${category.id}`)
+  }

@@ -1,7 +1,9 @@
 <?php
 /** @var \Illuminate\Database\Eloquent\Collection $products */
+$categoryList = \App\Models\Category::getActiveAsTree();
 ?>
 <x-app-layout>
+  <x-category-list  :category-list="$categoryList" class="-mt-5 -mr-5 -ml-5 px-4"/>
     <?php if ($products->count() === 0): ?>
         <div class="text-center text-gray-600 py-16 text-xl">
             There are no products published
