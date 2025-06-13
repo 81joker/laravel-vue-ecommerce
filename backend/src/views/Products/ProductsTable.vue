@@ -61,7 +61,8 @@
         <!-- <tr v-for="(product, index) of products.data" class="animate-fade-in-down" :style="{'animation-delay': (index * 0.1) + 's'}"> -->
         <td class="border-b p-2 ">{{ product.id }}</td>
         <td class="border-b p-2 ">
-          <img class="w-16 h-16 object-cover" :src="product.image" :alt="product.title">
+          <img v-if="product.image" class="w-16 h-16 object-cover" :src="product.image" :alt="product.title">
+          <img v-else class="w-16 h-16 object-cover" src="../../assets/images/no-image.png" :alt="product.title">
         </td>
         <td class="border-b p-2 max-w-[200px] whitespace-nowrap overflow-hidden text-ellipsis">
           {{ product.title }}
@@ -194,7 +195,6 @@ import {PRODUCTS_PER_PAGE} from "../../constants";
 import TableHeaderCell from "../../components/core/Table/TableHeaderCell.vue";
 import {Menu, MenuButton, MenuItem, MenuItems} from "@headlessui/vue";
 import {DotsVerticalIcon, PencilIcon, TrashIcon} from '@heroicons/vue/outline'
-import ProductModal from "./ProductModal.vue";
 import { RouterLink } from "vue-router";
 
 const perPage = ref(PRODUCTS_PER_PAGE);
@@ -204,7 +204,6 @@ const sortField = ref('updated_at');
 const sortDirection = ref('desc')
 
 const product = ref({})
-const showProductModal = ref(false);
 
 const emit = defineEmits(['clickEdit'])
 
@@ -246,9 +245,6 @@ function sortProducts(field) {
   getProducts()
 }
 
-function showAddNewModal() {
-  showProductModal.value = true
-}
 
 
 function deleteProduct(product) {

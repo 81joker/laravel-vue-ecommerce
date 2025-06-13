@@ -17,6 +17,7 @@ import NotFount from "@/views/NotFount.vue";
 import store from "@/store";
 import OrdersReports from "@/views/Reports/OrdersReports.vue";
 import CustomersReports from "@/views/Reports/CustomersReports.vue";
+import Categories from "@/views/Categories/Categories.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -45,6 +46,11 @@ const router = createRouter({
                   path: 'products',
                   name: 'app.products',
                   component: Products
+                },
+                {
+                  path: 'categories',
+                  name: 'app.categories',
+                  component: Categories
                 },
                 {
                   path: 'products/create',

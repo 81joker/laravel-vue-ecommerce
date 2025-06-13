@@ -1,7 +1,7 @@
 <template>
     <div>
       <label class="sr-only">{{ label }}</label>
-      <div class="mt-1 flex rounded-md shadow-sm">
+      <div class="mt-1 flex  rounded-md" :class="type == 'checkbox' ? 'items-center' : 'shadow-sm'">
         <span v-if="prepend"
               class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
           {{ prepend }}
@@ -24,18 +24,6 @@
                   :class="inputClasses"
                   :placeholder="label"></textarea>
         </template>
-        <!-- <template v-else-if="type === 'richtext'">
-          <ckeditor
-          :modelValue="props.modelValue"
-            :config="editorConfig"
-             /> -->
-
-          <!-- <ckeditor :editor="editor"
-                  :model-value="props.modelValue"
-                  @input="onChange"
-                  :class="inputClasses"
-                  :config="editorConfig"></ckeditor> -->
-        <!-- </template> -->
         <template v-else-if="type === 'checkbox'">
             <input :id="id"
                :name="name"
@@ -77,9 +65,6 @@
   <script setup>
 
   import {computed} from "vue";
-  import ckeditor from '@/components/core/CustomCKEditor.vue';
-
-
   const props = defineProps({
     modelValue: [String, Number, File],
     label: String,

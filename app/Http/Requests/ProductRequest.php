@@ -23,7 +23,11 @@ class ProductRequest extends FormRequest
     {
         return [
             'title' => ['required', 'max:2000'],
-            'image' => ['nullable', 'image'],
+            'images.*' => ['nullable', 'image'],
+            'deleted_images.*' => ['numeric'],
+            // 'image' => ['nullable', 'image'],
+            'categories' => ['nullable'],
+            // 'categories.*' => ['nullable' , 'int' , 'exists:cagtegory,id'],
             'price' => ['required', 'numeric'],
             'description' => ['nullable', 'string'],
             'published' => ['required', 'boolean'],

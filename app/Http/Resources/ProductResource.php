@@ -20,7 +20,12 @@ class ProductResource extends JsonResource
             'title' => $this->title,
             'slug' => $this->slug,
             'image' => $this->image,
+            'images' => $this->images,
             'description' => $this->description,
+            'categories' => $this->categories->map(fn($c) => [
+                'id' => $c->id,
+                // 'name' => $c->name,
+            ]),
             'price' => $this->price,
             'published' => (bool)$this->published,
             'created_at' => (new \DateTime($this->created_at))->format('Y-m-d H:i:s'),

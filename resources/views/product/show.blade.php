@@ -4,7 +4,7 @@
     'id' => $product->id,
     'title' => $product->title,
     'description' => $product->description,
-    'image' => $product->image,
+    'image' => $product->image ?: '/images/no-image.png',
     'price' => $product->price,
     'addToCartUrl' => route('cart.add', $product),
 
@@ -15,24 +15,24 @@
           <div class="lg:col-span-3">
               <div
                   x-data="{
-images: ['{{$product->image}}'],
-activeImage: null,
-prev() {
-    let index = this.images.indexOf(this.activeImage);
-    if (index === 0)
-        index = this.images.length;
-    this.activeImage = this.images[index - 1];
-},
-next() {
-    let index = this.images.indexOf(this.activeImage);
-    if (index === this.images.length - 1)
-        index = -1;
-    this.activeImage = this.images[index + 1];
-},
-init() {
-    this.activeImage = this.images.length > 0 ? this.images[0] : null
-}
-}"
+                            images: {{$product->images->count()? $product->images->map(fn($im) => $im->url) : json_encode(['/images/no-image.png']) }},
+                            activeImage: null,
+                            prev() {
+                                let index = this.images.indexOf(this.activeImage);
+                                if (index === 0)
+                                    index = this.images.length;
+                                this.activeImage = this.images[index - 1];
+                            },
+                            next() {
+                                let index = this.images.indexOf(this.activeImage);
+                                if (index === this.images.length - 1)
+                                    index = -1;
+                                this.activeImage = this.images[index + 1];
+                            },
+                            init() {
+                                this.activeImage = this.images.length > 0 ? this.images[0] : null
+                            }
+                            }"
               >
                   <div class="relative">
                       <template x-for="image in images">

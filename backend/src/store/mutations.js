@@ -101,3 +101,15 @@ export function hideToast(state, message) {
 export function setCountries (state, countries) {
     state.countries = countries.data
 }
+
+export function setCategories(state, [loading, data = null]) {
+
+    if (data) {
+      state.categories = {
+        ...state.categories,
+        data: data.data,
+      }
+    }
+  
+    state.categories.loading = loading;
+  }
