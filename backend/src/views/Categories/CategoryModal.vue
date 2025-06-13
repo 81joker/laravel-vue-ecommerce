@@ -44,16 +44,13 @@
               </header>
               <form @submit.prevent="onSubmit">
                 <div class="bg-white px-4 pt-5 pb-4">
-                  <CustomInput class="mb-2" v-model="category.name" label="Name" />
-                  <!-- <CustomInput class="mb-2" v-model="category.name" label="Name" :errors="errors['name']"/> -->
+                  <CustomInput class="mb-2" v-model="category.name" label="Name" :errors="errors['name']"/>
                   <CustomInput type="select"
                                :select-options="parentCategories"
                                class="mb-2"
                                v-model="category.parent_id"
-                               label="Parent" />
-                               <!-- label="Parent" :errors="errors['parent_id']"/> -->
-                  <CustomInput type="checkbox" class="mb-2" v-model="category.active" label="Active"  />
-                  <!-- <CustomInput type="checkbox" class="mb-2" v-model="category.active" label="Active"  :errors="errors['active']"/> -->
+                               label="Parent" :errors="errors['parent_id']" />
+                  <CustomInput type="checkbox" class="mb-2" v-model="category.active" label="Active"  :errors="errors['active']"/>
                 </div>
                 <footer class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                   <button type="submit"
@@ -161,7 +158,8 @@ function onSubmit() {
       .catch(err => {
         loading.value = false;
         errors.value = err.response.data.errors
-        console.log("err.response.data.errors" ,err.response.data.errors['parent_id'][0]);
+        // errors.value = err.response.data.errors['parent_id'][0]
+        console.log("err.response.data.errors" ,errors.value);
         
       })
   } else {
