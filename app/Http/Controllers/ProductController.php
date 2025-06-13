@@ -26,6 +26,7 @@ class ProductController extends Controller
 
         $products = Product::query()
             ->select('products.*')
+            // This mean in jon product_categories table ===>SELECT * FROM product_categories WHERE product_id = [current_product_id]
             ->join('product_categories AS pc', 'pc.product_id', 'products.id')
             ->whereIn('pc.category_id', array_map(fn($c) => $c->id, $categories))
              ->orderBy('updated_at', 'desc')

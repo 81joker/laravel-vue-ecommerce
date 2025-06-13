@@ -143,8 +143,6 @@ const sortField = ref('status');
 // const sortField = ref('updated_at');
 const sortDirection = ref('desc')
 
-// const orders = ref({})
-// const showProductModal = ref(false);
 
 const emit = defineEmits(['clickView'])
 onMounted(() => {
@@ -185,9 +183,9 @@ function sortOrders(field) {
   getOrders()
 }
 
-function showAddNewModal() {
-  showProductModal.value = true
-}
+// function showAddNewModal() {
+//   showProductModal.value = true
+// }
 
 
 // function deleteOrder(orders) {

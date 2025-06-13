@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Category;
 
 class UpdateCategoryRequest extends FormRequest
 {
@@ -23,7 +24,19 @@ class UpdateCategoryRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'parent_id' => ['nullable', 'exists:categories,id'],
+            'parent_id' => ['nullable', 'exists:categories,id',
+            function (string $attribute, $value,\Closure $fail) {
+                    $category = Category::where('id', $value)->first();
+                    $children = Category::getAllChildrenByParent($category);
+                    // if (count($children) > 0) {
+                    //     $fail('Parent category cannot have children.');
+                    // }
+                    $ids = array_map(fn($c) => $c->id , $children);
+                    if (in_array($value, $ids)) {
+                      return  $fail('Parent category cannot have children.');
+                    }
+            }
+        ],
             'active' => ['required', 'boolean'],
         ];
     }

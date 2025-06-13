@@ -18,8 +18,8 @@ class CategoryController extends Controller
     {
         // $perPage = request('per_page', 10);
         // $search = request('search', '');
-        $sortField = request('sort_field', 'updated_at');
-        $sortDirection = request('sort_direction', default: 'desc');
+        $sortField = request('sort_field', 'name');
+        $sortDirection = request('sort_direction', default: 'asc');
 
         $categories = Category::query()
             ->orderBy("categories.$sortField", $sortDirection)->get();
