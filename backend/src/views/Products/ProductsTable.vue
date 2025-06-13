@@ -195,7 +195,6 @@ import {PRODUCTS_PER_PAGE} from "../../constants";
 import TableHeaderCell from "../../components/core/Table/TableHeaderCell.vue";
 import {Menu, MenuButton, MenuItem, MenuItems} from "@headlessui/vue";
 import {DotsVerticalIcon, PencilIcon, TrashIcon} from '@heroicons/vue/outline'
-import ProductModal from "./ProductModal.vue";
 import { RouterLink } from "vue-router";
 
 const perPage = ref(PRODUCTS_PER_PAGE);
@@ -205,7 +204,6 @@ const sortField = ref('updated_at');
 const sortDirection = ref('desc')
 
 const product = ref({})
-const showProductModal = ref(false);
 
 const emit = defineEmits(['clickEdit'])
 
@@ -247,9 +245,6 @@ function sortProducts(field) {
   getProducts()
 }
 
-function showAddNewModal() {
-  showProductModal.value = true
-}
 
 
 function deleteProduct(product) {

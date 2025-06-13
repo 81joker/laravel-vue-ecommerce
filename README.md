@@ -48,3 +48,4 @@ Note: We can make the show  product controller available to id  like $product->i
 1- Go to the https://docs.stripe.com/payments/accept-a-payment and we pick the type from payment 
 
 
+reviw muss https://thecodeholic.teachable.com/courses/build-and-deploy-laravel-e-commerce-website/lectures/50071132

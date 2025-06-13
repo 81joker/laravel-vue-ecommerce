@@ -121,6 +121,7 @@ const parentCategories = computed(() => {
       })
       .map(c => ({key: c.id, text: c.name}))
       .sort((c1, c2) => {
+        // Sort alphabetically
         if (c1.text < c2.text) return -1;
         if (c1.text > c2.text) return 1;
         return 0;
@@ -160,6 +161,8 @@ function onSubmit() {
       .catch(err => {
         loading.value = false;
         errors.value = err.response.data.errors
+        console.log("err.response.data.errors" ,err.response.data.errors['parent_id'][0]);
+        
       })
   } else {
     store.dispatch('createCategory', category.value)
