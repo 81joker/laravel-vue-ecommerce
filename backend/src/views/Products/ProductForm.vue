@@ -141,7 +141,7 @@ function onSubmit($event, close = false) {
       })
       .catch(err => {
         loading.value = false;
-        errors.value = err.response.data.errors
+        errors.value = err.response.data.errors        
       })
   }
 }

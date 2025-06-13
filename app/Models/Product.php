@@ -18,7 +18,7 @@ class Product extends Model
     use SoftDeletes;
     use HasFactory;
     use HasApiTokens;
-    protected $fillable = ['title', 'description', 'price','image_mime', 'image_size','published', 'created_by', 'updated_by'];
+    protected $fillable = ['title', 'description', 'price', 'quantity', 'image', 'image_name','image_mime', 'image_size','published', 'created_by', 'updated_by'];
 
     protected $casts = [
         'published' => 'boolean',

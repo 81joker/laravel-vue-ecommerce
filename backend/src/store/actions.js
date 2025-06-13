@@ -100,6 +100,7 @@ export function createProduct({ commit }, product) {
     form.append("description", product.description);
     form.append("price", product.price);
     form.append("published", product.published ? 1 : 0);
+    form.append("quantity", product.quantity);
 
     // Handle categories - ensure it's always an array and properly stringified
     const categories = Array.isArray(product.categories) ? product.categories : [];

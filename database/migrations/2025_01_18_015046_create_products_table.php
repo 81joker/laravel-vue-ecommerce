@@ -20,13 +20,9 @@ return new class extends Migration
             $table->string('image_size')->nullable();
             $table->longText('description')->nullable();
             $table->decimal('price', 10)->nullable();
-            // $table->foreignIdFor(User::class , 'created_by')->nullable();
-            // $table->foreignIdFor(User::class , 'updated_by')->nullable();
-            // $table->foreignIdFor(User::class , 'deleted_by')->nullable();
+            $table->integer('quantity')->nullable();
             $table->foreignId('created_by')->constrained('users')->nullable();
             $table->foreignId('updated_by')->constrained('users')->nullable();
-            // $table->foreignId('deleted_by')->constrained('users')->nullable();
-            // $table->foreignId('deleted_by')->constrained('users')->nullable()->default(null);
             $table->softDeletes();
             $table->timestamps();
         });
