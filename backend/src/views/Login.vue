@@ -1,5 +1,8 @@
 <template>
   <guest-layout title="Sign in to your account">
+
+    <p class="text-gray-500">User: admin@example.com</p>
+    <p class="text-gray-500">Password: password</p>
     <form class="mt-8 space-y-6"  method="POST" @submit.prevent="login">
       <div v-if="errorMsg" class="flex items-center justify-between px-5 py-3 text-sm rounded text-white bg-red-400">
         {{errorMsg}}
@@ -81,15 +84,6 @@
           Remember me
         </label>
       </div>
-
-      <!-- <div class="text-sm">
-        <router-link
-          :to="{ name: 'requestPassword' }"
-          class="font-medium text-indigo-600 hover:text-indigo-500"
-        >
-          Forgot your password?
-        </router-link>
-      </div> -->
     </div>
     <!--/ Remmber me -->
     <div>

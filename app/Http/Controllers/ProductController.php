@@ -30,7 +30,7 @@ class ProductController extends Controller
 
     public function view(Product $product)
     {
-        return view('product.view', ['product' => $product]);
+        return view('product.show', ['product' => $product]);
     }
 
     private function renderProducts(Builder $query)

@@ -16,7 +16,14 @@
           <CustomInput type="number" class="mb-2" v-model.number="product.price" label="Price" prepend="$" :errors="errors['price']"/>
           <CustomInput type="number" class="mb-2" v-model="product.quantity" label="Quantity" :errors="errors['quantity']"/>
           <CustomInput type="checkbox" class="mb-2" v-model="product.published" label="Published" :errors="errors['published']"/>
-          <treeselect v-model="product.categories" :multiple="true" :options="options"  flat="true"  :errors="errors['categories']"/>
+          <treeselect 
+            v-model="product.categories" 
+            :multiple="true" 
+            :options="options" 
+            :normalizer="normalizer"
+            placeholder="Select categories..."
+            :errors="errors['categories']"
+          />
         </div>
         <div class="col-span-1 px-4 pt-5 pb-4">
           <image-preview
@@ -55,9 +62,7 @@ import store from "../../store/index.js";
 import Spinner from "../../components/core/Spinner.vue";
 import {useRoute, useRouter} from "vue-router";
 import ImagePreview from "../../components/ImagePreview.vue";
-// import the component
 import Treeselect from 'vue3-treeselect'
-// import the styles
 import 'vue3-treeselect/dist/vue3-treeselect.css'
 import axiosClient from "../../axios.js";
 
@@ -74,38 +79,58 @@ const product = ref({
   price: null,
   quantity: null,
   published: false,
-  categories: []
+  categories: [] 
 })
 
 const errors = ref({});
-
 const loading = ref(false)
 const options = ref([])
+
+const normalizer = (node) => ({
+  id: node.id,
+  label: node.name || node.label,
+  children: node.children
+})
 
 const emit = defineEmits(['update:modelValue', 'close'])
 
 onMounted(() => {
-  if (route.params.id) {
-    loading.value = true
-    store.dispatch('getProduct', route.params.id)
-      .then((response) => {
-        loading.value = false;
-        product.value = response.data
-      })
-  }
-
-  axiosClient.get('/categories/tree')
-    .then(result => {
-      options.value = result.data
-    })
+  loading.value = true
+  
+  // Load both product and categories simultaneously
+  Promise.all([
+    route.params.id ? store.dispatch('getProduct', route.params.id) : Promise.resolve(),
+    axiosClient.get('/categories/tree')
+  ])
+  .then(([productResponse, categoriesResponse]) => {
+    options.value = categoriesResponse.data
+    
+    if (productResponse) {
+      product.value = {
+        ...productResponse.data,
+        categories: productResponse.data.categories?.map(c => c.id) || []
+      }
+    }
+    loading.value = false
+  })
+  .catch(error => {
+    loading.value = false
+    console.error('Loading error:', error)
+  })
 })
 
 function onSubmit($event, close = false) {
   loading.value = true
   errors.value = {};
   product.value.quantity = product.value.quantity || null
+  
+  const submitData = {
+    ...product.value,
+    categories: product.value.categories.map(c => typeof c === 'object' ? c.id : c)
+  }
+
   if (product.value.id) {
-    store.dispatch('updateProduct', product.value)
+    store.dispatch('updateProduct', submitData)
       .then(response => {
         loading.value = false;
         if (response.status === 200) {
@@ -122,12 +147,10 @@ function onSubmit($event, close = false) {
         errors.value = err.response.data.errors
       })
   } else {
-    store.dispatch('createProduct', product.value)
-    .then(response => {
-        console.log(product.value);
+    store.dispatch('createProduct', submitData)
+      .then(response => {
         loading.value = false;
         if (response.status === 201) {
-          product.value = response.data
           store.commit('showToast', 'Product was successfully created');
           store.dispatch('getProducts')
           if (close) {

@@ -63,35 +63,6 @@ export function getProduct({commit}, id) {
   }
 
 
-
-
-// export function createProduct({ commit }, product) {
-//     if (product.images && product.images.length) {
-//         // This is for just one mage
-//     // if (product.image instanceof File) {
-//         const form = new FormData();
-//         form.append("title", product.title);
-//         // This is for just one mage
-//         // form.append("image", product.image);
-//         product.images.forEach((im) => {
-//             form.append("images[]", im);
-//         });
-//         if(product.deleted_images && product.deleted_images.length) {
-//             product.deleted_images.forEach((im) => {
-//                 form.append("deleted_images[]", im);
-//             });
-//         }
-//         form.append("description", product.description);
-//         form.append("price", product.price);
-//         form.append("published", product.published ? 1 : 0);
-//           // Append categories as JSON array
-//   form.append('categories', product.categories || []);
-// //   formData.append('categories', JSON.stringify(product.categories || []));
-//         product = form;
-//     }
-//     return axiosClient.post("/products", product);
-// }
-
 export function createProduct({ commit }, product) {
     const form = new FormData();
 
@@ -102,7 +73,7 @@ export function createProduct({ commit }, product) {
     form.append("published", product.published ? 1 : 0);
     form.append("quantity", product.quantity);
 
-    // Handle categories - ensure it's always an array and properly stringified
+
     const categories = Array.isArray(product.categories) ? product.categories : [];
     form.append("categories", JSON.stringify(categories));
 
@@ -149,6 +120,11 @@ export function updateProduct({commit}, product) {
       form.append('description', product.description || '');
       form.append('published', product.published ? 1 : 0);
       form.append('price', product.price);
+      form.append('quantity', product.quantity);
+
+      const categories = Array.isArray(product.categories) ? product.categories : [];
+      form.append("categories", JSON.stringify(categories));
+      
       form.append('_method', 'PUT');
       product = form;
     } else {
