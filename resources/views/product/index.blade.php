@@ -4,7 +4,7 @@ $categoryList = \App\Models\Category::getActiveAsTree();
 ?>
 <x-app-layout>
     <x-category-list :category-list="$categoryList" class="-mt-5 -mr-5 -ml-5 px-4" />
-    <div class="flex gap-2 items-centerp-3 pb-0 p-3" x-data="{
+     <div class="gird md:flex gap-2 items-centerp-3 pb-0 p-3" x-data="{
         selectedSort: '{{ request()->get('sort', '-updated_at') }}',
         searchKeyword: '{{ request()->get('search') }}',
         updateUrl() {
@@ -28,7 +28,7 @@ $categoryList = \App\Models\Category::getActiveAsTree();
             <x-text-input type="text" name="search" placeholder="Search for Products"
                 value="{{ request()->get('search') }}" x-model="searchKeyword" />
         </form>
-        <div>
+        <div class="md:mt-0 mt-2">
             <x-text-input x-model="selectedSort" @change="updateUrl()" type="select" name="sort"
                 class="w-full focus:border-purple-600 focus:ring-purple-600 border-gray-300 rounded">
                 <option value="price">Price (ASC)</option>
@@ -45,7 +45,7 @@ $categoryList = \App\Models\Category::getActiveAsTree();
         There are no products published
     </div>
     <?php else: ?>
-    <div class="grid gap-8 grig-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-5 gap-4">
+    <div class="grid gap-1 md:gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-5 overflow-hidden">
         @foreach ($products as $product)
             <!-- Product Item -->
             <div x-data="productItem({{ json_encode([
@@ -56,7 +56,7 @@ $categoryList = \App\Models\Category::getActiveAsTree();
                 'price' => $product->price,
                 'addToCartUrl' => route('cart.add', $product),
             ]) }})"
-                class="relative flex flex-col my-6 bg-white shadow-sm border border-slate-200 rounded-lg w-96 hover:border-purple-600 transition-colors">
+                class="relative flex flex-col my-6 bg-white shadow-sm border border-slate-200 rounded-lg  w-full hover:border-purple-600 transition-colors">
 
                 <a href="{{ route('product.view', $product->slug) }}"
                     class="relative p-2.5 h-96 overflow-hidden rounded-xl bg-clip-border">
@@ -66,14 +66,14 @@ $categoryList = \App\Models\Category::getActiveAsTree();
                 </a>
                 <div class="p-4">
                     <div class="mb-2 flex items-center justify-between">
-                        <p class="text-slate-800 text-xl font-semibold">
+                        <p class="text-slate-800 text-xl font-semibold overflow-hidden">
                             {{ Str::limit($product->title, 25) }}
                         </p>
                         <p class="text-purple-600 text-xl font-semibold">
                             ${{ $product->price }}
                         </p>
                     </div>
-                    <p class="text-slate-600 leading-normal font-light">
+                    <p class="text-slate-600 leading-normal font-light overflow-hidden">
                         {{ Str::limit($product->description, 80) }}
                     </p>
                     <button
