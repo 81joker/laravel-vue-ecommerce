@@ -3,7 +3,8 @@
 $categoryList = \App\Models\Category::getActiveAsTree();
 ?>
 <x-app-layout>
-    <x-category-list :category-list="$categoryList" class="-mt-5 -mr-5 -ml-5 px-4" />
+    <x-category-list :category-list="$categoryList"  />
+    {{-- <x-category-list :category-list="$categoryList" class="-mt-5 -mr-5 -ml-5 px-4" /> --}}
      <div class="gird md:flex gap-2 items-centerp-3 pb-0 p-3" x-data="{
         selectedSort: '{{ request()->get('sort', '-updated_at') }}',
         searchKeyword: '{{ request()->get('search') }}',
