@@ -22,6 +22,7 @@
             :options="options" 
             :normalizer="normalizer"
             placeholder="Select categories..."
+            flat="true"
             :errors="errors['categories']"
           />
         </div>
