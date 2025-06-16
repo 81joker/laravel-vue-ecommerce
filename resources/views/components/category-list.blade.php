@@ -1,62 +1,137 @@
-<nav class="bg-slate-700 border-gray-200 py-2.5 dark:bg-gray-900 category-list text-white -mt-5 -mr-5 -ml-5 px-4
-">
-    <div class="flex flex-wrap items-center justify-end md:justify-between  px-4 mx-auto">
-        <div class="flex items-center justify-end w-full lg:w-auto lg:order-2">
-            <button data-collapse-toggle="mobile-menu-2" type="button"
-                class="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-                aria-controls="mobile-menu-2" aria-expanded="true">
-                <span class="sr-only">Open main menu</span>
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd"
-                        d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                        clip-rule="evenodd"></path>
-                </svg>
-                <svg class="hidden w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd"
-                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                        clip-rule="evenodd"></path>
-                </svg>
-            </button>
-        </div>
-        <div class="items-center justify-between w-full lg:flex lg:w-auto lg:order-1" id="mobile-menu-2">
-            <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
-                @props(['categoryList'])
-                @if (!empty($categoryList))
-                    @foreach ($categoryList as $category)
-                        <li class="category-item group relative">
-                            @if(!is_null($category->children))
-                                <button id="dropdownHoverButton-{{ $category->id }}" data-dropdown-toggle="dropdownHover-{{ $category->id }}" 
-                                    data-dropdown-trigger="hover"
-                                    class="flex items-center justify-between w-full py-2 pl-3 pr-4 text-white hover:bg-black/10 transition">
-                                    {{ $category->name }}
-                                    <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                                    </svg>
-                                </button>
-                                <!-- Dropdown menu -->
-                                <div id="dropdownHover-{{ $category->id }}" 
-                                    class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700 absolute left-0">
-                                    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHoverButton-{{ $category->id }}">
-                                        @foreach($category->children as $child)
-                                            <li>
-                                                <a href="{{ route('byCategory', $child->id) }}" 
-                                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                                    {{ $child->name }}
-                                                </a>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @else
-                                <a href="{{ route('byCategory', $category->id) }}"
-                                    class="block py-2 pl-3 pr-4 text-white cursor-pointer shadow hover:bg-black/10 transition"
-                                    aria-current="page">{{ $category->name }}</a>
+@props(['categoryList', 'isChild' => false, 'level' => 0])
+
+<div class="relative">
+    <!-- Mobile toggle button - only for root level -->
+    @if($level === 0)
+    <button onclick="toggleMainMenu()" class="md:hidden bg-slate-800 text-white p-3 w-full text-left flex justify-between items-center">
+        Categories
+        <span id="mainMenuIcon">▼</span>
+    </button>
+    @endif
+
+    <!-- Category list container -->
+    <div id="{{ $isChild ? 'childMenu-'.$level : 'mainMenu' }}" 
+         class="{{ $isChild ? 'child-menu' : 'main-menu' }} 
+                {{ !$isChild && $level === 0 ? 'hidden md:flex' : '' }} 
+                {{ $isChild ? 'hidden md:group-hover:flex' : '' }}
+                bg-slate-700 text-white">
+        @if (!empty($categoryList))
+            <div class="{{ $isChild ? 'pl-4' : '' }} {{ $level === 0 ? 'flex flex-col md:flex-row' : '' }}">
+                @foreach ($categoryList as $category)
+                    <div class="category-item relative group" 
+                         onmouseenter="handleHover(this, {{ !empty($category->children) ? 'true' : 'false' }})"
+                         onmouseleave="handleLeave(this, {{ !empty($category->children) ? 'true' : 'false' }})">
+                        <a href="{{ route('byCategory', $category->id) }}" 
+                           class="block cursor-pointer py-3 px-6 hover:bg-black/10 transition flex justify-between items-center"
+                           onclick="handleClick(event, {{ !empty($category->children) ? 'true' : 'false' }})">
+                            {{ $category->name }}
+                            @if(!empty($category->children))
+                                <span class="arrow-icon transform transition-transform duration-200">›</span>
                             @endif
-                        </li>
-                    @endforeach
-                @endif
-            </ul>
-        </div>
+                        </a>
+                        @if(!empty($category->children))
+                            <x-category-list 
+                                :categoryList="$category->children" 
+                                :isChild="true"
+                                :level="$level + 1"
+                                class="absolute md:top-full left-0 z-50 bg-slate-700 w-full md:w-48 shadow-md" 
+                            />
+                        @endif
+                    </div>
+                @endforeach
+            </div>
+        @else
+            <div class="text-center text-gray-400 py-4 px-6">
+                No categories available
+            </div>
+        @endif
     </div>
-</nav>
-<script src="https://unpkg.com/flowbite@1.4.1/dist/flowbite.js"></script>
+</div>
+
+{{-- <script>
+  // Toggle main menu on mobile
+function toggleMainMenu() {
+    const menu = document.getElementById('mainMenu');
+    const icon = document.getElementById('mainMenuIcon');
+    menu.classList.toggle('active');
+    icon.textContent = menu.classList.contains('active') ? '▲' : '▼';
+}
+
+// Unified hover handler for both mobile and desktop
+function handleHover(element, hasChildren) {
+    if (hasChildren) {
+        const childMenu = element.querySelector('.child-menu');
+        if (childMenu) {
+            if (window.innerWidth < 768) {
+                // On mobile, show immediately on hover
+                childMenu.style.display = 'flex';
+            } else {
+                // On desktop, use the hover behavior
+                element.classList.add('hover-active');
+                childMenu.style.display = 'flex';
+            }
+        }
+    }
+}
+
+function handleLeave(element, hasChildren) {
+    if (hasChildren) {
+        const childMenu = element.querySelector('.child-menu');
+        if (childMenu) {
+            if (window.innerWidth < 768) {
+                // On mobile, don't hide on leave - let click handle it
+                return;
+            } else {
+                // On desktop, hide after delay
+                element.classList.remove('hover-active');
+                setTimeout(() => {
+                    if (!element.classList.contains('hover-active')) {
+                        childMenu.style.display = 'none';
+                    }
+                }, 200);
+            }
+        }
+    }
+}
+
+// Click handler for mobile
+function handleClick(event, hasChildren) {
+    if (window.innerWidth < 768 && hasChildren) {
+        event.preventDefault();
+        const item = event.currentTarget.closest('.category-item');
+        item.classList.toggle('active');
+        
+        // Toggle child menu display
+        const childMenu = item.querySelector('.child-menu');
+        if (childMenu) {
+            childMenu.style.display = item.classList.contains('active') ? 'flex' : 'none';
+        }
+        
+        // Close siblings
+        const siblings = Array.from(item.parentNode.children).filter(child => child !== item);
+        siblings.forEach(sibling => {
+            sibling.classList.remove('active');
+            const siblingChildMenu = sibling.querySelector('.child-menu');
+            if (siblingChildMenu) {
+                siblingChildMenu.style.display = 'none';
+            }
+        });
+    }
+}
+
+// Close menus when clicking outside (mobile)
+document.addEventListener('click', function(event) {
+    if (window.innerWidth >= 768) return;
+    
+    if (!event.target.closest('.category-item')) {
+        document.querySelectorAll('.category-item').forEach(item => {
+            item.classList.remove('active');
+            const childMenu = item.querySelector('.child-menu');
+            if (childMenu) {
+                childMenu.style.display = 'none';
+            }
+        });
+    }
+});
+</script>
+ --}}
