@@ -20,7 +20,7 @@
           placeholder="Your email address"
           id="loginEmail"
           type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-          <x-input-error :messages="$errors->get('email')" class="mt-2" />
+          {{-- <x-input-error :messages="$errors->get('email')" class="mt-2" /> --}}
         </div>
         <div class="mb-4">
           {{-- <x-input-label for="password" :value="__(key: 'Password')" /> --}}
